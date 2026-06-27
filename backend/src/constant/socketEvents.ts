@@ -6,4 +6,3 @@ export const COMMAND_SCOKET_EVENT : Object = Object.freeze({
     CONNECTION : "connection",
     SOCKET_ERROR : "Socker:Error"
 })
-
