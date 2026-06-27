@@ -1,7 +1,6 @@
 # PROJECT START
 
-### THE FIGMA DESIGN
-### FOR FRONTEND DEV
+### THE FIGMA DESIGN FOR FRONTEND DEV
 [click me](https://www.figma.com/community/file/1408230173770818011)
 
 ## BACKEND
