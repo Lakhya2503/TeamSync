@@ -1,6 +1,6 @@
 
 
-export const COMMAND_SCOKET_EVENT : Object = Object.freeze({    
+export const COMMAN_SCOKET_EVENT : Object = Object.freeze({    
     CONNECT : "connect",
     DISCCONECT : "discoonect",
     CONNECTION : "connection",

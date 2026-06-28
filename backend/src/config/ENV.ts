@@ -1,3 +1,10 @@
+import { configDotenv } from "dotenv"
+
+configDotenv({
+    path : '.env',
+    quiet : true
+})
+
 
 export const ENV = Object.freeze({
     // PORT AND TOKEN
@@ -18,7 +25,7 @@ export const ENV = Object.freeze({
     DATABASE_PASSWORD : String(process.env.DATABASE_PASSWORD),
     DATABASE_NAME : String(process.env.DATABASE_NAME),
     DATABASE_HOST : String(process.env.DATABASE_HOST),
-    DATABASE_PORT : String(process.env.DATABASE_PORT),
+    DATABASE_PORT : Number(process.env.DATABASE_PORT),
 
     // CLOUDINARY NAME, SECRET AND KEY 
     CLOUDINARY_CLOUD_NAME : String(process.env.CLOUDINARY_CLOUD_NAME),

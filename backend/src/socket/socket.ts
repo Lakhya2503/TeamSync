@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken'
 import cookie from 'cookie'
-import { COMMAND_SCOKET_EVENT } from '../socket/socket.ts'
+import { COMMAN_SCOKET_EVENT } from '../constant/comman'
 
 export const intializeSocketIO = (io:any) => {
-    return io.on(COMMAND_SCOKET_EVENT.CONNECTION, async(socket:any)=>{
+    return io.on(COMMAN_SCOKET_EVENT.CONNECTION, async(socket:any)=>{
         
     })
 }
