@@ -13,7 +13,7 @@ export const ENV = Object.freeze({
     CORS_ORIGIN : String(process.env.CORS_ORIGIN),
     BACKEND_ORIGIN : String(process.env.BACKEND_ORIGIN),
     SOCKET_ORIGIN : String(process.env.SOCKET_ORIGIN),
-    
+
     // TOKEN AND SECRET 
     ACCESS_TOKEN_SECRET : String(process.env.ACCESS_TOKEN_SECRET),
     REFRESH_TOKEN_SECRET : String(process.env.REFRESH_TOKEN_SECRET),
@@ -26,6 +26,7 @@ export const ENV = Object.freeze({
     DATABASE_NAME : String(process.env.DATABASE_NAME),
     DATABASE_HOST : String(process.env.DATABASE_HOST),
     DATABASE_PORT : Number(process.env.DATABASE_PORT),
+    REDIS_URL : String(process.env.REDIS_URL),
 
     // CLOUDINARY NAME, SECRET AND KEY 
     CLOUDINARY_CLOUD_NAME : String(process.env.CLOUDINARY_CLOUD_NAME),
