@@ -4,3 +4,9 @@ export interface UserType {
     MEMBER : string,
     MANAGER : string
 }
+
+export interface RegisterFileds {
+    name : string , 
+    email : string, 
+    password : string
+}

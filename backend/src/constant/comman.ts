@@ -8,3 +8,6 @@ export const USER_TYPE : UserType = {
 
 export const USER_TYPE_ENUM = Object.values(USER_TYPE)
 
+export const REDIS_EVENT = {
+    ERROR : "Error"
+}
