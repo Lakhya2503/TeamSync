@@ -1,10 +1,13 @@
 import  jwt  from 'jsonwebtoken';
 import { ENV } from './ENV';
-import { userType } from '../modules/user/user.type';
-
+import { 
+    accessTokenUserData, 
+    refreshTokenUserData, 
+    userType 
+} from '../modules/user/user.interface';
 
 export const generateAccessToken = (user : userType) => {
-    const payload : userType = {
+    const payload : accessTokenUserData = {
         email : user.email,
         id : user.id,
         role : user.role
@@ -15,10 +18,10 @@ export const generateAccessToken = (user : userType) => {
 }
 
 export const generateRefreshToken = (user : userType) => {
-    const payload = {
+    const payload : refreshTokenUserData = {
         id : user.id,
     }
-
+    
     return jwt.sign(payload, ENV.REFRESH_TOKEN_SECRET, {
         expiresIn : ENV.REFRESH_TOKEN_EXPIRY
     })

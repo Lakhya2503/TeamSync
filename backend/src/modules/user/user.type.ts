@@ -1,30 +1,12 @@
+import { UserType } from "./user.interface"
 
-export interface UserType {
-    ADMIN : string,
-    MEMBER : string,
-    MANAGER : string
+export const TEAM_USER_TYPE : UserType = {
+    ADMIN : "Admin",
+    MANAGER : "Manager",
+    Member : "Member"
 }
 
-export interface RegisterFileds {
-    name : string , 
-    email : string, 
-    password : string
-}
-
-export interface accessTokenUserData {
-    email : string,
-    id : string
-}
-
-export interface userType {
-    name?: string,
-    id: string,
-    email: string,
-    password?: string,
-    avatar?: string,
-    role?: string,
-    refreshtoken?: string,
-    reset_password_token_expiry?: string,
-    reset_password_token?: string,
-    created_at?: string
+export const USER_TYPE : UserType = {
+    ADMIN : "Admin",
+    USER : "User"
 }

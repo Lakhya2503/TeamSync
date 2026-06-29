@@ -14,6 +14,7 @@ export const database = new Pool({
 export const connectDB = async() => {
     try {
        const promise = await database.connect();
+       console.log("Database connection successfully : 🦣")
     } catch (error : any) {
         console.log(`error : ${error.message}`);
         process.exit(1);
@@ -24,6 +25,7 @@ export const connectDB = async() => {
 export const createTable = async() => {
     try {
         await userTable()
+        console.log("All Table Create Successfully : 📚")
     } catch (error : {message : string} | any) {
         console.error(`ERROR : ${error.message}`)
     }

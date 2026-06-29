@@ -1,13 +1,5 @@
-import { UserType } from "../modules/user/user.type"
+import { redisEvent } from "../types/comman";
 
-export const USER_TYPE : UserType = {
-    ADMIN : "Admin",
-    MANAGER : "Manager",
-    MEMBER : "Member"
-}
-
-export const USER_TYPE_ENUM = Object.values(USER_TYPE)
-
-export const REDIS_EVENT = {
-    ERROR : "Error"
+export const REDIS_EVENT : redisEvent = {
+    ERROR : "error"
 }

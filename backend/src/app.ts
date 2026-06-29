@@ -4,7 +4,7 @@ import { ENV } from "./config/ENV.js";
 import { Server } from "socket.io";
 import cookieParser from 'cookie-parser'
 import { createServer } from "http";
-
+import { CommanError } from "./types/comman.js";
 const app = express()
 const httpServer = createServer(app)
 
@@ -51,11 +51,14 @@ app.use("/api/v1/tms/health",(req:any, res:any)=>{
 import AuthRouter from './modules/user/user.route.js'
 import { intializeSocketIO } from "./socket/socket.js";
 
+
 // APP ROUTER USE HERE
 app.use("/api/v1/tms/auth", AuthRouter)
 
 
 intializeSocketIO(io)
+
+// TODO : DEFINED THIS ERROR AND RESPONSES TYPE DECLEARE LATER ON
 
 app.use((err:any, req: any, res:any, next:any) => {
   res.status(err.statusCode || 500).json({
@@ -66,22 +69,22 @@ app.use((err:any, req: any, res:any, next:any) => {
 });
 
 
-// Global error handler middleware (Always returns JSON)
-app.use((err:any, req: any, res:any, next:any) => {
-  // Catch MongoDB duplicate key error (code 11000)
-  if (err.code === 11000) {
-    return res.status(400).json({
-      success: false,
-      message: "Email already registered. Please login."
-    });
-  }
+// // Global error handler middleware (Always returns JSON)
+// app.use((err:any, req: any, res:any, next:any) => {
+//   // Catch MongoDB duplicate key error (code 11000)
+//   if (err.code === 11000) {
+//     return res.status(400).json({
+//       success: false,
+//       message: "Email already registered. Please login."
+//     });
+//   }
 
-  const statusCode = err.statusCode || err.status || 500;
-  return res.status(statusCode).json({
-    success: false,
-    message: err.message || "Internal Server Error"
-  });
-});
+//   const statusCode = err.statusCode || err.status || 500;
+//   return res.status(statusCode).json({
+//     success: false,
+//     message: err.message || "Internal Server Error"
+//   });
+// });
 
 
 export {
