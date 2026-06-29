@@ -12,7 +12,7 @@ import {
     LogoutResponse, 
     RegisterRequest, 
     RegisterResponse, 
-    userType, 
+    userType,
     UserUpdateRequest,
     UserUpdateResponse
 } from "./user.interface";
@@ -22,14 +22,15 @@ import {
 } from "../../config/token";
 import { USER_TYPE } from "./user.type";
 
+
 const options = {
     httpOnly : true,
     secure : true
 }
 
 export const generateAccessRefreshToken = async (user:userType) => {
-    const refreshToken = generateAccessToken(user);
-    const accessToken = generateRefreshToken(user);
+    const refreshToken = generateRefreshToken(user);
+    const accessToken = generateAccessToken(user);
 
     await database
                 .query(
@@ -115,7 +116,7 @@ export const logoutUser = asyncHandler(async(req : LogoutRequest,res: LogoutResp
     console.log("user : ", user)
 
     await database.query(
-        "UPDATE users SET refreshToken = $1 WHERE id = $1",["", user.id]
+        "UPDATE users SET refreshToken = $1 WHERE id = $2",["",user.id]
     )
 
     return res
@@ -127,7 +128,8 @@ export const logoutUser = asyncHandler(async(req : LogoutRequest,res: LogoutResp
 
 export const updateUserProfile = asyncHandler(async(req: UserUpdateRequest, res : UserUpdateResponse) => {
 
-    const user = { } ;
-
-    return res.status(200).json(new ApiResponse(200, {"user" : user}, "User Udpdate Successfully"))
+    const user : userType = req.user
+    
+    
+    return res.status(200).json(new ApiResponse(200, { user }, "User Udpdate Successfully"))
 })

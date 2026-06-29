@@ -9,5 +9,8 @@ export interface commanSocketEvent {
     SOCKET_ERROR : string
 }
 
+export interface redisEvent {
+    ERROR : string
+}
 
 

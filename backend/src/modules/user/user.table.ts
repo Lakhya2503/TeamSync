@@ -18,6 +18,7 @@ export const userTable = async() => {
             )
         `
         await database.query(userQuery);
+        console.log("User Table Create Or Fetch Successfully : 👤🗃️")
     } catch (error : {message : string} | any) {
         console.error(`CREATE TABLE ERROR: ${error.message}`)
     }

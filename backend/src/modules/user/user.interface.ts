@@ -1,7 +1,18 @@
 import { Request, Response } from "express"
 import { ApiResponse } from "../../utils/ApiResponse"
 
-export interface UserType {
+export interface accessTokenUserData {
+    id: string,
+    email: string,
+    role?: string,
+}
+
+export interface refreshTokenUserData {
+    id: string,
+}
+
+
+export interface USERTYPE {
     ADMIN? : string,
     USER? : string,
     MANAGER? : string,
@@ -96,7 +107,11 @@ interface UserUpdateRequestBody  {
     avatar? : string
 }
 
-export type UserUpdateRequest = Request < {},{}, UserUpdateRequestBody >;
+interface UserUpdateRequestParams {
+    user : userType
+}
+
+export type UserUpdateRequest = Request <UserUpdateRequestParams,{}, UserUpdateRequestBody >;
 
 // ---------- Response ---------- //
 interface UserUpdateResponseData {
