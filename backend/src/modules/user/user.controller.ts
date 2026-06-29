@@ -8,8 +8,6 @@ import bcrypt from 'bcrypt';
 import {  userType } from "./user.type";
 import { generateAccessToken, generateRefreshToken } from "../../config/token";
 
-
-
 const options = {
     httpOnly : true,
     secure : true
@@ -19,10 +17,17 @@ export const generateAccessRefreshToken = async (user:userType) => {
     const refreshToken = generateAccessToken(user);
     const accessToken = generateRefreshToken(user);
 
-    
-    
-}
+    await database
+                .query(
+                    "UPDATE users SET refreshToken = $1 WHERE id = $2 RETURNING refreshToken ",
+                    [ refreshToken, user.id ]
+                )
 
+    return {
+        accessToken, 
+        refreshToken
+    }
+}
 
 export const registerUser = asyncHandler(async(req : any,res: any)=>{
     const { name, email, password } = req.body
@@ -60,7 +65,7 @@ export const loginUser = asyncHandler(async(req : any,res: any)=>{
         throw new ApiError(401, "User can't Exist with this Email..")
     }
 
-    const isPasswordCorrect = bcrypt.compare(password, user.rows[0].password)
+    const isPasswordCorrect = await bcrypt.compare(password, user.rows[0].password)
 
     if(!isPasswordCorrect) {
         throw new ApiError(401, "Creadential faild....")
@@ -76,7 +81,22 @@ export const loginUser = asyncHandler(async(req : any,res: any)=>{
         "users" : user.rows[0],
         "accessToken" : accessToken,
         "refreshToken" : refreshToken
-    }, "user Register Successfully", true))
+    }, "user Login Successfully", true))
 })
 
+export const logoutUser = asyncHandler(async(req : any,res: any)=>{
 
+    const user:userType = req.user
+
+    console.log("user : ", user)
+
+    await database.query(
+        "UPDATE users SET refreshToken = $1 WHERE id = $1",["", user.id]
+    )
+
+    return res
+        .status(200)
+        .cookie("accessToken", "")
+        .cookie("refreshToken", "")
+        .json(new ApiResponse(200, {}, "user Logout Successfully", true))
+})

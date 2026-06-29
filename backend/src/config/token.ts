@@ -4,12 +4,12 @@ import { userType } from '../modules/user/user.type';
 
 
 export const generateAccessToken = (user : userType) => {
-    const payload = {
+    const payload : userType = {
         email : user.email,
         id : user.id,
         role : user.role
     }
-    return jwt.sign(payload, ENV.ACCESS_TOKEN_SECRET, {
+    return jwt.sign(payload, ENV.ACCESS_TOKEN_SECRET , {
         expiresIn : ENV.ACCESS_TOKEN_EXPIRY
     })
 }
