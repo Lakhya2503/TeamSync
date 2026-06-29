@@ -1,14 +1,10 @@
 
-export class ApiResponse{
-        statusCode : number
-        data? :object
-        message : string
-        success : boolean
+export class ApiResponse<T>{
     constructor(
-        statusCode : number,
-        data : object ,
-        message : string,
-        success = true
+       public statusCode : number,
+       public data : T,
+       public  message : string,
+       public success = true
     ) {
         this.data = data
         this.message = message

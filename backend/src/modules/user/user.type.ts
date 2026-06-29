@@ -1,4 +1,3 @@
-
 import { UserType } from "./user.interface"
 
 export const TEAM_USER_TYPE : UserType = {

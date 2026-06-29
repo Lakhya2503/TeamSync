@@ -5,8 +5,21 @@ import { ApiError } from "../../utils/ApiError";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
 import bcrypt from 'bcrypt';
-import {  userType } from "./user.interface";
-import { generateAccessToken, generateRefreshToken } from "../../config/token";
+import { 
+    LoginRequest, 
+    LoginResponse, 
+    LogoutRequest, 
+    LogoutResponse, 
+    RegisterRequest, 
+    RegisterResponse, 
+    userType, 
+    UserUpdateRequest,
+    UserUpdateResponse
+} from "./user.interface";
+import { 
+    generateAccessToken, 
+    generateRefreshToken 
+} from "../../config/token";
 import { USER_TYPE } from "./user.type";
 
 const options = {
@@ -30,7 +43,7 @@ export const generateAccessRefreshToken = async (user:userType) => {
     }
 }
 
-export const registerUser = asyncHandler(async(req : any,res: any)=>{
+export const registerUser = asyncHandler(async(req : RegisterRequest, res: RegisterResponse)=>{
     const { name, email, password, secretKey } = req.body
 
     requiredFiled([name, email, password])
@@ -53,10 +66,10 @@ export const registerUser = asyncHandler(async(req : any,res: any)=>{
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = await database.query(
-        `INSERT INTO users (name, email, password, role) 
-        VALUES ($1, $2, $3, $4).
-        RETURNING * `, 
-        [name,email,hashedPassword,role]
+            `INSERT INTO users (name, email, password, role) 
+            VALUES ($1, $2, $3, $4).
+            RETURNING * `, 
+            [name,email,hashedPassword,role]
     )
 
     if(!user.rows.length) {
@@ -66,7 +79,7 @@ export const registerUser = asyncHandler(async(req : any,res: any)=>{
     return res.status(200).json(new ApiResponse(200, {}, "user Register Successfully", true))
 }) 
 
-export const loginUser = asyncHandler(async(req : any,res: any)=>{
+export const loginUser = asyncHandler(async(req : LoginRequest,res: LoginResponse)=>{
 
     const { email, password } = req.body
 
@@ -89,15 +102,15 @@ export const loginUser = asyncHandler(async(req : any,res: any)=>{
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
         .json(new ApiResponse(200, {
-        "users" : user.rows[0],
+        "user" : user.rows[0],
         "accessToken" : accessToken,
         "refreshToken" : refreshToken
     }, "user Login Successfully", true))
 })
 
-export const logoutUser = asyncHandler(async(req : any,res: any)=>{
+export const logoutUser = asyncHandler(async(req : LogoutRequest,res: LogoutResponse)=>{
 
-    const user:userType = req.user
+    const user = req.user
 
     console.log("user : ", user)
 
@@ -110,4 +123,11 @@ export const logoutUser = asyncHandler(async(req : any,res: any)=>{
         .cookie("accessToken", "")
         .cookie("refreshToken", "")
         .json(new ApiResponse(200, {}, "user Logout Successfully", true))
+})
+
+export const updateUserProfile = asyncHandler(async(req: UserUpdateRequest, res : UserUpdateResponse) => {
+
+    const user = { } ;
+
+    return res.status(200).json(new ApiResponse(200, {"user" : user}, "User Udpdate Successfully"))
 })
