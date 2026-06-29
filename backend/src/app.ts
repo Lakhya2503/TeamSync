@@ -35,6 +35,8 @@ const io = new Server(httpServer, {
 })
 
 app.use(cookieParser())
+app.use(express.json())
+app.use(express.urlencoded({extended : true, limit : "20kb"}))
 
 app.use("/api/v1/tms/health",(req:any, res:any)=>{
     res.status(200).json({
@@ -46,14 +48,14 @@ app.use("/api/v1/tms/health",(req:any, res:any)=>{
 
 
 // APP ROUTE DIFIEND HERE
-
-
-
+import AuthRouter from './modules/user/user.route.js'
+import { intializeSocketIO } from "./socket/socket.js";
 
 // APP ROUTER USE HERE
+app.use("/api/v1/tms/auth", AuthRouter)
 
 
-
+intializeSocketIO(io)
 
 app.use((err:any, req: any, res:any, next:any) => {
   res.status(err.statusCode || 500).json({
