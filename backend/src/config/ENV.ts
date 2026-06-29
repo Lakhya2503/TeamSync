@@ -14,7 +14,6 @@ export const ENV = Object.freeze({
     BACKEND_ORIGIN : String(process.env.BACKEND_ORIGIN),
     SOCKET_ORIGIN : String(process.env.SOCKET_ORIGIN),
     ADMIN_SECRET_KEY : String(process.env.ADMIN_SECRET_KEY),
-    MANAGER_SECRET_KEY : String(process.env.MANAGER_SECRET_KEY),
 
     // TOKEN AND SECRET 
     ACCESS_TOKEN_SECRET : String(process.env.ACCESS_TOKEN_SECRET),
