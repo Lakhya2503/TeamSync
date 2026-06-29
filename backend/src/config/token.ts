@@ -1,6 +1,6 @@
 import  jwt  from 'jsonwebtoken';
 import { ENV } from './ENV';
-import { userType } from '../modules/user/user.type';
+import { userType } from '../modules/user/user.interface';
 
 
 export const generateAccessToken = (user : userType) => {

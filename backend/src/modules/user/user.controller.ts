@@ -5,8 +5,9 @@ import { ApiError } from "../../utils/ApiError";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
 import bcrypt from 'bcrypt';
-import {  userType } from "./user.type";
+import {  userType } from "./user.interface";
 import { generateAccessToken, generateRefreshToken } from "../../config/token";
+import { USER_TYPE } from "./user.type";
 
 const options = {
     httpOnly : true,
@@ -30,7 +31,7 @@ export const generateAccessRefreshToken = async (user:userType) => {
 }
 
 export const registerUser = asyncHandler(async(req : any,res: any)=>{
-    const { name, email, password } = req.body
+    const { name, email, password, secretKey } = req.body
 
     requiredFiled([name, email, password])
 
@@ -42,10 +43,20 @@ export const registerUser = asyncHandler(async(req : any,res: any)=>{
         throw new ApiError(400, "User already Exist")
     }
 
+    let role;
+    if(secretKey || secretKey === ENV.ADMIN_SECRET_KEY) {
+        role = USER_TYPE.ADMIN
+    } else {
+        role = USER_TYPE.USER
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = await database.query(
-        "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING * ", [name,email,hashedPassword]
+        `INSERT INTO users (name, email, password, role) 
+        VALUES ($1, $2, $3, $4).
+        RETURNING * `, 
+        [name,email,hashedPassword,role]
     )
 
     if(!user.rows.length) {
