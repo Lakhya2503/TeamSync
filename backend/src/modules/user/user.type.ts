@@ -1,12 +1,12 @@
-import { UserType } from "./user.interface"
+import { auth_userType, teamUserType } from "./user.interface"
 
-export const TEAM_USER_TYPE : UserType = {
+export const TEAM_USER_TYPE : teamUserType = {
     ADMIN : "Admin",
     MANAGER : "Manager",
-    Member : "Member"
+    MEMBER : "Member"
 }
 
-export const USER_TYPE : UserType = {
+export const USER_TYPE : auth_userType = {
     ADMIN : "Admin",
     USER : "User"
 }

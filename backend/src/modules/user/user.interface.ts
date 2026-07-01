@@ -11,13 +11,18 @@ export interface refreshTokenUserData {
     id: string,
 }
 
-
-export interface USERTYPE {
-    ADMIN? : string,
-    USER? : string,
-    MANAGER? : string,
-    Member? : string
+export interface auth_userType {
+    USER : string,
+    ADMIN : string,
 }
+
+export interface teamUserType {
+    ADMIN : string,
+    MANAGER : string,
+    MEMBER : string
+}
+
+
 
 export interface userType {
     name: string,

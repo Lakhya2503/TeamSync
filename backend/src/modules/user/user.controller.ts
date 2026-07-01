@@ -58,17 +58,17 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
     }
 
     let role;
-    if(secretKey || secretKey === ENV.ADMIN_SECRET_KEY) {
+    if(secretKey && secretKey === ENV.ADMIN_SECRET_KEY) {
         role = USER_TYPE.ADMIN
     } else {
         role = USER_TYPE.USER
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
-
+    
     const user = await database.query(
             `INSERT INTO users (name, email, password, role) 
-            VALUES ($1, $2, $3, $4).
+            VALUES ($1, $2, $3, $4)
             RETURNING * `, 
             [name,email,hashedPassword,role]
     )

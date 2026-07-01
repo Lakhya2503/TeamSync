@@ -11,7 +11,7 @@ export const userTable = async() => {
                 password TEXT NOT NULL,
                 avatar TEXT DEFAULT NULL,
                 refreshToken TEXT DEFAULT NULL,
-                role VARCHAR(10) DEFAULT '${USER_TYPE.USER}' Check (role IN('${USER_TYPE.ADMIN}')),
+                role VARCHAR(10) DEFAULT '${USER_TYPE.USER}' CHECK (role IN('${USER_TYPE.ADMIN}','${USER_TYPE.USER}')),
                 reset_password_token TEXT DEFAULT NULL,
                 reset_password_token_expiry TEXT DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT now()
