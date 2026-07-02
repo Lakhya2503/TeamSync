@@ -125,5 +125,4 @@ interface UserUpdateResponseData {
 
 export type UserUpdateResponse = Response<ApiResponse<UserUpdateResponseData> >;
 
-
 // ========== xx ==========

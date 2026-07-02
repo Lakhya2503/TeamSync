@@ -21,6 +21,7 @@ import {
     generateRefreshToken 
 } from "../../config/token";
 import { USER_TYPE } from "./user.type";
+import { Pool } from "pg";
 
 
 const options = {
@@ -127,9 +128,42 @@ export const logoutUser = asyncHandler(async(req : LogoutRequest,res: LogoutResp
 })
 
 export const updateUserProfile = asyncHandler(async(req: UserUpdateRequest, res : UserUpdateResponse) => {
-
+    
     const user : userType = req.user
-    
-    
+
+    const { name, avatar } = req.body
+
+    const updates : Partial<{
+        name : string,
+        avatar : string
+    }> = {};
+
+    if (name !== undefined) updates.name = name;
+    if (avatar !== undefined) updates.avatar = avatar;
+
+    const keys = Object.keys(updates)
+
+    if (keys.length === 0) {
+        throw new ApiError(400, "No fields to update");
+    }
+
+    const setClause = keys
+    .map((key, index) => `${key} = $${index + 1}`)
+    .join(", ");
+
+    const values = Object.values(updates);
+    values.push(user.id);
+
+    const query = `
+        UPDATE users
+        SET ${setClause}
+        WHERE id = $${values.length}
+        RETURNING *;
+    `;
+
+    const result = await database.query(query, values);
+
+        console.log(result.rows[0]);
+
     return res.status(200).json(new ApiResponse(200, { user }, "User Udpdate Successfully"))
 })
