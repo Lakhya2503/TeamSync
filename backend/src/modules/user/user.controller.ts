@@ -66,6 +66,14 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
+
+
+    // CREATE TEMPORARY TOKEN => SET OTP => AND SAVE THE TOKEN IN DATABASE
+
+
+    
+
+
     
     const user = await database.query(
             `INSERT INTO users (name, email, password, role) 
@@ -80,6 +88,11 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
 
     return res.status(200).json(new ApiResponse(200, {}, "user Register Successfully", true))
 }) 
+
+// export const verifyEmail = asyncHandler(async(req,res)=>{
+
+// })
+
 
 export const loginUser = asyncHandler(async(req : LoginRequest,res: LoginResponse)=>{
 
@@ -134,8 +147,8 @@ export const updateUserProfile = asyncHandler(async(req: UserUpdateRequest, res 
     const { name, avatar } = req.body
 
     const updates : Partial<{
-        name : string,
-        avatar : string
+        name? : string,
+        avatar? : string
     }> = {};
 
     if (name !== undefined) updates.name = name;
@@ -167,3 +180,4 @@ export const updateUserProfile = asyncHandler(async(req: UserUpdateRequest, res 
 
     return res.status(200).json(new ApiResponse(200, { user }, "User Udpdate Successfully"))
 })
+

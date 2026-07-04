@@ -28,5 +28,6 @@ export const generateRefreshToken = (user : userType) => {
 }
 
 export const temporaryTokenGenerater = () => {
-    
+    // const hashToken = crypto.hash
+    // const unHashedToken =
 }

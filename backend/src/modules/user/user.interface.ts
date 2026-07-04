@@ -67,6 +67,31 @@ export type RegisterResponse = Response<ApiResponse<RegisterResponseData> >;
 
 // ========== xx ==========
 
+
+// // =======================  //
+// //  ?? verifyEmail interface 
+// // ======================= //
+// // ---------- Request ---------- //
+// interface LoginRequestBody  {
+//     email: string,
+//     password: string,
+// }
+
+// export type LoginRequest = Request < {},{}, LoginRequestBody >;
+
+// // ---------- Response ---------- //
+// export interface LoginResponseData {
+//     user : userType,
+//     refreshToken : string,
+//     accessToken : string
+// }
+
+// export type LoginResponse = Response<ApiResponse<LoginResponseData>>;
+
+// // ========== xx ==========
+
+
+
 // =======================  //
 //  ?? login interface 
 // ======================= //
@@ -126,3 +151,5 @@ interface UserUpdateResponseData {
 export type UserUpdateResponse = Response<ApiResponse<UserUpdateResponseData> >;
 
 // ========== xx ==========
+
+
