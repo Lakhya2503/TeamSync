@@ -63,6 +63,24 @@ export type RegisterResponse = Response<ApiResponse<RegisterResponseData> >;
 
 // ========== xx ==========
 
+// =======================  //
+//  ?? verifyEmailRequest interface 
+// ======================= //
+// ---------- Request ---------- //
+interface VerifyEmailRequestBody  {
+    email: string
+}
+
+export type VerifyEmailRequestRequest = Request < {},{}, VerifyEmailRequestBody >;
+
+// ---------- Response ---------- //
+export interface VerifyEmailRequestResponseData {}
+
+export type VerifyEmailRequestResponse = Response<ApiResponse<VerifyEmailRequestResponseData>>;
+
+// ========== xx ==========
+
+
 
 // =======================  //
 //  ?? verifyEmail interface 

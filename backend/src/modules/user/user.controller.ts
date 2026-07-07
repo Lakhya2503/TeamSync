@@ -16,6 +16,8 @@ import {
     UserUpdateRequest,
     UserUpdateResponse,
     VerifyEmailRequest,
+    VerifyEmailRequestRequest,
+    VerifyEmailRequestResponse,
     VerifyEmailResponse
 } from "./user.interface";
 import { 
@@ -24,7 +26,6 @@ import {
     temporaryTokenGenerater
 } from "../../config/token";
 import { USER_TYPE } from "./user.type";
-import { Pool } from "pg";
 import { getOtp, setOtp } from "../../redis/cache";
 import { otpGenerator } from "../../helper/comman";
 import crypto from 'crypto'
@@ -102,8 +103,29 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
     return res.status(200).json(new ApiResponse(200, {}, "user Register Successfully", true))
 }) 
 
+export const verifyEmailReuqest = asyncHandler(async(req:VerifyEmailRequestRequest,res:VerifyEmailRequestResponse)=>{
+    const { email } = req.body
+
+    const user = await database.query(
+        ` SELECT * FROM users WHERE email = $1 `, [email]
+    )
+
+    if(user.rows.length < 0) {
+        throw new ApiError(404, "User not found")
+    }
+
+    const { hashToken, unHashedToken } = temporaryTokenGenerater()
+    const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000)
+
+    await database.query(
+        ` UPDATE users WHERE reset_password_token = $1, reset_password_token_expiry = $2 WHERE id = $3 `,[hashToken,tokenExpiry,user.rows[0].id]
+    )
+
+    return res.status(200).json(new ApiResponse(200, {}, "Send verify email request", true))
+})
+
 export const verifyEmail = asyncHandler(async(req:VerifyEmailRequest,res:VerifyEmailResponse)=>{
-    const { email, otp, token } = req.body
+    const { otp, token } = req.body
 
     const decodedToken = crypto.createHash('sha256').update(token).digest('hex')
 
@@ -117,14 +139,18 @@ export const verifyEmail = asyncHandler(async(req:VerifyEmailRequest,res:VerifyE
 
     const otpFromServer = await getOtp(decodedToken)
 
-    
 
+    if(otpFromServer.otp !== otp) {
+        throw new ApiError(400, "Invalid OTP")
+    }
 
-
+    await database.query(
+        ` UPDATE users SET reset_password_token = $1, reset_password_token_expiry = $2 WHERE id = $3 RETURNING *
+        `, ["","",user.rows[0].id]
+    )
 
     return res.status(200).json(new ApiResponse(200, {}, "User Verify Successfully" , true))
 })
-
 
 export const loginUser = asyncHandler(async(req : LoginRequest,res: LoginResponse)=>{
 
