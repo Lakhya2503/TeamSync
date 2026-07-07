@@ -5,6 +5,7 @@ import {
     refreshTokenUserData, 
     userType 
 } from '../modules/user/user.interface';
+import crypto from 'crypto'
 
 export const generateAccessToken = (user : userType) => {
     const payload : accessTokenUserData = {
@@ -28,6 +29,13 @@ export const generateRefreshToken = (user : userType) => {
 }
 
 export const temporaryTokenGenerater = () => {
-    // const hashToken = crypto.hash
-    // const unHashedToken =
+    const hashToken = crypto.randomBytes(20).toString("hex")
+
+    const unHashedToken = crypto.createHash('sha256').update(hashToken).digest('hex')
+
+    return {
+        hashToken,
+        unHashedToken
+    }
 }
+

@@ -12,3 +12,4 @@ export const requiredFiled = (filed : string[]) => {
 export const fetchUser = () => {
     
 }
+

@@ -56,11 +56,7 @@ interface RegisterRequestBody  {
 export type RegisterRequest = Request < {},{}, RegisterRequestBody >;
 
 // ---------- Response ---------- //
-interface RegisterResponseData {
-    user? : userType,
-    refreshToken? : string,
-    accessToken? : string
-}
+interface RegisterResponseData {}
 
 export type RegisterResponse = Response<ApiResponse<RegisterResponseData> >;
 
@@ -68,28 +64,24 @@ export type RegisterResponse = Response<ApiResponse<RegisterResponseData> >;
 // ========== xx ==========
 
 
-// // =======================  //
-// //  ?? verifyEmail interface 
-// // ======================= //
-// // ---------- Request ---------- //
-// interface LoginRequestBody  {
-//     email: string,
-//     password: string,
-// }
+// =======================  //
+//  ?? verifyEmail interface 
+// ======================= //
+// ---------- Request ---------- //
+interface VerifyEmailBody  {
+    email: string,
+    token : string,
+    otp: string,
+}
 
-// export type LoginRequest = Request < {},{}, LoginRequestBody >;
+export type VerifyEmailRequest = Request < {},{}, VerifyEmailBody >;
 
-// // ---------- Response ---------- //
-// export interface LoginResponseData {
-//     user : userType,
-//     refreshToken : string,
-//     accessToken : string
-// }
+// ---------- Response ---------- //
+export interface VerifyEmailResponseData {}
 
-// export type LoginResponse = Response<ApiResponse<LoginResponseData>>;
+export type VerifyEmailResponse = Response<ApiResponse<VerifyEmailResponseData>>;
 
-// // ========== xx ==========
-
+// ========== xx ==========
 
 
 // =======================  //

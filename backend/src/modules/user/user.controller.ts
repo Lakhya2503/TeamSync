@@ -14,15 +14,20 @@ import {
     RegisterResponse, 
     userType,
     UserUpdateRequest,
-    UserUpdateResponse
+    UserUpdateResponse,
+    VerifyEmailRequest,
+    VerifyEmailResponse
 } from "./user.interface";
 import { 
     generateAccessToken, 
-    generateRefreshToken 
+    generateRefreshToken, 
+    temporaryTokenGenerater
 } from "../../config/token";
 import { USER_TYPE } from "./user.type";
 import { Pool } from "pg";
-
+import { getOtp, setOtp } from "../../redis/cache";
+import { otpGenerator } from "../../helper/comman";
+import crypto from 'crypto'
 
 const options = {
     httpOnly : true,
@@ -68,19 +73,27 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
     const hashedPassword = await bcrypt.hash(password, 10)
 
 
-    // CREATE TEMPORARY TOKEN => SET OTP => AND SAVE THE TOKEN IN DATABASE
-
-
-    
-
+    const { hashToken, unHashedToken  } = temporaryTokenGenerater()
+    const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
     
     const user = await database.query(
-            `INSERT INTO users (name, email, password, role) 
-            VALUES ($1, $2, $3, $4)
+            `INSERT INTO users (name, email, password, role, isVerified) 
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING * `, 
-            [name,email,hashedPassword,role]
+            [name,email,hashedPassword,role,false]
     )
+
+    
+    await database.query(
+        `UPDATE users SET reset_password_token = $1, reset_password_token_expiry = $2 WHERE id = $3 RETURNING *
+        `, [hashToken, expiry, user.rows[0].id ]
+    )
+
+    
+    const otp = otpGenerator()
+    await setOtp(unHashedToken,otp)
+
 
     if(!user.rows.length) {
         throw new ApiError(400 , "User can't register")
@@ -89,9 +102,28 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
     return res.status(200).json(new ApiResponse(200, {}, "user Register Successfully", true))
 }) 
 
-// export const verifyEmail = asyncHandler(async(req,res)=>{
+export const verifyEmail = asyncHandler(async(req:VerifyEmailRequest,res:VerifyEmailResponse)=>{
+    const { email, otp, token } = req.body
 
-// })
+    const decodedToken = crypto.createHash('sha256').update(token).digest('hex')
+
+    const user = await database.query(
+        ` SELECT * FROM users WHERE reset_password_token = $1 `,[decodedToken]
+    )
+
+    if(user.rows.length < 0) {
+        throw new ApiError(401 , "Token Used or Expired")
+    }
+
+    const otpFromServer = await getOtp(decodedToken)
+
+    
+
+
+
+
+    return res.status(200).json(new ApiResponse(200, {}, "User Verify Successfully" , true))
+})
 
 
 export const loginUser = asyncHandler(async(req : LoginRequest,res: LoginResponse)=>{

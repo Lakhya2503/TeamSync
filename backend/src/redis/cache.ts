@@ -7,20 +7,16 @@ import { client , isConnected } from './connection'
 export const setOtp = async(id : string, otp: string) => {
     if(!client || !isConnected) return null;
     const key = `otp:${id}`
-    await client.set(key, JSON.stringify(otp))
+    await client.lpush(key, JSON.stringify(otp))
 }
 
-export const gettOtp = async(id : string) => {
+export const getOtp = async(id : string) => {
     if(!client || !isConnected) return null;
     const key = `otp:${id}`
-    const payload = await client.get(key)
+    const payload = await client.rpop(key)
     return payload ? JSON.parse(payload) : null
 }
 
-export const deletOtp = async(id : string, otp: string) => {
-    if(!client || !isConnected) return null;
-    const key = `otp:${id}`
-    await client.del(key)
-}
+
 
 
