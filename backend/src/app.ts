@@ -4,7 +4,6 @@ import { ENV } from "./config/ENV.js";
 import { Server } from "socket.io";
 import cookieParser from 'cookie-parser'
 import { createServer } from "http";
-import { CommanError } from "./types/comman.js";
 const app = express()
 const httpServer = createServer(app)
 
@@ -68,23 +67,6 @@ app.use((err:any, req: any, res:any, next:any) => {
   });
 });
 
-
-// // Global error handler middleware (Always returns JSON)
-// app.use((err:any, req: any, res:any, next:any) => {
-//   // Catch MongoDB duplicate key error (code 11000)
-//   if (err.code === 11000) {
-//     return res.status(400).json({
-//       success: false,
-//       message: "Email already registered. Please login."
-//     });
-//   }
-
-//   const statusCode = err.statusCode || err.status || 500;
-//   return res.status(statusCode).json({
-//     success: false,
-//     message: err.message || "Internal Server Error"
-//   });
-// });
 
 
 export {

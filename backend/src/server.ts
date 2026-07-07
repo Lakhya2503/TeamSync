@@ -2,7 +2,6 @@ import { assert } from 'node:console'
 import { httpServer } from './app'
 import { ENV } from './config/ENV'
 import { connectDB, createTable } from './config/db'
-import { CommanError } from './types/comman'
 import { RedisConnection } from './redis/connection'
 
 
