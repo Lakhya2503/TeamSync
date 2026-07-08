@@ -7,24 +7,28 @@ import {
 import { ApiError } from "../utils/ApiError";
 import  jwt  from 'jsonwebtoken';
 import { ENV } from "../config/ENV";
-import { database } from "../config/db";
+import { fetchUser } from "../helper/user.helper";
 
-export const verifyJWT = async(req : AuthRequest, res : Response, next : NextFunction) =>{
+export const verifyJWT = async(req : AuthRequest, res : Response, next : NextFunction) =>  {
     const token = req.cookies?.accessToken
     if(!token) {
         throw new ApiError(401, "Token not found.")
     }
     try {
-        const decodedToken : accessTokenUserData = jwt.verify(token, ENV.ACCESS_TOKEN_SECRET)
+        const decodedToken = jwt.verify(token, ENV.ACCESS_TOKEN_SECRET) as accessTokenUserData
 
-        if(!decodedToken.id) {
+        if(!decodedToken) {
             throw new ApiError(401, "Token expired or used")
         }
 
-        const findUser  = await database.query("SELECT * FROM users WHERE id = $1" , [decodedToken.id])
+        const user  = await fetchUser(decodedToken.id)
 
-        const user : userType = findUser.rows[0]
-        req.user = user;
+        if(!user) {
+            throw new ApiError(401, "Token expired or used")
+        }
+
+        req.user = user as userType
+        
         next()
     } catch (error : unknown) {
         next(error)

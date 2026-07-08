@@ -7,26 +7,26 @@ configDotenv({
 
 
 export const ENV = Object.freeze({
-    // PORT, KEY AND TOKEN
+    // ??  PORT, KEY AND TOKEN
     PORT : Number(process.env.PORT),
     APP_NAME : String(process.env.APP_NAME),
     ADMIN_SECRET_KEY : String(process.env.ADMIN_SECRET_KEY),
 
-    // OTHER URLs
+    // ?? OTHER URLs
     CORS_ORIGIN : String(process.env.CORS_ORIGIN),
     BACKEND_ORIGIN : String(process.env.BACKEND_ORIGIN),
     SOCKET_ORIGIN : String(process.env.SOCKET_ORIGIN),
     FORGET_PASSWORD_URL : String(process.env.FORGET_PASSWORD_URL),
     VERIFY_EMAIL_URL : String(process.env.VERIFY_EMAIL_URL),
 
-    // TOKEN AND SECRET 
+    // ?? TOKEN AND SECRET 
     ACCESS_TOKEN_SECRET : String(process.env.ACCESS_TOKEN_SECRET),
     REFRESH_TOKEN_SECRET : String(process.env.REFRESH_TOKEN_SECRET),
     
     ACCESS_TOKEN_EXPIRY : String(process.env.ACCESS_TOKEN_EXPIRY),
     REFRESH_TOKEN_EXPIRY : String(process.env.REFRESH_TOKEN_EXPIRY),
 
-    // DATABASE 
+    // ?? DATABASE 
     DATABASE_USERNAME : String(process.env.DATABASE_USERNAME),
     DATABASE_PASSWORD : String(process.env.DATABASE_PASSWORD),
     DATABASE_NAME : String(process.env.DATABASE_NAME),
@@ -34,7 +34,7 @@ export const ENV = Object.freeze({
     DATABASE_PORT : Number(process.env.DATABASE_PORT),
     REDIS_URL : String(process.env.REDIS_URL),
 
-    // CLOUDINARY NAME, SECRET AND KEY 
+  // ?? CLOUDINARY NAME, SECRET AND KEY 
     CLOUDINARY_CLOUD_NAME : String(process.env.CLOUDINARY_CLOUD_NAME),
     CLOUDINARY_API_KEY : String(process.env.CLOUDINARY_API_KEY),
     CLOUDINARY_API_SECRET : String(process.env.CLOUDINARY_API_SECRET),

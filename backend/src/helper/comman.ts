@@ -6,7 +6,6 @@ export const otpGenerator = () => {
     let otp:string  = ""
 
     for(let i = 0; i < 6; i++) {
-        // otp += str.charAt(i)
         otp += str.charAt(Math.floor(Math.random() * str.length)) 
     }
 

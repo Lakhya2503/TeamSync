@@ -32,6 +32,8 @@ export interface userType {
     avatar?: string,
     role?: string,
     refreshtoken?: string,
+    email_verified_token_expiry : string,
+    email_verified_token : string,
     reset_password_token_expiry?: string,
     reset_password_token?: string,
     created_at?: string
@@ -111,7 +113,7 @@ interface LoginRequestBody  {
     password: string,
 }
 
-export type LoginRequest = Request < {},{}, LoginRequestBody >;
+export type LoginRequest = Request<{},{},LoginRequestBody>;
 
 // ---------- Response ---------- //
 export interface LoginResponseData {
@@ -121,6 +123,26 @@ export interface LoginResponseData {
 }
 
 export type LoginResponse = Response<ApiResponse<LoginResponseData>>;
+
+// ========== xx ==========
+
+
+// =======================  //
+//  ?? current interface 
+// ======================= //
+// ---------- Request ---------- //
+interface CurrentUserParams  {
+    user: userType
+}
+
+export type CurrentUserParamsRequest = Request <CurrentUserParams,{},{}>;
+
+// ---------- Response ---------- //
+export interface CurrentUserData {
+    user : userType
+}
+
+export type CurrentUserResponse = Response<ApiResponse<CurrentUserData>>;
 
 // ========== xx ==========
 

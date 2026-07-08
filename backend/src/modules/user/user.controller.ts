@@ -1,11 +1,13 @@
 import { database } from "../../config/db";
 import { ENV } from "../../config/ENV";
-import { requiredFiled } from "../../helper/user.helper";
+import { fetchUser, requiredFiled } from "../../helper/user.helper";
 import { ApiError } from "../../utils/ApiError";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
 import bcrypt from 'bcrypt';
 import { 
+    CurrentUserParamsRequest,
+    CurrentUserResponse,
     LoginRequest, 
     LoginResponse, 
     LogoutRequest, 
@@ -191,6 +193,13 @@ export const loginUser = asyncHandler(async(req : LoginRequest,res: LoginRespons
         "refreshToken" : refreshToken
     }, "user Login Successfully", true))
 })
+
+export const currentUser = asyncHandler(async(req:CurrentUserParamsRequest,res:CurrentUserResponse)=>{
+
+    const user:userType = req.user
+
+    return res.status(200).json(new ApiResponse(200, { user }, "User Fetch Successfully", true))
+}) 
 
 export const logoutUser = asyncHandler(async(req : LogoutRequest,res: LogoutResponse)=>{
 
