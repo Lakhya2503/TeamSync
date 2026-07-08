@@ -30,10 +30,12 @@ import { getOtp, setOtp } from "../../redis/cache";
 import { otpGenerator } from "../../helper/comman";
 import crypto from 'crypto'
 
+
 const options = {
     httpOnly : true,
     secure : true
 }
+
 
 export const generateAccessRefreshToken = async (user:userType) => {
     const refreshToken = generateRefreshToken(user);
@@ -75,7 +77,7 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
 
 
     const { hashToken, unHashedToken  } = temporaryTokenGenerater()
-    const expiry = new Date(Date.now() + 10 * 60 * 1000);
+    const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
     
     const user = await database.query(
@@ -87,13 +89,15 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
 
     
     await database.query(
-        `UPDATE users SET reset_password_token = $1, reset_password_token_expiry = $2 WHERE id = $3 RETURNING *
-        `, [hashToken, expiry, user.rows[0].id ]
+        `UPDATE users SET email_verified_token = $1, email_verified_token_expiry = $2 WHERE id = $3 RETURNING *
+        `, [unHashedToken, tokenExpiry, user.rows[0].id ]
     )
 
     
     const otp = otpGenerator()
     await setOtp(unHashedToken,otp)
+
+    console.log(`${ENV.BACKEND_ORIGIN}/api/v1/tms/auth/${hashToken}`)
 
 
     if(!user.rows.length) {
@@ -117,9 +121,16 @@ export const verifyEmailReuqest = asyncHandler(async(req:VerifyEmailRequestReque
     const { hashToken, unHashedToken } = temporaryTokenGenerater()
     const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000)
 
-    await database.query(
-        ` UPDATE users WHERE reset_password_token = $1, reset_password_token_expiry = $2 WHERE id = $3 `,[hashToken,tokenExpiry,user.rows[0].id]
+    console.log(`${ENV.BACKEND_ORIGIN}/api/v1/tms/auth/${hashToken}`)
+
+     await database.query(
+        `UPDATE users SET email_verified_token = $1, email_verified_token_expiry = $2 WHERE id = $3 RETURNING *
+        `, [unHashedToken, tokenExpiry, user.rows[0].id ]
     )
+
+    
+    const otp = otpGenerator()
+    await setOtp(unHashedToken,otp)
 
     return res.status(200).json(new ApiResponse(200, {}, "Send verify email request", true))
 })

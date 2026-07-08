@@ -10,10 +10,14 @@ export const ENV = Object.freeze({
     // PORT, KEY AND TOKEN
     PORT : Number(process.env.PORT),
     APP_NAME : String(process.env.APP_NAME),
+    ADMIN_SECRET_KEY : String(process.env.ADMIN_SECRET_KEY),
+
+    // OTHER URLs
     CORS_ORIGIN : String(process.env.CORS_ORIGIN),
     BACKEND_ORIGIN : String(process.env.BACKEND_ORIGIN),
     SOCKET_ORIGIN : String(process.env.SOCKET_ORIGIN),
-    ADMIN_SECRET_KEY : String(process.env.ADMIN_SECRET_KEY),
+    FORGET_PASSWORD_URL : String(process.env.FORGET_PASSWORD_URL),
+    VERIFY_EMAIL_URL : String(process.env.VERIFY_EMAIL_URL),
 
     // TOKEN AND SECRET 
     ACCESS_TOKEN_SECRET : String(process.env.ACCESS_TOKEN_SECRET),

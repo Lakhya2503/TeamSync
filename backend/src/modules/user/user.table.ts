@@ -14,6 +14,8 @@ export const userTable = async() => {
                 role VARCHAR(10) DEFAULT '${USER_TYPE.USER}' CHECK (role IN ('${USER_TYPE.USER}','${USER_TYPE.ADMIN}')),
                 reset_password_token TEXT DEFAULT NULL,
                 reset_password_token_expiry TIMESTAMP DEFAULT NULL,
+                email_verified_token TEXT DEFAULT NULL,
+                email_verified_token_expiry TIMESTAMP DEFAULT NULL,
                 isVerified BOOLEAN NOT NULL DEFAULT FALSE,
                 created_at TIMESTAMP DEFAULT now()
             )
