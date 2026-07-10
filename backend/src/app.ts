@@ -4,8 +4,30 @@ import { ENV } from "./config/ENV.js";
 import { Server } from "socket.io";
 import cookieParser from 'cookie-parser'
 import { createServer } from "http";
+import { intializeSocketIO } from "./socket/socket.js";
+
+
 const app = express()
 const httpServer = createServer(app)
+
+const io = new Server(httpServer, {
+    pingTimeout : 60000,
+    cors : {
+        origin : [
+            ENV.CORS_ORIGIN,
+            ENV.SOCKET_ORIGIN,
+        ],
+        credentials : true,
+        methods: ["POST","GET","PUT","PATCH","DELETE","OPTIONS"]
+    },
+})
+
+
+app.set("io",io)
+app.use(express.static("public"));
+app.use(cookieParser())
+app.use(express.json())
+app.use(express.urlencoded({extended : true, limit : "20kb"}))
 
 
 app.use(cors({
@@ -21,22 +43,6 @@ app.use(cors({
     ]
 }))
 
-const io = new Server(httpServer, {
-    pingTimeout : 60000,
-    cors : {
-        origin : [
-            ENV.CORS_ORIGIN,
-            ENV.SOCKET_ORIGIN,
-        ],
-        credentials : true,
-        methods: ["POST","GET","PUT","PATCH","DELETE","OPTIONS"]
-    },
-})
-
-app.use(cookieParser())
-app.use(express.json())
-app.use(express.urlencoded({extended : true, limit : "20kb"}))
-
 app.use("/api/v1/tms/health",(req:any, res:any)=>{
     res.status(200).json({
         statusCode : 200,
@@ -48,26 +54,25 @@ app.use("/api/v1/tms/health",(req:any, res:any)=>{
 
 // APP ROUTE DIFIEND HERE
 import AuthRouter from './modules/user/user.route.js'
-import { intializeSocketIO } from "./socket/socket.js";
 
 
 // APP ROUTER USE HERE
 app.use("/api/v1/tms/auth", AuthRouter)
 
 
-intializeSocketIO(io)
 
 // TODO : DEFINED THIS ERROR AND RESPONSES TYPE DECLEARE LATER ON
 
-app.use((err:any, req: any, res:any, next:any) => {
-  res.status(err.statusCode || 500).json({
-    success: false,
-    message: err.message,
-    errors: err.errors || [],
-  });
-});
+// app.use((err:any, req: any, res:any, next:any) => {
+//     res.status(err.statusCode || 500).json({
+//         success: false,
+//         message: err.message,
+//         errors: err.errors || [],
+//     });
+// });
 
 
+intializeSocketIO(io)
 
 export {
     httpServer,

@@ -1,4 +1,4 @@
-import * as cookie from "cookie";
+import cookie from "cookie";
 import jwt from 'jsonwebtoken'
 import { COMMAN_SOCKET_EVENT } from '../constant/socketEvents';
 import {Server, Socket } from 'socket.io';
@@ -8,46 +8,27 @@ import { fetchUser } from "../helper/user.helper";
 import { accessTokenUserData, userType } from "../modules/user/user.interface";
 
 export const intializeSocketIO = (io:Server) => {
-    return io.on(COMMAN_SOCKET_EVENT.CONNECTION, async(socket: Socket)=>{
+    return io.on("connection", async(socket: Socket)=>{
         try {
-            const cookies = cookie.parse(socket.handshake.headers?.cookie)
-            let token = cookies.accessToken
 
-            if(!token) {    
-                token = socket.headers("Authorization").replace("Bearer", "")
+            let token: string | undefined;
+            console.log("socket.handshake.headers.cookie",socket.handshake.headers)
+
+            const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+
+            if (cookies.accessToken) {
+                token = cookies.accessToken;
             }
 
-            if(!token) {
-                token = socket.handshake.auth?.token
+            const authHeader = socket.handshake.headers.authorization;
+
+            if (!token && authHeader?.startsWith("Bearer ")) {
+                token = authHeader.slice(7);
             }
 
-            if(!token) {
-                throw new ApiError(401,"Token Expired ❗")
+            if (!token) {
+                throw new ApiError(401, "Access token not found");
             }
-
-            const decodedToken = jwt.verify(
-                token,
-                ENV.ACCESS_TOKEN_SECRET
-            ) as jwt.JwtPayload & accessTokenUserData;
-
-            if(!decodedToken) {
-                throw new ApiError(401, "Token Used Or Expired")
-            }
-
-            const user:userType = await fetchUser(decodedToken.id)
-
-            if(!user){
-                throw new ApiError(401,"Token Expired or Invalid")
-            }
-
-            socket.user = user;
-
-            socket.join(socket.user.id.toString())
-            socket.emit(COMMAN_SOCKET_EVENT.CONNECT);
-            console.log(`🤝 USER CONNECTED | USER : ${socket.user.name}`);
-
-            // mount other functions here
-
 
             socket.on(COMMAN_SOCKET_EVENT.DISCCONECT, ()=>{
                 console.log("🚨 USER DISS-CONNECTED USER : ", user.name);
@@ -60,6 +41,7 @@ export const intializeSocketIO = (io:Server) => {
                 socket.leave(socket.user.id.toString());
             })
         } catch (error : any ) {
+            console.log("error",error)
              socket.emit(
                 COMMAN_SOCKET_EVENT.SOCKET_ERROR,
                 error || "Something went wrong"
@@ -67,7 +49,6 @@ export const intializeSocketIO = (io:Server) => {
         }
     })
 }
-
 
 export const emitSocketEvent = (req:any, roomId:String, event:String, payload:Object) => {
     req.app.get("io").in(roomId).emit(event,payload);
