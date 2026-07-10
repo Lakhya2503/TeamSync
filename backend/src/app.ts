@@ -57,7 +57,7 @@ import AuthRouter from './modules/user/user.route.js'
 
 
 // APP ROUTER USE HERE
-app.use("/api/v1/tms/auth", AuthRouter)
+app.use("/api/v1/teamsync/auth", AuthRouter)
 
 
 
