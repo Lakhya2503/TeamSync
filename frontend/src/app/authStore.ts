@@ -2,7 +2,7 @@ import { type StoreApi }  from 'zustand'
 import { create } from 'zustand'
 import { devtools, persist } from "zustand/middleware"
 import type { AuthLogin, AuthRegister, AuthResponse, userType } from '../types/user.type'
-import { authRegister, authLogin, authLogout } from '../apis/apis';
+import { authRegister, authLogin, authLogout, getMe } from '../apis/apis';
 import type { AxiosResponse } from 'axios';
 
 interface AuthStore {
@@ -11,6 +11,8 @@ interface AuthStore {
     userRegister : (data : AuthRegister) => Promise<void>
     userLogin : (data : AuthLogin) => Promise<AxiosResponse<AuthResponse>>
     userLogout : () => Promise<void>
+    getUser : () => Promise<AxiosResponse<AuthResponse>>
+
 }
 
 const authStore = (
@@ -34,6 +36,18 @@ const authStore = (
         })
         return res.data
     },
+    getUser : async() => {
+        const res = await getMe()
+        set ({
+            user : res.data.data.user,
+            isAuthenticated : true
+        })
+        return res.data
+    },
+    
+
+
+
      userLogout : async() => {
         const res = await authLogout()
         set ({

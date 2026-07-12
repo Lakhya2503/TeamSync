@@ -13,3 +13,21 @@ export const authLogin = (payload : AuthLogin) => {
 export const authLogout = () => {
     return apiClient.get("/auth/logout")
 }
+
+export const getMe = () => {
+    return apiClient.get("/auth/get-me")
+}
+
+
+// ============= auth ============= //
+
+
+
+// ============= auth ============= //
+
+// !! ============= Danger Zone ============= //
+// !! == DELETE USER ACCOUNT
+
+export const deleteUserAccount = () => {
+    return apiClient.delete("/auth/delete-account")
+}
