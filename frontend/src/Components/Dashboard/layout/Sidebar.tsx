@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
   
   const navItems: NavItem[] = [
-    { icon: <HomeIcon size={20} />, label: 'Dashboard', href: '/' },
+    { icon: <HomeIcon size={20} />, label: 'Dashboard', href: '/dashboard' },
     { icon: <UsersIcon size={20} />, label: 'Users', href: '/users' },
     { icon: <SettingsIcon size={20} />, label: 'Settings', href: '/settings' },
   ]

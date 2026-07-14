@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from '../pages/comman/HomePage'
 import AboutPage from '../pages/comman/AboutPage'
@@ -12,63 +12,50 @@ import Layout from '../Components/Dashboard/layout/Layout'
 import Loader from '../Components/ui/Loader'
 import Users from '../Components/Dashboard/admin/Users'
 
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
-function ProtectedRoute({ children }) {  
-  const isAuth = useAuthStore((state)=> state.isAuthenticated)
+function ProtectedRoute({ children }: ProtectedRouteProps) {  
+  const { isAuthenticated, getUser } = useAuthStore()
 
-  if (!isAuth) {
+  useEffect(() => {
+    if (!isAuthenticated) {
+      getUser().catch(() => {});
+    }
+  }, []);
+
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  return children;
-}
-
-
-interface DashboardLayoutProps {
-  children: ReactNode;
-}
-
-const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+  
   return <>{children}</>;
-};
-
+}
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route>
-        <Route path='/' element={<HomePage/>}/>
-        <Route path='/about' element={<AboutPage/>}/>
-        <Route path='/contact' element={<ContactPage/>}/>
-        <Route path='/help' element={<HelpPage/>}/>
-      </Route>
+      {/* PUBLIC ROUTES */}
+      <Route path='/' element={<HomePage />} />
+      <Route path='/about' element={<AboutPage />} />
+      <Route path='/contact' element={<ContactPage />} />
+      <Route path='/help' element={<HelpPage />} />
+      
+      {/* AUTH ROUTES */}
+      <Route path='/login' element={<LoginPage />} />
+      <Route path='/register' element={<RegisterPage />} />
 
-      {/*  AUTH ROUTES */}
-      <Route>
-        <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/register' element={<RegisterPage/>}/>
-        {/* <Route path='/contact' element={<ContactPage/>}/>
-        <Route path='/help' element={<HelpPage/>}/> */}
-      </Route>
-
+      {/* PROTECTED ROUTES WITH LAYOUT */}
       <Route element={
         <ProtectedRoute>
-          <DashboardLayout>
-            <Layout />
-          </DashboardLayout>
+          <Layout /> {/* Layout uses Outlet internally */}
         </ProtectedRoute>
       }>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<div> page on creating Dashboard </div>} />
         <Route path="/users" element={<Users />} />
+        <Route path="/settings" element={<div> page on creating pjage </div>} />
       </Route>
-
-
-
-      {/*  GENERAL ROUTES */}
-
-
-
-      {/*  GENERAL ROUTES */}
-
     </Routes>
   )
 }
