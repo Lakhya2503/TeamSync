@@ -10,6 +10,7 @@ import Dashboard from '../Components/Dashboard/Dashboard'
 import useAuthStore from '../app/authStore'
 import Layout from '../Components/Dashboard/layout/Layout'
 import Loader from '../Components/ui/Loader'
+import Users from '../Components/Dashboard/admin/Users'
 
 
 function ProtectedRoute({ children }) {  
@@ -57,6 +58,7 @@ const AppRouter = () => {
         </ProtectedRoute>
       }>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/users" element={<Users />} />
       </Route>
 
 

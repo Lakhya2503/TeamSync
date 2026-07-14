@@ -3,8 +3,11 @@ export interface userType {
     name? : string,
     email : string,
     avatar? : string,
-    password : string
+    password? : string
 }
+
+
+
 
 export interface AuthRegister {
     name : string,
@@ -20,3 +23,4 @@ export interface AuthLogin {
     email : string,
     password : string
 }
+
