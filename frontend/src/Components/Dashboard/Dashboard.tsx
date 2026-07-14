@@ -5,11 +5,7 @@ import { Outlet } from 'react-router-dom'
 const Dashboard = () => {
   return (
     <>
-     {/* <Layout> */}
-         {/* <div className="">
-            text
-         </div> */}
-     {/* </Layout> */}
+      <div className="">page</div>
     </>
   )
 }

@@ -1,12 +1,20 @@
 import React, { useState } from 'react'
 import { 
   HomeIcon, 
-  UsersIcon, 
   SettingsIcon, 
   LogOutIcon,
   MenuIcon,
   XIcon 
 } from 'lucide-react'
+import { PiUsersThreeLight } from "react-icons/pi";
+import { MdOutlineEditCalendar } from 'react-icons/md';
+import { FaRegListAlt } from 'react-icons/fa';
+import { VscNewSession } from 'react-icons/vsc';
+import { CiCalendar } from 'react-icons/ci';
+import { IoLogoAppleAr } from 'react-icons/io5';
+import { GoReport } from 'react-icons/go';
+import { BiSupport } from 'react-icons/bi';
+
 
 interface NavItem {
   icon: React.ReactNode
@@ -19,8 +27,15 @@ const Sidebar: React.FC = () => {
   
   const navItems: NavItem[] = [
     { icon: <HomeIcon size={20} />, label: 'Dashboard', href: '/dashboard' },
-    { icon: <UsersIcon size={20} />, label: 'Users', href: '/users' },
+    { icon: <PiUsersThreeLight size={20} />, label: 'Users', href: '/users' },
+    { icon: <MdOutlineEditCalendar size={20} />, label: 'Needs', href: '/needs' },
+    { icon: <FaRegListAlt size={20} />, label: 'Plan', href: '/plan' },
+    { icon: <VscNewSession size={20} />, label: 'Session', href: '/sessions' },
+    { icon: <CiCalendar size={20} />, label: 'Evalution', href: '/evalutions' },
+    { icon: <IoLogoAppleAr size={20} />, label: 'Catlog', href: '/catlogs' },
+    { icon: <GoReport size={20} />, label: 'Report', href: '/reports' },
     { icon: <SettingsIcon size={20} />, label: 'Settings', href: '/settings' },
+    { icon: <BiSupport size={20} />, label: 'Support', href: '/support' },
   ]
 
   return (

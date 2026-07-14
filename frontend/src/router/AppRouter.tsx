@@ -49,12 +49,21 @@ const AppRouter = () => {
       {/* PROTECTED ROUTES WITH LAYOUT */}
       <Route element={
         <ProtectedRoute>
-          <Layout /> {/* Layout uses Outlet internally */}
+          <Layout />
         </ProtectedRoute>
       }>
-        <Route path="/dashboard" element={<div> page on creating Dashboard </div>} />
+        <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/users" element={<Users />} />
-        <Route path="/settings" element={<div> page on creating pjage </div>} />
+        <Route path="/needs" element={<div> page on creating needs </div>} />
+        <Route path="/sessions" element={<div> page on creating sessions </div>} />
+        <Route path="/plan" element={<div> page on creating plan </div>} />
+        <Route path="/evalutions" element={<div> page on creating evalutions </div>} />
+        <Route path="/catlogs" element={<div> page on creating catlogs </div>} />
+        <Route path="/reports" element={<div> page on creating reports </div>} />
+        <Route path="/settings" element={<div> page on creating settings </div>} />
+        <Route path="/support" element={<div> page on creating support </div>} />
+
+
       </Route>
     </Routes>
   )
