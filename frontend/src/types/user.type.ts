@@ -3,7 +3,8 @@ export interface userType {
     name? : string,
     email : string,
     avatar? : string,
-    password? : string
+    password? : string,
+    role : string
 }
 
 

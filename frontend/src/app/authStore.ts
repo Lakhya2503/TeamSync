@@ -8,11 +8,11 @@ import type { AxiosResponse } from 'axios';
 interface AuthStore {
     user : userType | null;
     isAuthenticated : boolean;
+    role : "Admin" | "User" | unknown
     userRegister : (data : AuthRegister) => Promise<void>
     userLogin : (data : AuthLogin) => Promise<AxiosResponse<AuthResponse>>
     userLogout : () => Promise<void>
     getUser : () => Promise<AxiosResponse<AuthResponse>>
-
 }
 
 const authStore = (
@@ -20,11 +20,13 @@ const authStore = (
 ):AuthStore => ({
     user : null,
     isAuthenticated : false,
+    role : "",
     userRegister : async(data:AuthRegister) => {
         const res = await authRegister(data)
         set ({
             user : null,
-            isAuthenticated : false
+            isAuthenticated : false,
+            role : ""
         })
         return res.data
     },
@@ -32,7 +34,8 @@ const authStore = (
         const res = await authLogin(data)
         set ({
             user : res.data.data.user,
-            isAuthenticated : true
+            isAuthenticated : true,
+            role : res.data.data.user.role
         })
         return res.data
     },

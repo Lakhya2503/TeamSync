@@ -20,9 +20,9 @@ const Navbar = () => {
   // Filter nav items based on authentication status
   const navItems = [
     // { path: "/dashboard", label: "Dashboard", requiresAuth: true },
-    { path: "/teams", label: "Teams", requiresAuth: true },
-    { path: "/projects", label: "Projects", requiresAuth: true },
-    { path: "/calendar", label: "Calendar", requiresAuth: true },
+    // { path: "/teams", label: "Teams", requiresAuth: true },
+    // { path: "/projects", label: "Projects", requiresAuth: true },
+    // { path: "/calendar", label: "Calendar", requiresAuth: true },
     { path: "/about", label: "About", requiresAuth: false },
     { path: "/help", label: "Help", requiresAuth: false },
     { path: "/contact", label: "Contact", requiresAuth: false },

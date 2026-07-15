@@ -25,7 +25,7 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-const { isAuthenticated, getUser } = useAuthStore();
+const { isAuthenticated, getUser, role } = useAuthStore();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -53,13 +53,14 @@ const PublicRoutes = () => {
       <Navbar />
       {/* <Suspense fallback={<Loader />}> */}
         <Routes>
+          <Route path="*" element={<NotFound/>} />
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/help" element={<HelpPage />} />
-          <Route path="/teams" element={<div> page for Teams </div>} />
+          {/* <Route path="/teams" element={<div> page for Teams </div>} />
           <Route path="/projects" element={<div> page for Calendar </div>} />
-          <Route path="/calendar" element={<div> page for Calendar </div>} />
+          <Route path="/calendar" element={<div> page for Calendar </div>} /> */}
         </Routes>
       {/* </Suspense> */}
       <Footer />
@@ -72,7 +73,7 @@ const AppRouter = () => {
     <Suspense fallback={<Loader />}>
       <Routes>
         {/* PUBLIC ROUTES */}
-        <Route path="*" element={<NotFound/>} />
+        <Route path="*" element={<PublicRoutes/>} />
 
         {/* AUTH ROUTES - No layout needed */}
         <Route path="/login" element={<LoginPage />} />
