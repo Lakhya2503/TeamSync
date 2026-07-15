@@ -56,6 +56,9 @@ const PublicRoutes = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/help" element={<HelpPage />} />
+          <Route path="/teams" element={<div> page for Teams </div>} />
+          <Route path="/projects" element={<div> page for Calendar </div>} />
+          <Route path="/calendar" element={<div> page for Calendar </div>} />
         </Routes>
       {/* </Suspense> */}
       <Footer />
