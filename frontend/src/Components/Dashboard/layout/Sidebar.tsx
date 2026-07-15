@@ -15,7 +15,7 @@ import { IoLogoAppleAr } from "react-icons/io5";
 import { GoReport } from "react-icons/go";
 import { BiSupport } from "react-icons/bi";
 import useAuthStore from "../../../app/authStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 interface NavItem {
   icon: React.ReactNode;
@@ -27,12 +27,12 @@ const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const logout = useAuthStore((state) => state.userLogout);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await logout(); 
-      navigate("/"); 
+      await logout();
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -55,8 +55,8 @@ const Sidebar: React.FC = () => {
     { icon: <BiSupport size={20} />, label: "Support", href: "/support" },
   ];
 
-  if(!isAuthenticated) {
-    return <div> LOGIN FIRST </div>
+  if (!isAuthenticated) {
+    return <div className="text-indigo-600 font-semibold">LOGIN FIRST</div>;
   }
 
   return (
@@ -64,26 +64,33 @@ const Sidebar: React.FC = () => {
       {/* Mobile Menu Toggle */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-indigo-200 hover:bg-indigo-50 transition-colors"
       >
-        {isOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
+        {isOpen ? (
+          <XIcon size={24} className="text-indigo-700" />
+        ) : (
+          <MenuIcon size={24} className="text-indigo-700" />
+        )}
       </button>
 
       {/* Sidebar */}
       <aside
         className={`
-        fixed top-0 left-0 h-full bg-gray-900 text-white
+        fixed top-0 left-0 h-full bg-white text-gray-800
         transition-all duration-300 ease-in-out z-40
         ${isOpen ? "w-64" : "w-0 lg:w-20"}
         overflow-hidden
+        shadow-lg border-r border-indigo-100
       `}
       >
         {/* Brand */}
-        <div className="flex items-center justify-center h-16 border-b border-gray-800">
-          <span className={`font-bold text-xl ${!isOpen && "lg:hidden"}`}>
+        <div className="flex items-center justify-center h-16 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
+          <span className={`font-bold text-xl text-indigo-700 ${!isOpen && "lg:hidden"}`}>
             MyApp
           </span>
-          {isOpen && <span className="ml-2 text-sm text-gray-400">v1.0</span>}
+          {isOpen && (
+            <span className="ml-2 text-sm text-indigo-600">v1.0</span>
+          )}
         </div>
 
         {/* Navigation */}
@@ -91,29 +98,58 @@ const Sidebar: React.FC = () => {
           <ul className="space-y-2">
             {navItems.map((item) => (
               <li key={item.label}>
-                <a
-                  href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors group"
+                <NavLink
+                  to={item.href}
+                  className={({ isActive }) => `
+                    flex items-center gap-3 px-4 py-3 rounded-lg 
+                    transition-all duration-200 group border
+                    ${
+                      isActive
+                        ? "bg-indigo-100 text-indigo-700 border-indigo-300 shadow-sm"
+                        : "hover:bg-indigo-50 hover:text-indigo-600 border-transparent hover:border-indigo-200"
+                    }
+                  `}
                 >
-                  <span className="text-gray-400 group-hover:text-white transition-colors">
-                    {item.icon}
-                  </span>
-                  <span className={`${!isOpen && "lg:hidden"} text-sm`}>
-                    {item.label}
-                  </span>
-                </a>
+                  {({ isActive }) => (
+                    <>
+                      <span
+                        className={`
+                          transition-colors duration-200
+                          ${isActive ? "text-indigo-700" : "text-gray-500 group-hover:text-indigo-600"}
+                        `}
+                      >
+                        {item.icon}
+                      </span>
+                      <span
+                        className={`
+                          ${!isOpen && "lg:hidden"} 
+                          text-sm font-medium 
+                          ${isActive ? "text-indigo-700 font-semibold" : "text-gray-700 group-hover:text-indigo-700"}
+                        `}
+                      >
+                        {item.label}
+                      </span>
+                      {isActive && isOpen && (
+                        <span className="ml-auto w-1.5 h-8 bg-indigo-600 rounded-full shadow-sm"></span>
+                      )}
+                    </>
+                  )}
+                </NavLink>
               </li>
             ))}
           </ul>
         </nav>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800">
-          <button 
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors w-full">
-            <LogOutIcon size={20} className="text-gray-400" />
-            <span className={`text-sm ${!isOpen && "lg:hidden"}`}>Logout</span>
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors w-full border border-transparent hover:border-red-200"
+          >
+            <LogOutIcon size={20} className="text-gray-500 group-hover:text-red-600 transition-colors" />
+            <span className={`text-sm font-medium text-gray-700 ${!isOpen && "lg:hidden"} hover:text-red-600 transition-colors`}>
+              Logout
+            </span>
           </button>
         </div>
       </aside>

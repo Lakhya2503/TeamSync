@@ -38,9 +38,9 @@ const NotificationItem: React.FC<{
       case 'warning':
         return <AlertCircleIcon size={20} className="text-yellow-500" />
       case 'message':
-        return <MessageCircleIcon size={20} className="text-blue-500" />
+        return <MessageCircleIcon size={20} className="text-indigo-500" />
       default:
-        return <InfoIcon size={20} className="text-blue-500" />
+        return <InfoIcon size={20} className="text-indigo-500" />
     }
   }
 
@@ -59,8 +59,8 @@ const NotificationItem: React.FC<{
   return (
     <div 
       className={`
-        px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer
-        ${!notification.isRead ? 'bg-blue-50' : ''}
+        px-4 py-3 hover:bg-indigo-50 transition-colors cursor-pointer
+        ${!notification.isRead ? 'bg-indigo-50/60' : ''}
       `}
       onClick={() => {
         if (!notification.isRead) {
@@ -196,26 +196,26 @@ const Header: React.FC = () => {
 
   if (!user) {
     return (
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+      <header className="bg-white border-b border-indigo-100 sticky top-0 z-30">
         <div className="flex items-center justify-between px-6 py-4">
-          <div className="animate-pulse h-10 w-32 bg-gray-200 rounded"></div>
+          <div className="animate-pulse h-10 w-32 bg-indigo-100 rounded"></div>
         </div>
       </header>
     )
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+    <header className="bg-white border-b border-indigo-100 sticky top-0 z-30">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Left Section - Search */}
         <div className="flex items-center gap-4 flex-1">
           <div className="relative flex-1 max-w-md">
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" size={20} />
             <input
               type="text"
               placeholder="Search..."
               aria-label="Search"
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent hover:border-indigo-300 transition-colors"
             />
           </div>
         </div>
@@ -226,13 +226,13 @@ const Header: React.FC = () => {
           <div className="relative" ref={notificationRef}>
             <button
               onClick={toggleNotification}
-              className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="relative p-2 rounded-lg hover:bg-indigo-50 transition-colors"
               aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
               aria-expanded={isNotificationOpen}
             >
-              <BellIcon size={24} className="text-gray-600" />
+              <BellIcon size={26} className="text-indigo-600 hover:text-indigo-700 transition-colors" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-1">
+                <span className="absolute top-0 right-0 min-w-[18px] h-[18px] bg-indigo-600 text-white text-xs font-bold rounded-full flex items-center justify-center px-1 shadow-sm">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
@@ -240,23 +240,23 @@ const Header: React.FC = () => {
 
             {/* Notification Dropdown */}
             {isNotificationOpen && (
-              <div className="absolute right-0 mt-2 w-[380px] max-w-[90vw] bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden animate-slideDown">
+              <div className="absolute right-0 mt-2 w-[380px] max-w-[90vw] bg-white rounded-lg shadow-lg border border-indigo-100 overflow-hidden animate-slideDown">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
-                  <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+                <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
+                  <h3 className="text-sm font-semibold text-indigo-900">Notifications</h3>
                   <div className="flex items-center gap-2">
                     {notifications.length > 0 && (
                       <>
                         <button
                           onClick={handleMarkAllAsRead}
-                          className="text-xs text-blue-600 hover:text-blue-800 transition-colors"
+                          className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors font-medium"
                         >
                           Mark all read
                         </button>
-                        <span className="text-gray-300">|</span>
+                        <span className="text-indigo-200">|</span>
                         <button
                           onClick={handleClearAll}
-                          className="text-xs text-red-600 hover:text-red-800 transition-colors"
+                          className="text-xs text-red-500 hover:text-red-700 transition-colors font-medium"
                         >
                           Clear all
                         </button>
@@ -278,19 +278,19 @@ const Header: React.FC = () => {
                     ))
                   ) : (
                     <div className="flex flex-col items-center justify-center py-8 px-4">
-                      <BellIcon size={48} className="text-gray-300 mb-2" />
+                      <BellIcon size={48} className="text-indigo-200 mb-2" />
                       <p className="text-sm text-gray-500">No notifications</p>
-                      <p className="text-xs text-gray-400">You're all caught up!</p>
+                      <p className="text-xs text-indigo-400">You're all caught up!</p>
                     </div>
                   )}
                 </div>
 
                 {/* Footer */}
                 {notifications.length > 0 && (
-                  <div className="border-t border-gray-200 px-4 py-2 bg-gray-50">
+                  <div className="border-t border-indigo-100 px-4 py-2 bg-gradient-to-r from-indigo-50 to-white">
                     <a 
                       href="/notifications" 
-                      className="text-sm text-blue-600 hover:text-blue-800 transition-colors flex items-center justify-center gap-1"
+                      className="text-sm text-indigo-600 hover:text-indigo-800 transition-colors flex items-center justify-center gap-1 font-medium"
                     >
                       View all notifications
                       <ChevronDownIcon size={16} className="rotate-[-90deg]" />
@@ -305,11 +305,11 @@ const Header: React.FC = () => {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={toggleDropdown}
-              className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 transition-colors border-2 border-transparent hover:border-indigo-200"
               aria-expanded={isDropdownOpen}
               aria-haspopup="true"
             >
-              <div className="rounded-full bg-amber-300 w-10 h-10 flex items-center justify-center text-white font-semibold overflow-hidden">
+              <div className="rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 w-10 h-10 flex items-center justify-center text-white font-semibold overflow-hidden shadow-sm">
                 {user.avatar ? (
                   <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
                 ) : (
@@ -319,28 +319,28 @@ const Header: React.FC = () => {
 
               <div className="hidden md:block text-left">
                 <p className="text-sm font-medium text-gray-700">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.email}</p>
+                <p className="text-xs text-indigo-500">{user.email}</p>
               </div>
-              <ChevronDownIcon size={20} className="text-gray-400" />
+              <ChevronDownIcon size={20} className="text-indigo-400" />
             </button>
 
             {/* User Dropdown */}
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 animate-slideDown">
-                <div className="px-4 py-2 border-b border-gray-200 md:hidden">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-indigo-100 py-2 animate-slideDown">
+                <div className="px-4 py-2 border-b border-indigo-100 md:hidden">
                   <p className="text-sm font-medium text-gray-700">{user.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                  <p className="text-xs text-indigo-500 truncate">{user.email}</p>
                 </div>
-                <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                   Profile
                 </a>
-                <a href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                <a href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                   Settings
                 </a>
-                <hr className="my-1" />
+                <hr className="my-1 border-indigo-100" />
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors"
+                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                 >
                   Logout
                 </button>
