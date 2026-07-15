@@ -1,9 +1,22 @@
 import React, { useState } from 'react'
 import useAuthStore from '../../app/authStore'
 import { Link, useNavigate } from 'react-router-dom'
-import { FaUser, FaEnvelope, FaLock, FaGoogle, FaGithub } from 'react-icons/fa'
+import { 
+  FaUser, 
+  FaEnvelope, 
+  FaLock, 
+  FaGoogle, 
+  FaGithub,
+  FaShieldAlt,
+  FaRocket,
+  FaUsers,
+  FaArrowRight,
+  FaCheck,
+  FaEye,
+  FaEyeSlash
+} from 'react-icons/fa'
 import { HiUserGroup } from 'react-icons/hi'
-import { BsShieldCheck, BsRocket } from 'react-icons/bs'
+import { BsShieldCheck } from 'react-icons/bs'
 
 const RegisterPage = () => {
   const register = useAuthStore((state) => state.userRegister)
@@ -11,6 +24,7 @@ const RegisterPage = () => {
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const clearAuth = () => {
@@ -42,20 +56,20 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 to-white p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4">
       <div className="flex w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Left side - Registration Form */}
         <div className="w-full md:w-1/2 p-6 sm:p-10">
           <div className="max-w-sm mx-auto">
             {/* Mobile Logo */}
             <div className="md:hidden flex items-center justify-center mb-6">
-              <div className="w-14 h-14 bg-yellow-400 rounded-xl flex items-center justify-center font-bold text-white text-2xl">
+              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-2xl">
                 TS
               </div>
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <HiUserGroup className="text-yellow-500 text-2xl" />
+              <HiUserGroup className="text-indigo-500 text-2xl" />
               <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
             </div>
             <p className="text-gray-600 mb-6">Join TeamSync and start collaborating today</p>
@@ -67,14 +81,14 @@ const RegisterPage = () => {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaUser className="text-yellow-400" />
+                    <FaUser className="text-indigo-400" />
                   </div>
                   <input
                     type="text"
                     value={name}
                     id="name"
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-200"
                     placeholder="John Doe"
                     required
                   />
@@ -87,14 +101,14 @@ const RegisterPage = () => {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaEnvelope className="text-yellow-400" />
+                    <FaEnvelope className="text-indigo-400" />
                   </div>
                   <input
                     type="email"
                     value={email}
                     id="email"
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-200"
                     placeholder="you@example.com"
                     required
                   />
@@ -107,18 +121,25 @@ const RegisterPage = () => {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-yellow-400" />
+                    <FaLock className="text-indigo-400" />
                   </div>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     id="password"
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-12 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-200"
                     placeholder="Create a strong password"
                     required
                     minLength={6}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <FaEyeSlash className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
+                  </button>
                 </div>
                 <p className="mt-1.5 text-xs text-gray-500">Password must be at least 6 characters</p>
               </div>
@@ -126,7 +147,7 @@ const RegisterPage = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-yellow-200/50 flex items-center justify-center space-x-2 ${
+                className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-indigo-200/50 flex items-center justify-center space-x-2 ${
                   isLoading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
@@ -140,7 +161,7 @@ const RegisterPage = () => {
                   </>
                 ) : (
                   <>
-                    <BsRocket className="text-lg" />
+                    <FaRocket className="text-lg" />
                     <span>Create Account</span>
                   </>
                 )}
@@ -150,7 +171,7 @@ const RegisterPage = () => {
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="text-yellow-600 hover:text-yellow-700 font-semibold hover:underline transition-colors"
+                  className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline transition-colors"
                 >
                   Sign in
                 </Link>
@@ -169,20 +190,35 @@ const RegisterPage = () => {
 
             {/* Social Registration */}
             <div className="grid grid-cols-2 gap-3">
-              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-yellow-300 transition-all duration-200">
+              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-indigo-300 transition-all duration-200">
                 <FaGoogle className="text-red-500 text-lg" />
                 <span className="ml-2 text-sm font-medium">Google</span>
               </button>
-              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-yellow-300 transition-all duration-200">
+              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-indigo-300 transition-all duration-200">
                 <FaGithub className="text-gray-800 text-lg" />
                 <span className="ml-2 text-sm font-medium">GitHub</span>
               </button>
+            </div>
+
+            {/* Trust Badge */}
+            <div className="mt-4 flex items-center justify-center space-x-4 text-xs text-gray-500">
+              <span className="flex items-center">
+                <FaShieldAlt className="mr-1 text-indigo-500" />
+                Secure
+              </span>
+              <span>•</span>
+              <span className="flex items-center">
+                <FaCheck className="mr-1 text-indigo-500 h-3 w-3" />
+                Privacy Protected
+              </span>
+              <span>•</span>
+              <span>24/7 Support</span>
             </div>
           </div>
         </div>
 
         {/* Right side - Image */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-yellow-400 to-yellow-500 relative">
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 text-white">
             <div className="text-center">
@@ -196,15 +232,15 @@ const RegisterPage = () => {
               
               <div className="space-y-3 text-white/80">
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <BsShieldCheck className="text-2xl" />
+                  <FaShieldAlt className="text-2xl" />
                   <span className="text-sm">Secure & encrypted platform</span>
                 </div>
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <HiUserGroup className="text-2xl" />
+                  <FaUsers className="text-2xl" />
                   <span className="text-sm">Team collaboration tools</span>
                 </div>
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <BsRocket className="text-2xl" />
+                  <FaRocket className="text-2xl" />
                   <span className="text-sm">Free to get started</span>
                 </div>
               </div>

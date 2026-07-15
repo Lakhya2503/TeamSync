@@ -1,7 +1,23 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import useAuthStore from '../../app/authStore'
-import { FaEnvelope, FaLock, FaGoogle, FaGithub } from 'react-icons/fa'
+import { 
+  FaEnvelope, 
+  FaLock, 
+  FaGoogle, 
+  FaGithub, 
+  FaEye, 
+  FaEyeSlash,
+  FaArrowRight,
+  FaStar,
+  FaUserFriends,
+  FaShieldAlt,
+  FaRocket,
+  FaUsers,
+  FaChartLine,
+  FaHeadset,
+  FaCheck
+} from 'react-icons/fa'
 import { HiUserGroup } from 'react-icons/hi'
 import { BsShieldCheck, BsRocket, BsArrowRight } from 'react-icons/bs'
 
@@ -40,10 +56,10 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 to-white p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4">
       <div className="flex w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Left side - Image */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-yellow-400 to-yellow-500 relative">
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 text-white">
             <div className="text-center">
@@ -57,15 +73,15 @@ const LoginPage = () => {
               
               <div className="space-y-3 text-white/80">
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <BsShieldCheck className="text-2xl" />
+                  <FaShieldAlt className="text-2xl" />
                   <span className="text-sm">Secure & encrypted platform</span>
                 </div>
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <HiUserGroup className="text-2xl" />
+                  <FaUsers className="text-2xl" />
                   <span className="text-sm">Team collaboration tools</span>
                 </div>
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <BsRocket className="text-2xl" />
+                  <FaRocket className="text-2xl" />
                   <span className="text-sm">Real-time project tracking</span>
                 </div>
               </div>
@@ -94,13 +110,13 @@ const LoginPage = () => {
           <div className="max-w-sm mx-auto">
             {/* Mobile Logo */}
             <div className="md:hidden flex items-center justify-center mb-6">
-              <div className="w-14 h-14 bg-yellow-400 rounded-xl flex items-center justify-center font-bold text-white text-2xl">
+              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-2xl">
                 TS
               </div>
             </div>
 
             <div className="flex items-center gap-2 mb-1">
-              <HiUserGroup className="text-yellow-500 text-2xl" />
+              <HiUserGroup className="text-indigo-500 text-2xl" />
               <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
             </div>
             <p className="text-gray-600 mb-6">Please enter your credentials to sign in</p>
@@ -112,14 +128,14 @@ const LoginPage = () => {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaEnvelope className="text-yellow-400" />
+                    <FaEnvelope className="text-indigo-400" />
                   </div>
                   <input
                     type="email"
                     value={email}
                     id="email"
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-200"
                     placeholder="you@example.com"
                     required
                   />
@@ -132,14 +148,14 @@ const LoginPage = () => {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-yellow-400" />
+                    <FaLock className="text-indigo-400" />
                   </div>
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     id="password"
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-12 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-12 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-200"
                     placeholder="Enter your password"
                     required
                   />
@@ -148,20 +164,11 @@ const LoginPage = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? (
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    ) : (
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                      </svg>
-                    )}
+                    {showPassword ? <FaEyeSlash className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
                   </button>
                 </div>
                 <div className="mt-1.5 text-right">
-                  <Link to="/forgot-password" className="text-sm text-yellow-600 hover:text-yellow-700 hover:underline transition-colors">
+                  <Link to="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -170,7 +177,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-yellow-200/50 flex items-center justify-center space-x-2 ${
+                className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-indigo-200/50 flex items-center justify-center space-x-2 ${
                   isLoading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
@@ -185,7 +192,7 @@ const LoginPage = () => {
                 ) : (
                   <>
                     <span>Sign In</span>
-                    <BsArrowRight className="text-lg" />
+                    <FaArrowRight className="text-lg" />
                   </>
                 )}
               </button>
@@ -194,7 +201,7 @@ const LoginPage = () => {
                 Don't have an account?{' '}
                 <Link
                   to="/register"
-                  className="text-yellow-600 hover:text-yellow-700 font-semibold hover:underline transition-colors"
+                  className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline transition-colors"
                 >
                   Create one now
                 </Link>
@@ -213,11 +220,11 @@ const LoginPage = () => {
 
             {/* Social Login */}
             <div className="grid grid-cols-2 gap-3">
-              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-yellow-300 transition-all duration-200">
+              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-indigo-300 transition-all duration-200">
                 <FaGoogle className="text-red-500 text-lg" />
                 <span className="ml-2 text-sm font-medium">Google</span>
               </button>
-              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-yellow-300 transition-all duration-200">
+              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-indigo-300 transition-all duration-200">
                 <FaGithub className="text-gray-800 text-lg" />
                 <span className="ml-2 text-sm font-medium">GitHub</span>
               </button>
@@ -226,14 +233,12 @@ const LoginPage = () => {
             {/* Trust Badge */}
             <div className="mt-4 flex items-center justify-center space-x-4 text-xs text-gray-500">
               <span className="flex items-center">
-                <BsShieldCheck className="mr-1 text-yellow-500" />
+                <FaShieldAlt className="mr-1 text-indigo-500" />
                 Secure
               </span>
               <span>•</span>
               <span className="flex items-center">
-                <svg className="mr-1 text-yellow-500 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
+                <FaCheck className="mr-1 text-indigo-500 h-3 w-3" />
                 Privacy Protected
               </span>
               <span>•</span>

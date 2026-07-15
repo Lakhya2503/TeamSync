@@ -90,6 +90,7 @@ const AppRouter = () => {
           <Route path="/settings" element={<div>Page for creating settings</div>} />
           <Route path="/support" element={<div>Page for creating support</div>} />
           <Route path="/notifications" element={<div>Page for notifications</div>} />
+          <Route path="/profile" element={<div>Page for profile</div>} />
         </Route>
 
         {/* Catch-all route for 404 */}

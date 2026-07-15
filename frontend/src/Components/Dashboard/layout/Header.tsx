@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import useAuthStore from '../../../app/authStore'
 import type { userType } from '../../../types/user.type'
+import { useNavigate } from 'react-router-dom'
 
 // Types
 type NotificationType = 'info' | 'success' | 'warning' | 'message'
@@ -136,6 +137,8 @@ const Header: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const notificationRef = useRef<HTMLDivElement>(null)
   const user = useAuthStore((state) => state.user)
+  const logout = useAuthStore((state) => state.userLogout);
+  const navigate = useNavigate();
 
   // Click outside handlers
   useEffect(() => {
@@ -168,10 +171,15 @@ const Header: React.FC = () => {
     setIsNotificationOpen((prev) => !prev)
   }, [])
 
-  const handleLogout = useCallback(() => {
-    // Add logout logic here
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
     setIsDropdownOpen(false)
-  }, [])
+  };
 
   const handleMarkAsRead = useCallback((id: string) => {
     setNotifications(prev => 

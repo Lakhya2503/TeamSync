@@ -261,11 +261,6 @@ const HomePage = () => {
                             className={`bg-white rounded-xl p-3 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-x-1 border-l-4 border-transparent hover:border-${rankColor.split(' ')[1].split('-')[1]}-500 group relative`}
                           >
                             <div className="flex items-center gap-3">
-                              {/* Rank */}
-                              {/* <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${rankColor} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
-                                {getRankIcon(index)}
-                              </div> */}
-
                               {/* Avatar with status */}
                               <div className="relative flex-shrink-0">
                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-400 flex items-center justify-center text-white font-semibold text-sm">

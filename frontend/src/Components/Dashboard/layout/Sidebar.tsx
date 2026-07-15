@@ -16,6 +16,7 @@ import { GoReport } from "react-icons/go";
 import { BiSupport } from "react-icons/bi";
 import useAuthStore from "../../../app/authStore";
 import { useNavigate, NavLink } from "react-router-dom";
+import { Logo_image } from "../../../assets";
 
 interface NavItem {
   icon: React.ReactNode;
@@ -86,11 +87,11 @@ const Sidebar: React.FC = () => {
         {/* Brand */}
         <div className="flex items-center justify-center h-16 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
           <span className={`font-bold text-xl text-indigo-700 ${!isOpen && "lg:hidden"}`}>
-            MyApp
+              <img src={Logo_image} alt="" className="h-12" />
           </span>
-          {isOpen && (
+          {/* {isOpen && (
             <span className="ml-2 text-sm text-indigo-600">v1.0</span>
-          )}
+          )} */}
         </div>
 
         {/* Navigation */}
