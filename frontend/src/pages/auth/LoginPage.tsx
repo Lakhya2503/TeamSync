@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fa'
 import { HiUserGroup } from 'react-icons/hi'
 import { BsShieldCheck, BsRocket, BsArrowRight } from 'react-icons/bs'
+import { Logo_circle_image } from '../../assets'
 
 const LoginPage = () => {
   const login = useAuthStore((state) => state.userLogin)
@@ -63,9 +64,9 @@ const LoginPage = () => {
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 text-white">
             <div className="text-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-4xl font-bold">TS</span>
-              </div>
+              <div className="mx-auto w-25 h-25 rounded-full flex items-center justify-center mb-4">
+                  <img src={Logo_circle_image} alt="" />
+                </div>
               <h1 className="text-4xl font-bold mb-3">Welcome Back!</h1>
               <p className="text-white/90 text-lg mb-6">
                 Sign in to continue managing your teams and projects

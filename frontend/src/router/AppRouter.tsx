@@ -4,6 +4,9 @@ import useAuthStore from '../app/authStore';
 // import Loader from '../Components/ui/Loader';
 import Navbar from '../Components/ui/Navbar';
 import Footer from '../Components/ui/Footer';
+import ForgetPasswordRequestPage from '../pages/auth/ForgetPasswordRequestPage';
+import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
+import OtpPage from '../pages/auth/OtpPage';
 
 const HomePage = React.lazy(() => import('../pages/comman/HomePage'));
 const AboutPage = React.lazy(() => import('../pages/comman/AboutPage'));
@@ -70,6 +73,11 @@ const AppRouter = () => {
         {/* AUTH ROUTES - No layout needed */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgetPasswordRequestPage/>} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/otp" element={<OtpPage />} />
+
+
 
         {/* PROTECTED ROUTES WITH LAYOUT */}
         <Route

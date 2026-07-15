@@ -17,6 +17,7 @@ import { BiSupport } from "react-icons/bi";
 import useAuthStore from "../../../app/authStore";
 import { useNavigate, NavLink } from "react-router-dom";
 import { Logo_image } from "../../../assets";
+import type { userType } from "../../../types/user.type";
 
 interface NavItem {
   icon: React.ReactNode;
@@ -28,6 +29,7 @@ const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const logout = useAuthStore((state) => state.userLogout);
+  const user = useAuthStore((state) => state.user) as userType;
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -85,13 +87,12 @@ const Sidebar: React.FC = () => {
       `}
       >
         {/* Brand */}
-        <div className="flex items-center justify-center h-16 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
-          <span className={`font-bold text-xl text-indigo-700 ${!isOpen && "lg:hidden"}`}>
-              <img src={Logo_image} alt="" className="h-12" />
+        <div className="flex items-center justify-center h-20 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
+          <span
+            className={`font-bold text-xl text-indigo-700 ${!isOpen && "lg:hidden"}`}
+          >
+            <img src={Logo_image} alt="" className="h-10" />
           </span>
-          {/* {isOpen && (
-            <span className="ml-2 text-sm text-indigo-600">v1.0</span>
-          )} */}
         </div>
 
         {/* Navigation */}
@@ -131,7 +132,7 @@ const Sidebar: React.FC = () => {
                         {item.label}
                       </span>
                       {isActive && isOpen && (
-                        <span className="ml-auto w-1.5 h-8 bg-indigo-600 rounded-full shadow-sm"></span>
+                        <span className="ml-auto w-1.5 h-5 bg-indigo-600 rounded-full shadow-sm"></span>
                       )}
                     </>
                   )}
@@ -145,12 +146,17 @@ const Sidebar: React.FC = () => {
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors w-full border border-transparent hover:border-red-200"
+            className="flex items-center gap-6 px-4 py-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors w-full border border-transparent hover:border-red-200"
           >
-            <LogOutIcon size={20} className="text-gray-500 group-hover:text-red-600 transition-colors" />
-            <span className={`text-sm font-medium text-gray-700 ${!isOpen && "lg:hidden"} hover:text-red-600 transition-colors`}>
-              Logout
-            </span>
+              <LogOutIcon
+                size={20}
+                className="text-gray-500 group-hover:text-red-600 transition-colors"
+              />
+              <span
+                className={`text-sm font-medium text-gray-700 ${!isOpen && "lg:hidden"} hover:text-red-600 transition-colors`}
+              >
+                Logout
+              </span>
           </button>
         </div>
       </aside>

@@ -136,7 +136,7 @@ const Header: React.FC = () => {
 
   const dropdownRef = useRef<HTMLDivElement>(null)
   const notificationRef = useRef<HTMLDivElement>(null)
-  const user = useAuthStore((state) => state.user)
+  const user : userType | null = useAuthStore((state) => state.user)
   const logout = useAuthStore((state) => state.userLogout);
   const navigate = useNavigate();
 

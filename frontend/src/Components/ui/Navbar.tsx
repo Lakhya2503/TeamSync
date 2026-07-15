@@ -19,7 +19,7 @@ const Navbar = () => {
 
   // Filter nav items based on authentication status
   const navItems = [
-    { path: "/dashboard", label: "Dashboard", requiresAuth: true },
+    // { path: "/dashboard", label: "Dashboard", requiresAuth: true },
     { path: "/teams", label: "Teams", requiresAuth: true },
     { path: "/projects", label: "Projects", requiresAuth: true },
     { path: "/calendar", label: "Calendar", requiresAuth: true },
@@ -100,7 +100,7 @@ const Navbar = () => {
                   </button>
 
                   {/* Dropdown menu */}
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-indigo-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute z-50 right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-indigo-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     <div className="px-4 py-2 border-b border-indigo-100">
                       <p className="text-sm font-medium text-gray-900">
                         {userData.name}
@@ -109,6 +109,12 @@ const Navbar = () => {
                         {userData.email}
                       </p>
                     </div>
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                    >
+                      Dashboard
+                    </Link>
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"

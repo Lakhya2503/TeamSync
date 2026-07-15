@@ -109,7 +109,7 @@ const HomePage = () => {
   }, [])
 
   // Calculate completion percentage
-  const getCompletionRate = (completed, total) => {
+  const getCompletionRate = (completed : number, total : number) => {
     return Math.round((completed / total) * 100)
   }
 

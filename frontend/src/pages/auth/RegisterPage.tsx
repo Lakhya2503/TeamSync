@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import useAuthStore from '../../app/authStore'
-import { Link, useNavigate } from 'react-router-dom'
-import { 
-  FaUser, 
-  FaEnvelope, 
-  FaLock, 
-  FaGoogle, 
+import React, { useState } from "react";
+import useAuthStore from "../../app/authStore";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaGoogle,
   FaGithub,
   FaShieldAlt,
   FaRocket,
@@ -13,47 +13,48 @@ import {
   FaArrowRight,
   FaCheck,
   FaEye,
-  FaEyeSlash
-} from 'react-icons/fa'
-import { HiUserGroup } from 'react-icons/hi'
-import { BsShieldCheck } from 'react-icons/bs'
+  FaEyeSlash,
+} from "react-icons/fa";
+import { HiUserGroup } from "react-icons/hi";
+import { BsShieldCheck } from "react-icons/bs";
+import { Logo_circle_image } from "../../assets";
 
 const RegisterPage = () => {
-  const register = useAuthStore((state) => state.userRegister)
-  const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate()
+  const register = useAuthStore((state) => state.userRegister);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const clearAuth = () => {
-    setEmail("")
-    setName("")
-    setPassword("")
-  }
+    setEmail("");
+    setName("");
+    setPassword("");
+  };
 
   const handleRegister = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     const payload = {
       password: password,
       email: email,
-      name: name
-    }
+      name: name,
+    };
     try {
-      const res = await register(payload)
-      console.log(res)
+      const res = await register(payload);
+      console.log(res);
       if (res.data?.user) {
-        navigate("/dashboard")
+        navigate("/dashboard");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setIsLoading(false)
-      clearAuth()
+      setIsLoading(false);
+      clearAuth();
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4">
@@ -63,20 +64,27 @@ const RegisterPage = () => {
           <div className="max-w-sm mx-auto">
             {/* Mobile Logo */}
             <div className="md:hidden flex items-center justify-center mb-6">
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-2xl">
-                TS
+              <div className="mx-auto w-25 h-25 rounded-full flex items-center justify-center mb-4">
+                <img src={Logo_circle_image} alt="" />
               </div>
             </div>
 
             <div className="flex items-center gap-2 mb-1">
               <HiUserGroup className="text-indigo-500 text-2xl" />
-              <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
+              <h2 className="text-3xl font-bold text-gray-800">
+                Create Account
+              </h2>
             </div>
-            <p className="text-gray-600 mb-6">Join TeamSync and start collaborating today</p>
+            <p className="text-gray-600 mb-6">
+              Join TeamSync and start collaborating today
+            </p>
 
             <form onSubmit={handleRegister} className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
                   Full Name
                 </label>
                 <div className="relative">
@@ -96,7 +104,10 @@ const RegisterPage = () => {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
                   Email Address
                 </label>
                 <div className="relative">
@@ -116,7 +127,10 @@ const RegisterPage = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -138,24 +152,46 @@ const RegisterPage = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <FaEyeSlash className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
+                    {showPassword ? (
+                      <FaEyeSlash className="h-5 w-5" />
+                    ) : (
+                      <FaEye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
-                <p className="mt-1.5 text-xs text-gray-500">Password must be at least 6 characters</p>
+                <p className="mt-1.5 text-xs text-gray-500">
+                  Password must be at least 6 characters
+                </p>
               </div>
 
               <button
                 type="submit"
                 disabled={isLoading}
                 className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-indigo-200/50 flex items-center justify-center space-x-2 ${
-                  isLoading ? 'opacity-70 cursor-not-allowed' : ''
+                  isLoading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
               >
                 {isLoading ? (
                   <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     <span>Creating account...</span>
                   </>
@@ -168,7 +204,7 @@ const RegisterPage = () => {
               </button>
 
               <p className="text-center text-gray-600 font-medium">
-                Already have an account?{' '}
+                Already have an account?{" "}
                 <Link
                   to="/login"
                   className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline transition-colors"
@@ -184,7 +220,9 @@ const RegisterPage = () => {
                 <div className="w-full border-t border-gray-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Or continue with</span>
+                <span className="px-4 bg-white text-gray-500">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -222,14 +260,14 @@ const RegisterPage = () => {
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 text-white">
             <div className="text-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-4xl font-bold">TS</span>
-              </div>
+              <div className="mx-auto w-25 h-25 rounded-full flex items-center justify-center mb-4">
+                  <img src={Logo_circle_image} alt="" />
+                </div>
               <h1 className="text-4xl font-bold mb-3">Join TeamSync</h1>
               <p className="text-white/90 text-lg mb-6">
                 Start managing your teams and projects efficiently
               </p>
-              
+
               <div className="space-y-3 text-white/80">
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
                   <FaShieldAlt className="text-2xl" />
@@ -265,7 +303,7 @@ const RegisterPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;
