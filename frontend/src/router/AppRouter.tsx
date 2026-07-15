@@ -1,12 +1,13 @@
 import React, { useEffect, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import useAuthStore from '../app/authStore';
-// import Loader from '../Components/ui/Loader';
+import Loader from '../Components/ui/Loader';
 import Navbar from '../Components/ui/Navbar';
 import Footer from '../Components/ui/Footer';
 import ForgetPasswordRequestPage from '../pages/auth/ForgetPasswordRequestPage';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
 import OtpPage from '../pages/auth/OtpPage';
+import NotFound from '../Components/ui/NotFound';
 
 const HomePage = React.lazy(() => import('../pages/comman/HomePage'));
 const AboutPage = React.lazy(() => import('../pages/comman/AboutPage'));
@@ -68,10 +69,10 @@ const PublicRoutes = () => {
 
 const AppRouter = () => {
   return (
-    // <Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader />}>
       <Routes>
         {/* PUBLIC ROUTES */}
-        <Route path="/*" element={<PublicRoutes />} />
+        <Route path="*" element={<NotFound/>} />
 
         {/* AUTH ROUTES - No layout needed */}
         <Route path="/login" element={<LoginPage />} />
@@ -80,7 +81,8 @@ const AppRouter = () => {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/otp" element={<OtpPage />} />
 
-
+        {/* not found page */}
+         
 
         {/* PROTECTED ROUTES WITH LAYOUT */}
         <Route
@@ -105,9 +107,9 @@ const AppRouter = () => {
         </Route>
 
         {/* Catch-all route for 404 */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
-    // </Suspense>
+     </Suspense>
   );
 };
 
