@@ -1,72 +1,101 @@
-import React, { useEffect } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
-import HomePage from '../pages/comman/HomePage'
-import AboutPage from '../pages/comman/AboutPage'
-import ContactPage from '../pages/comman/ContactPage'
-import HelpPage from '../pages/comman/HelpPage'
-import RegisterPage from '../pages/auth/RegisterPage'
-import LoginPage from '../pages/auth/LoginPage'
-import Dashboard from '../Components/Dashboard/Dashboard'
-import useAuthStore from '../app/authStore'
-import Layout from '../Components/Dashboard/layout/Layout'
-import Loader from '../Components/ui/Loader'
-import Users from '../Components/Dashboard/admin/Users'
+import React, { useEffect, Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import useAuthStore from '../app/authStore';
+// import Loader from '../Components/ui/Loader';
+import Navbar from '../Components/ui/Navbar';
+import Footer from '../Components/ui/Footer';
+
+const HomePage = React.lazy(() => import('../pages/comman/HomePage'));
+const AboutPage = React.lazy(() => import('../pages/comman/AboutPage'));
+const ContactPage = React.lazy(() => import('../pages/comman/ContactPage'));
+const HelpPage = React.lazy(() => import('../pages/comman/HelpPage'));
+const RegisterPage = React.lazy(() => import('../pages/auth/RegisterPage'));
+const LoginPage = React.lazy(() => import('../pages/auth/LoginPage'));
+const Dashboard = React.lazy(() => import('../Components/Dashboard/Dashboard'));
+const Layout = React.lazy(() => import('../Components/Dashboard/layout/Layout'));
+const Users = React.lazy(() => import('../Components/Dashboard/admin/Users'));
+
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-function ProtectedRoute({ children }: ProtectedRouteProps) {  
-  const { isAuthenticated, getUser } = useAuthStore()
+function ProtectedRoute({ children }: ProtectedRouteProps) {
+const { isAuthenticated, getUser } = useAuthStore();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      getUser().catch(() => {});
-    }
-  }, []);
+    const checkAuth = async () => {
+      if (!isAuthenticated) {
+        try {
+          await getUser();
+        } catch (error) {
+          console.error('Authentication failed:', error);
+        }
+      }
+    };
+    checkAuth();
+  }, [isAuthenticated, getUser]);
 
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return <>{children}</>;
 }
+const PublicRoutes = () => {
+  return (
+    <>
+      <Navbar />
+      {/* <Suspense fallback={<Loader />}> */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/help" element={<HelpPage />} />
+        </Routes>
+      {/* </Suspense> */}
+      <Footer />
+    </>
+  );
+};
 
 const AppRouter = () => {
   return (
-    <Routes>
-      {/* PUBLIC ROUTES */}
-      <Route path='/' element={<HomePage />} />
-      <Route path='/about' element={<AboutPage />} />
-      <Route path='/contact' element={<ContactPage />} />
-      <Route path='/help' element={<HelpPage />} />
-      
-      {/* AUTH ROUTES */}
-      <Route path='/login' element={<LoginPage />} />
-      <Route path='/register' element={<RegisterPage />} />
+    // <Suspense fallback={<Loader />}>
+      <Routes>
+        {/* PUBLIC ROUTES */}
+        <Route path="/*" element={<PublicRoutes />} />
 
-      {/* PROTECTED ROUTES WITH LAYOUT */}
-      <Route element={
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>
-      }>
-        <Route path="/dashboard" element={<Dashboard/>} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/needs" element={<div> page on creating needs </div>} />
-        <Route path="/sessions" element={<div> page on creating sessions </div>} />
-        <Route path="/plan" element={<div> page on creating plan </div>} />
-        <Route path="/evalutions" element={<div> page on creating evalutions </div>} />
-        <Route path="/catlogs" element={<div> page on creating catlogs </div>} />
-        <Route path="/reports" element={<div> page on creating reports </div>} />
-        <Route path="/settings" element={<div> page on creating settings </div>} />
-        <Route path="/support" element={<div> page on creating support </div>} />
+        {/* AUTH ROUTES - No layout needed */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
+        {/* PROTECTED ROUTES WITH LAYOUT */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/needs" element={<div>Page for creating needs</div>} />
+          <Route path="/sessions" element={<div>Page for creating sessions</div>} />
+          <Route path="/plan" element={<div>Page for creating plan</div>} />
+          <Route path="/evalutions" element={<div>Page for creating evaluations</div>} />
+          <Route path="/catalogs" element={<div>Page for creating catalogs</div>} />
+          <Route path="/reports" element={<div>Page for creating reports</div>} />
+          <Route path="/settings" element={<div>Page for creating settings</div>} />
+          <Route path="/support" element={<div>Page for creating support</div>} />
+        </Route>
 
-      </Route>
-    </Routes>
-  )
-}
+        {/* Catch-all route for 404 */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    // </Suspense>
+  );
+};
 
-export default AppRouter
+export default AppRouter;

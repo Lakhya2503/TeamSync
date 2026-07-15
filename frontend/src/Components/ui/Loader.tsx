@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Loader({
   fullScreen = false,
-  size = 'md', // sm | md | lg
+  size = 'md', 
   text = 'Loading...'
 }) {
   const sizeClasses = {

@@ -14,6 +14,8 @@ import { CiCalendar } from "react-icons/ci";
 import { IoLogoAppleAr } from "react-icons/io5";
 import { GoReport } from "react-icons/go";
 import { BiSupport } from "react-icons/bi";
+import useAuthStore from "../../../app/authStore";
+import { useNavigate } from "react-router-dom";
 
 interface NavItem {
   icon: React.ReactNode;
@@ -23,6 +25,18 @@ interface NavItem {
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const logout = useAuthStore((state) => state.userLogout);
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      await logout(); 
+      navigate("/"); 
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   const navItems: NavItem[] = [
     { icon: <HomeIcon size={20} />, label: "Dashboard", href: "/dashboard" },
@@ -35,11 +49,15 @@ const Sidebar: React.FC = () => {
     { icon: <FaRegListAlt size={20} />, label: "Plan", href: "/plan" },
     { icon: <VscNewSession size={20} />, label: "Session", href: "/sessions" },
     { icon: <CiCalendar size={20} />, label: "Evalution", href: "/evalutions" },
-    { icon: <IoLogoAppleAr size={20} />, label: "Catlog", href: "/catlogs" },
+    { icon: <IoLogoAppleAr size={20} />, label: "Catalogs", href: "/catalogs" },
     { icon: <GoReport size={20} />, label: "Report", href: "/reports" },
     { icon: <SettingsIcon size={20} />, label: "Settings", href: "/settings" },
     { icon: <BiSupport size={20} />, label: "Support", href: "/support" },
   ];
+
+  if(!isAuthenticated) {
+    return <div> LOGIN FIRST </div>
+  }
 
   return (
     <>
@@ -91,7 +109,9 @@ const Sidebar: React.FC = () => {
 
         {/* Footer */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800">
-          <button className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors w-full">
+          <button 
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors w-full">
             <LogOutIcon size={20} className="text-gray-400" />
             <span className={`text-sm ${!isOpen && "lg:hidden"}`}>Logout</span>
           </button>

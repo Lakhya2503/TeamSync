@@ -61,17 +61,6 @@ app.use("/api/v1/teamsync/auth", AuthRouter)
 
 
 
-// TODO : DEFINED THIS ERROR AND RESPONSES TYPE DECLEARE LATER ON
-
-// app.use((err:any, req: any, res:any, next:any) => {
-//     res.status(err.statusCode || 500).json({
-//         success: false,
-//         message: err.message,
-//         errors: err.errors || [],
-//     });
-// });
-
-
 intializeSocketIO(io)
 
 export {
