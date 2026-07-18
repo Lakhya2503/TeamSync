@@ -183,6 +183,8 @@ export const loginUser = asyncHandler(async(req : LoginRequest,res: LoginRespons
 
     const { accessToken, refreshToken } = await generateAccessRefreshToken(user.rows[0])
 
+    console.log(`${user.rows[0].name} : Login successfully`)
+
     return res
         .status(200)
         .cookie("accessToken", accessToken, options)
@@ -210,6 +212,8 @@ export const logoutUser = asyncHandler(async(req : LogoutRequest,res: LogoutResp
     await database.query(
         "UPDATE users SET refreshToken = $1 WHERE id = $2",["",user.id]
     )
+
+        console.log(`${user.name} : Log out successfully`)
 
     return res
         .status(200)
