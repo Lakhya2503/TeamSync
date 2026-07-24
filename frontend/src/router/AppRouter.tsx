@@ -8,6 +8,9 @@ import ForgetPasswordRequestPage from '../pages/auth/ForgetPasswordRequestPage';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
 import OtpPage from '../pages/auth/OtpPage';
 import NotFound from '../Components/ui/NotFound';
+import AdminRouter from './AdminRouter';
+import ManagerRouter from './ManagerRouter';
+import UserRouter from './UserRouter';
 
 const HomePage = React.lazy(() => import('../pages/comman/HomePage'));
 const AboutPage = React.lazy(() => import('../pages/comman/AboutPage'));
@@ -15,9 +18,8 @@ const ContactPage = React.lazy(() => import('../pages/comman/ContactPage'));
 const HelpPage = React.lazy(() => import('../pages/comman/HelpPage'));
 const RegisterPage = React.lazy(() => import('../pages/auth/RegisterPage'));
 const LoginPage = React.lazy(() => import('../pages/auth/LoginPage'));
-const Dashboard = React.lazy(() => import('../Components/Dashboard/Dashboard'));
 const Layout = React.lazy(() => import('../Components/Dashboard/layout/Layout'));
-const Users = React.lazy(() => import('../Components/Dashboard/admin/Users'));
+
 
 
 interface ProtectedRouteProps {
@@ -70,6 +72,8 @@ const PublicRoutes = () => {
 };
 
 const AppRouter = () => {
+  const { user } = useAuthStore();
+  const userPath : string = `${user?.role}`
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
@@ -94,18 +98,20 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         >
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/needs" element={<div>Page for creating needs</div>} />
-          <Route path="/sessions" element={<div>Page for creating sessions</div>} />
-          <Route path="/plan" element={<div>Page for creating plan</div>} />
-          <Route path="/evalutions" element={<div>Page for creating evaluations</div>} />
-          <Route path="/catalogs" element={<div>Page for creating catalogs</div>} />
-          <Route path="/reports" element={<div>Page for creating reports</div>} />
-          <Route path="/settings" element={<div>Page for creating settings</div>} />
-          <Route path="/support" element={<div>Page for creating support</div>} />
-          <Route path="/notifications" element={<div>Page for notifications</div>} />
-          <Route path="/profile" element={<div>Page for profile</div>} />
+          <Route
+            path={`/${userPath}`}
+            element={
+              userPath === "Admin" ? (
+                <AdminRouter />
+              ) : userPath === "Manager" ? (
+                <ManagerRouter />
+              ) : userPath === "User" ? (
+                <UserRouter />
+              ) : (
+                <NotFound />
+              )
+            }
+          />
         </Route>
  
         {/* Catch-all route for 404 */}
