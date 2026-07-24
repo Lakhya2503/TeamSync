@@ -74,6 +74,7 @@ const PublicRoutes = () => {
 const AppRouter = () => {
   const { user } = useAuthStore();
   const userPath : string = `${user?.role}`
+  console.log("user", userPath)
   return (
     <Suspense fallback={<Loader />}>
       <Routes>

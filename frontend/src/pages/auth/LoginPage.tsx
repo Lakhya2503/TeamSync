@@ -45,8 +45,9 @@ const LoginPage = () => {
       const res = await login(payload)
       console.log(res.data.user)
       console.log(user)
+      console.log("role", res.data.user?.role)
       if (res.data.user) {
-        navigate("/dashboard")
+        navigate(`/${res.data.user?.role}/dashboard`)
       }
     } catch (error) {
       console.error(error)
