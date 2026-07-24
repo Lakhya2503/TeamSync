@@ -175,6 +175,7 @@ export const loginUser = asyncHandler(async(req : LoginRequest,res: LoginRespons
         throw new ApiError(401, "User can't Exist with this Email..")
     }
 
+    
     const isPasswordCorrect = await bcrypt.compare(password, user.rows[0].password)
 
     if(!isPasswordCorrect) {
