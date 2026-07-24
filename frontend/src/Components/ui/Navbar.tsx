@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../../app/authStore";
+import { Logo_circle_image, Logo_image } from "../../assets";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -49,12 +50,13 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center font-bold text-white text-xl shadow-sm">
+              {/* <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center font-bold text-white text-xl shadow-sm">
                 TS
-              </div>
-              <span className="text-2xl font-bold text-gray-800">
+              </div> */}
+              <img src={Logo_image} alt="" className="w-60" />
+              {/* <span className="text-2xl font-bold text-gray-800">
                 Team<span className="text-indigo-600">Sync</span>
-              </span>
+              </span> */}
             </Link>
           </div>
 

@@ -78,8 +78,6 @@ const HomePage = () => {
     { id: 2, name: 'Michael Chen', team: 'Project Alpha', tasks: 53, completed: 48, avatar: 'MC', status: 'online' },
     { id: 3, name: 'Emily Rodriguez', team: 'Marketing Q4', tasks: 38, completed: 29, avatar: 'ER', status: 'away' },
     { id: 4, name: 'David Kim', team: 'Design Sprint', tasks: 41, completed: 36, avatar: 'DK', status: 'online' },
-    { id: 5, name: 'Lisa Thompson', team: 'Project Alpha', tasks: 35, completed: 33, avatar: 'LT', status: 'offline' },
-    { id: 6, name: 'James Wilson', team: 'Marketing Q4', tasks: 29, completed: 21, avatar: 'JW', status: 'online' },
   ])
 
   // Live update simulation
