@@ -100,7 +100,7 @@ const AppRouter = () => {
           }
         >
           <Route
-            path={`/${userPath}`}
+            path={`/${userPath}/dashboard`}
             element={
               userPath === "Admin" ? (
                 <AdminRouter />
