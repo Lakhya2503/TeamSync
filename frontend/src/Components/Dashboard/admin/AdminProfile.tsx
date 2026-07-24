@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Profile = () => {
+const AdminProfile = () => {
   return (
-    <div>Profile</div>
+    <div>AdminProfile</div>
   )
 }
 
-export default Profile
+export default AdminProfile

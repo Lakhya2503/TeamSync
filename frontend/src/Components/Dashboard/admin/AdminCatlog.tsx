@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Catlog = () => {
+const AdminCatlog = () => {
   return (
-    <div>Catlog</div>
+    <div>AdminCatlog</div>
   )
 }
 
-export default Catlog
+export default AdminCatlog

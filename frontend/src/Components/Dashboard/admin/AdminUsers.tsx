@@ -1,10 +1,9 @@
 import React from 'react'
 
-const Users = () => {
-  console.log("io")
+const AdminUsers = () => {
   return (
-    <div>Users</div>
+    <div>AdminUsers</div>
   )
 }
 
-export default Users
+export default AdminUsers

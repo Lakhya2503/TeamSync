@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Session = () => {
+const AdminSession = () => {
   return (
-    <div>Session</div>
+    <div>AdminSession</div>
   )
 }
 
-export default Session
+export default AdminSession

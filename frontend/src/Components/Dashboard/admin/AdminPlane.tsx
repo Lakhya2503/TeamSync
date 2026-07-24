@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Plane = () => {
+const AdminPlane = () => {
   return (
-    <div>Plane</div>
+    <div>AdminPlane</div>
   )
 }
 
-export default Plane
+export default AdminPlane
