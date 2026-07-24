@@ -26,10 +26,11 @@ interface ProtectedRouteProps {
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
 const { isAuthenticated, getUser, role } = useAuthStore();
+console.log("role", role)
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated) { 
         try {
           await getUser();
         } catch (error) {
@@ -80,7 +81,7 @@ const AppRouter = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgetPasswordRequestPage/>} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/otp" element={<OtpPage />} />
+        <Route path="/verify-email/:token" element={<OtpPage />} />
 
         {/* not found page */}
          
@@ -106,7 +107,7 @@ const AppRouter = () => {
           <Route path="/notifications" element={<div>Page for notifications</div>} />
           <Route path="/profile" element={<div>Page for profile</div>} />
         </Route>
-
+ 
         {/* Catch-all route for 404 */}
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>

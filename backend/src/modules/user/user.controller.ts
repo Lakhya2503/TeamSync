@@ -78,7 +78,6 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
-
     const { hashToken, unHashedToken  } = temporaryTokenGenerater()
     const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
@@ -90,17 +89,17 @@ export const registerUser = asyncHandler(async(req : RegisterRequest, res: Regis
             [name,email,hashedPassword,role,false]
     )
 
-    
     await database.query(
         `UPDATE users SET email_verified_token = $1, email_verified_token_expiry = $2 WHERE id = $3 RETURNING *
-        `, [unHashedToken, tokenExpiry, user.rows[0].id ]
+        `, [unHashedToken, tokenExpiry, user.rows[0].id ]   
     )
 
     
     const otp = otpGenerator()
-    await setOtp(unHashedToken,otp)
+    const otpExpiry : number = 1200 
+    await setOtp(unHashedToken,otp,otpExpiry)
 
-    console.log(`${ENV.BACKEND_ORIGIN}/api/v1/tms/auth/${hashToken}`)
+    console.log(`${ENV.CORS_ORIGIN}/verify-email/${hashToken}`)
 
 
     if(!user.rows.length) {
