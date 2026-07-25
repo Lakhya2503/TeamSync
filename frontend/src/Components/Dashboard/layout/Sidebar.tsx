@@ -56,7 +56,7 @@ const Sidebar: React.FC = () => {
     { icon: <VscNewSession size={20} />, label: "Session", href: `/${role}/sessions` },
     { icon: <CiCalendar size={20} />, label: "Evalution", href: `/${role}/evalution` },
     { icon: <IoLogoAppleAr size={20} />, label: "Catalogs", href: `/${role}/catlogs` },
-    { icon: <GoReport size={20} />, label: "Report", href: `/${role}/sessions` },
+    { icon: <GoReport size={20} />, label: "Report", href: `/${role}/reports` },
     { icon: <SettingsIcon size={20} />, label: "Settings", href: `/${role}/setting` },
     { icon: <BiSupport size={20} />, label: "Support", href: `/${role}/support` },
   ];
