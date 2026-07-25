@@ -30,6 +30,8 @@ const Sidebar: React.FC = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const logout = useAuthStore((state) => state.userLogout);
   const user = useAuthStore((state) => state.user) as userType;
+  const role = useAuthStore((state) => state.role);
+
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -42,20 +44,21 @@ const Sidebar: React.FC = () => {
   };
 
   const navItems: NavItem[] = [
-    { icon: <HomeIcon size={20} />, label: "Dashboard", href: "/dashboard" },
-    { icon: <PiUsersThreeLight size={20} />, label: "Users", href: "/users" },
+    { icon: <HomeIcon size={20} />, label: "Dashboard", href: `/${role}/dashboard`},
+    { icon: <PiUsersThreeLight size={20} />, label: "Users", href: `/${role}/users`},
     {
       icon: <MdOutlineEditCalendar size={20} />,
       label: "Needs",
-      href: "/needs",
+      href:`/${role}/needs`,
+      
     },
-    { icon: <FaRegListAlt size={20} />, label: "Plan", href: "/plan" },
-    { icon: <VscNewSession size={20} />, label: "Session", href: "/sessions" },
-    { icon: <CiCalendar size={20} />, label: "Evalution", href: "/evalutions" },
-    { icon: <IoLogoAppleAr size={20} />, label: "Catalogs", href: "/catalogs" },
-    { icon: <GoReport size={20} />, label: "Report", href: "/reports" },
-    { icon: <SettingsIcon size={20} />, label: "Settings", href: "/settings" },
-    { icon: <BiSupport size={20} />, label: "Support", href: "/support" },
+    { icon: <FaRegListAlt size={20} />, label: "Plan", href: `/${role}/plan` },
+    { icon: <VscNewSession size={20} />, label: "Session", href: `/${role}/sessions` },
+    { icon: <CiCalendar size={20} />, label: "Evalution", href: `/${role}/evalution` },
+    { icon: <IoLogoAppleAr size={20} />, label: "Catalogs", href: `/${role}/catlogs` },
+    { icon: <GoReport size={20} />, label: "Report", href: `/${role}/sessions` },
+    { icon: <SettingsIcon size={20} />, label: "Settings", href: `/${role}/setting` },
+    { icon: <BiSupport size={20} />, label: "Support", href: `/${role}/support` },
   ];
 
   if (!isAuthenticated) {

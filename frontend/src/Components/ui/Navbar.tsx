@@ -7,6 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  const role = useAuthStore((state)=> state.role)
   const logout = useAuthStore((state) => state.userLogout);
 
   const handleLogout = async () => {
@@ -112,7 +113,7 @@ const Navbar = () => {
                       </p>
                     </div>
                     <Link
-                      to="/dashboard"
+                      to={`/${role}/dashboard`}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                     >
                       Dashboard
