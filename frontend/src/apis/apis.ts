@@ -18,6 +18,17 @@ export const getMe = () => {
     return apiClient.get("/auth/get-me")
 }
 
+export const verifyEmail = () => {
+    return apiClient.post("/auth/verify-email/")
+}
+
+export const verifyEmailRequest = () => {
+    return apiClient.get("/auth/verify-email-request/:email")
+}
+
+
+
+
 
 // ============= auth ============= //
 

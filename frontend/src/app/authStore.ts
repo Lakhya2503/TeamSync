@@ -1,72 +1,99 @@
-import { type StoreApi }  from 'zustand'
-import { create } from 'zustand'
-import { devtools, persist } from "zustand/middleware"
-import type { AuthLogin, AuthRegister, AuthResponse, userType } from '../types/user.type'
-import { authRegister, authLogin, authLogout, getMe } from '../apis/apis';
-import type { AxiosResponse } from 'axios';
+import { type StoreApi } from "zustand";
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import type {
+  AuthLogin,
+  AuthRegister,
+  AuthResponse,
+  AuthVerifyEmail,
+  AuthVerifyEmailRequest,
+  userType,
+} from "../types/user.type";
+import {
+     authRegister,
+     authLogin, 
+     authLogout, 
+     getMe, 
+     verifyEmail, 
+     verifyEmailRequest 
+    } from "../apis/apis";
+import type { AxiosResponse } from "axios";
 
 interface AuthStore {
-    user : userType | null;
-    isAuthenticated : boolean;
-    role : "Admin" | "User" | unknown
-    userRegister : (data : AuthRegister) => Promise<void>
-    userLogin : (data : AuthLogin) => Promise<AxiosResponse<AuthResponse>>
-    userLogout : () => Promise<void>
-    getUser : () => Promise<AxiosResponse<AuthResponse>>
+  user: userType | null;
+  isAuthenticated: boolean;
+  role: "Admin" | "User" | unknown;
+  userRegister: (data: AuthRegister) => Promise<void>;
+  userLogin: (data: AuthLogin) => Promise<AxiosResponse<AuthResponse>>;
+  userLogout: () => Promise<void>;
+  getUser: () => Promise<AxiosResponse<AuthResponse>>;
+  userVerifyEmail: (data: AuthVerifyEmail) => Promise<void>;
+  userVerifyEmailRequest: (data: AuthVerifyEmailRequest) => Promise<void>;
 }
 
-const authStore = (
-    set : StoreApi<AuthStore>['setState']
-):AuthStore => ({
-    user : null,
-    isAuthenticated : false,
-    role : "",
-    userRegister : async(data:AuthRegister) => {
-        const res = await authRegister(data)
-        set ({
-            user : null,
-            isAuthenticated : false,
-            role : ""
-        })
-        return res.data
-    },
-    userLogin : async(data:AuthLogin) => {
-        const res = await authLogin(data)
-        set ({
-            user : res.data.data.user,
-            isAuthenticated : true,
-            role : res.data.data.user.role
-        })
-        return res.data
-    },
-    getUser : async() => {
-        const res = await getMe()
-        set ({
-            user : res.data.data.user,
-            isAuthenticated : true
-        })
-        return res.data
-    },
-    
+const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
+  user: null,
+  isAuthenticated: false,
+  role: "",
+  userRegister: async (data: AuthRegister) => {
+    const res = await authRegister(data);
+    set({
+      user: null,
+      isAuthenticated: false,
+      role: "",
+    });
+    return res.data;
+  },
+  userLogin: async (data: AuthLogin) => {
+    const res = await authLogin(data);
+    set({
+      user: res.data.data.user,
+      isAuthenticated: true,
+      role: res.data.data.user.role,
+    });
+    return res.data;
+  },
+  getUser: async () => {
+    const res = await getMe();
+    set({
+      user: res.data.data.user,
+      isAuthenticated: true,
+    });
+    return res.data;
+  },
+  userVerifyEmail: async () => {
+    const res = await verifyEmail();
+    set({
+      user: res.data.data.user,
+      isAuthenticated: true,
+    });
+    return res.data;
+  },
+  userVerifyEmailRequest: async () => {
+    const res = await verifyEmailRequest();
+    set({
+      user: res.data.data.user,
+      isAuthenticated: true,
+    });
+    return res.data;
+  },
 
-
-
-     userLogout : async() => {
-        const res = await authLogout()
-        set ({
-            user : null,
-            isAuthenticated : false
-        })
-        return res.data
-    },
-})
+  userLogout: async () => {
+    const res = await authLogout();
+    set({
+      user: null,
+      isAuthenticated: false,
+    });
+    return res.data;
+  },
+});
 
 const useAuthStore = create(
-    devtools(
-        persist(authStore,{
-            name : "auth"
-        })
-    )
-)
+  devtools(
+    persist(authStore, {
+      name: "auth",
+    })
+  )
+);
 
 export default useAuthStore;

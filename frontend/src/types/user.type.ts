@@ -8,8 +8,6 @@ export interface userType {
 }
 
 
-
-
 export interface AuthRegister {
     name : string,
     email : string,
@@ -25,3 +23,10 @@ export interface AuthLogin {
     password : string
 }
 
+export interface AuthVerifyEmailRequest {
+    email : string
+}
+
+export interface AuthVerifyEmail {
+    email : string
+}

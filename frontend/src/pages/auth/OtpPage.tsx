@@ -5,7 +5,7 @@ import { Logo_circle_image } from '../../assets';
 
 const OtpPage: React.FC = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(40);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const OtpPage: React.FC = () => {
   };
 
   const handleResend = () => {
-    setTimer(30);
+    setTimer(60);
     setOtp(['', '', '', '', '', '']);
     inputRefs.current[0]?.focus();
     // Handle resend logic
