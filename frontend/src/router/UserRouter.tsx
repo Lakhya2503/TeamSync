@@ -7,7 +7,6 @@ const UserRouter = () => {
    <>
        <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
-            {/* <Route path="/users" element={<AdminUsers />} /> */}
             <Route path="/needs" element={<div>Page for creating needs</div>} />
             <Route path="/sessions" element={<div>Page for creating sessions</div>} />
             <Route path="/plan" element={<div>Page for creating plan</div>} />
