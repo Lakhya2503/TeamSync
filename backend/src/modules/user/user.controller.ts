@@ -47,7 +47,7 @@ export const registerUser = asyncHandler(
       "SELECT * FROM users WHERE email = $1 ",
       [email]
     );
-    
+
     const _userExists: userType = userExists.rows[0];
 
     if (!_userExists) {
@@ -74,7 +74,8 @@ export const registerUser = asyncHandler(
 
     const _user: userType = user.rows[0];
 
-    const verificationCode = otpGenerator();
+    const verificationCode: string = otpGenerator();
+    console.log(`VerificationCode : ${verificationCode}`);
 
     await database.query(
       `UPDATE users SET email_verified_code = $1, email_verified_code_expiry = $2 WHERE id = $3 RETURNING *
@@ -85,6 +86,15 @@ export const registerUser = asyncHandler(
     if (!_user) {
       throw new ApiError(400, "User can't register");
     }
+
+    /* 
+    TODO : the verification code send on mail via service
+    await sendVerificationCode {
+        verificationcode,
+        email,
+        name
+    }
+    */
 
     return res
       .status(200)
@@ -126,29 +136,27 @@ export const verifyEmailReuqest = asyncHandler(
 );
 
 export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
-  const { otp, token } = req.body;
+  const { verificationCode } = req.body;
+  const { email } = req.query;
 
-  const decodedToken = crypto.createHash("sha256").update(token).digest("hex");
+  const user = await database.query(` SELECT * FROM users WHERE email = $1 `, [
+    email,
+  ]);
 
-  const user = await database.query(
-    ` SELECT * FROM users WHERE reset_password_token = $1 `,
-    [decodedToken]
-  );
+  const _user: userType = user.rows[0];
 
-  if (user.rows.length < 0) {
-    throw new ApiError(401, "Token Used or Expired");
+  if (!_user) {
+    throw new ApiError(401, "User Not found");
   }
 
-  const otpFromServer = await getOtp(decodedToken);
-
-  if (otpFromServer.otp !== otp) {
+  if (_user.verificationCode !== verificationCode) {
     throw new ApiError(400, "Invalid OTP");
   }
 
   await database.query(
-    ` UPDATE users SET reset_password_token = $1, reset_password_token_expiry = $2 WHERE id = $3 RETURNING *
+    ` UPDATE users SET email_verified_code = $1, email_verified_code_expiry = $2, isVerified = $3 WHERE id = $4 RETURNING *
         `,
-    ["", "", user.rows[0].id]
+    ["", "", true, user.rows[0].id]
   );
 
   return res
