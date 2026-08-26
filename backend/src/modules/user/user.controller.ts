@@ -1,6 +1,6 @@
 import { database } from "../../config/db";
 import { ENV } from "../../config/ENV";
-import { requiredFiled } from "../../helper/user.helper";
+import { fetchUser, requiredFiled } from "../../helper/user.helper";
 import { ApiError } from "../../utils/ApiError";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
@@ -164,13 +164,15 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     email,
   ]);
 
-  if (!user.rows.length) {
+  const _user: userType = await fetchUser(user.rows[0].id) 
+
+  if (!_user) {
     throw new ApiError(401, "User can't Exist with this Email..");
   }
 
-  const isPasswordCorrect = await bcrypt.compare(
+  const isPasswordCorrect = bcrypt.compare(
     password,
-    user.rows[0].password
+    _user?.password
   );
 
   if (!isPasswordCorrect) {
@@ -178,7 +180,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const { accessToken, refreshToken } = await generateAccessRefreshToken(
-    user.rows[0]
+    _user
   );
 
   console.log(`${user.rows[0].name} : Login successfully`);
