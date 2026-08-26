@@ -43,12 +43,14 @@ export const registerUser = asyncHandler(
 
     requiredFiled([name, email, password]);
 
-    const userExists: any = await database.query(
+    const userExists = await database.query(
       "SELECT * FROM users WHERE email = $1 ",
       [email]
     );
+    
+    const _userExists: userType = userExists.rows[0];
 
-    if (userExists.rows.length > 0) {
+    if (!_userExists) {
       throw new ApiError(400, "User already Exist");
     }
 
@@ -61,8 +63,7 @@ export const registerUser = asyncHandler(
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { hashToken, unHashedToken } = temporaryTokenGenerater();
-    const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    const verificationCodeExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
     const user = await database.query(
       `INSERT INTO users (name, email, password, role, isVerified) 
@@ -71,19 +72,17 @@ export const registerUser = asyncHandler(
       [name, email, hashedPassword, role, false]
     );
 
+    const _user: userType = user.rows[0];
+
+    const verificationCode = otpGenerator();
+
     await database.query(
-      `UPDATE users SET email_verified_token = $1, email_verified_token_expiry = $2 WHERE id = $3 RETURNING *
+      `UPDATE users SET email_verified_code = $1, email_verified_code_expiry = $2 WHERE id = $3 RETURNING *
         `,
-      [unHashedToken, tokenExpiry, user.rows[0].id]
+      [verificationCode, verificationCodeExpiry, _user.id]
     );
 
-    const otp = otpGenerator();
-    const otpExpiry: number = 1200;
-    await setOtp(unHashedToken, otp);
-
-    console.log(`${ENV.CORS_ORIGIN}/verify-email/${hashToken}`);
-
-    if (!user.rows.length) {
+    if (!_user) {
       throw new ApiError(400, "User can't register");
     }
 
@@ -164,26 +163,25 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     email,
   ]);
 
-  const _user: userType = await fetchUser(user.rows[0].id) 
+  const _user: userType = await fetchUser(user.rows[0].id);
 
   if (!_user) {
     throw new ApiError(401, "User can't Exist with this Email..");
   }
 
-  const isPasswordCorrect = bcrypt.compare(
-    password,
-    _user?.password
-  );
+  const isPasswordCorrect = bcrypt.compare(password, _user?.password);
 
   if (!isPasswordCorrect) {
     throw new ApiError(401, "Creadential faild....");
   }
 
-  const { accessToken, refreshToken } = await generateAccessRefreshToken(
-    _user
-  );
+  const { accessToken, refreshToken } = await generateAccessRefreshToken(_user);
 
   console.log(`${user.rows[0].name} : Login successfully`);
+
+  if (!_user.isverified) {
+    throw new ApiError(401, "Account not verified", [], false);
+  }
 
   return res
     .status(200)

@@ -31,6 +31,7 @@ export interface userType {
     password: string,
     avatar?: string,
     role?: string,
+    isverified : boolean,
     refreshtoken?: string,
     email_verified_token_expiry : string,
     email_verified_token : string,
