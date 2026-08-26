@@ -1,14 +1,19 @@
+import { ApiResponseType } from "../types/ApiResponseType";
 
-export class ApiResponse<T>{
-    constructor(
-       public statusCode : number,
-       public data : T,
-       public  message : string,
-       public success = true
-    ) {
-        this.data = data
-        this.message = message
-        this.statusCode = statusCode
-        this.success = statusCode < 500
-    }
+export class ApiResponse implements ApiResponseType {
+  statusCode: number;
+  data: object;
+  message: string;
+  success: boolean;
+  constructor(
+    statusCode: number,
+    data: object,
+    message: string,
+    success = true
+  ) {
+    this.data = data;
+    this.message = message;
+    this.statusCode = statusCode;
+    this.success = statusCode < 500;
+  }
 }

@@ -4,8 +4,6 @@ import { ENV } from './config/ENV'
 import { connectDB, createTable } from './config/db'
 import { RedisConnection } from './redis/connection'
 
-
-
 const port = ENV.PORT || 5001
 
 httpServer.listen(port, async()=>{

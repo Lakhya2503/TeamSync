@@ -28,7 +28,7 @@ export interface userType {
     name: string,
     id: string,
     email: string,
-    password: string,
+    password?: string,
     avatar?: string,
     role?: string,
     refreshtoken?: string,

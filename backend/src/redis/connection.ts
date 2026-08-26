@@ -18,7 +18,7 @@ export const RedisConnection = async() => {
             // ?? YOU CAN ALSO ADD PUB, SUB 
         ])
 
-        console.log("Redis Connecting Successfully : 🏎️ ")
+        console.log("Redis Connecting Successfully : ⚡️")
 
         isConnected = true;
 

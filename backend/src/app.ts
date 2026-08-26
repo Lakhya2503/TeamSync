@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import cookieParser from 'cookie-parser'
 import { createServer } from "http";
 import { intializeSocketIO } from "./socket/socket.js";
+import morgan from 'morgan'
 
 
 const app = express()
@@ -43,6 +44,8 @@ app.use(cors({
     ]
 }))
 
+
+
 app.use("/api/v1/tms/health",(req:any, res:any)=>{
     res.status(200).json({
         statusCode : 200,
@@ -50,6 +53,8 @@ app.use("/api/v1/tms/health",(req:any, res:any)=>{
         response : "App Health Was Good"
     })
 })
+
+app.use(morgan('dev'))
 
 
 // APP ROUTE DIFIEND HERE
@@ -60,6 +65,14 @@ import AuthRouter from './modules/user/user.route.js'
 app.use("/api/v1/teamsync/auth", AuthRouter)
 
 
+app.use((req,res)=>{
+    return res.json(
+        {
+            status : 404,
+            message : "page not found"
+        }
+    )
+})
 
 intializeSocketIO(io)
 
