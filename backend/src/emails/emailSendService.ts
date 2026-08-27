@@ -1,8 +1,6 @@
-
-
 export const emailTemplate = (
   code?: string,
-  validityMinutes?: number,
+  validityMinutes?: Date,
   title?: string,
   description?: string,
   ctaText?: string,
@@ -183,10 +181,16 @@ export const emailTemplate = (
       ${description || "Use the code below to complete your action."}
     </p>
 
-    <!-- Code Display -->
-    <div class="code-box">
-      <span class="code">${code}</span>
-    </div>
+    ${
+      code &&
+      `
+        <div class="code-box">
+            <span class="code">${code}</span>
+        </div>
+      `
+    }
+
+    
 
     <!-- Validity -->
     <div class="validity">⏱ Valid for ${validityMinutes} minutes</div>
