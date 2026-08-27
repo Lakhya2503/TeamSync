@@ -169,7 +169,7 @@ export const emailTemplate = (
 
 <body>
   <div class="card">
-    <img src="https://res.cloudinary.com/qnf2f4fq/image/upload/v1787834151/logo_vsxqcr.png" class="logo" alt="TEAMSYNC" />
+    <img src="https://res.cloudinary.com/qnf2f4fq/image/upload/v1787834107/logo_circle_we3ttc.png" class="logo" alt="TEAMSYNC" />
     <div class="app-name">TEAMSYNC</div>
 
     <!-- Dynamic Title & Description -->

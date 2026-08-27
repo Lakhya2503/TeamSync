@@ -16,6 +16,7 @@ import { otpGenerator } from "../../helper/comman";
 import crypto from "crypto";
 import { userType } from "./user.interface";
 import { Request, Response } from "express";
+import { sendVerificationEmail } from "../../services/sendEmail.service";
 
 const options = {
   httpOnly: true,
@@ -39,7 +40,7 @@ export const generateAccessRefreshToken = async (user: userType) => {
 
 export const registerUser = asyncHandler(
   async (req: Request, res: Response): Promise<{}> => {
-    const { name , email, password, secretKey } = req.body;
+    const { name, email, password, secretKey } = req.body;
 
     requiredFiled([name, email, password]);
 
@@ -87,18 +88,24 @@ export const registerUser = asyncHandler(
       throw new ApiError(400, "User can't register");
     }
 
-    /* 
-    TODO : the verification code send on mail via service
-    await sendVerificationCode {
-        verificationcode,
-        email,
-        name
-    }
-    */
+    /* TODO : the verification code send on mail via service */
+    const verificationresponse = await sendVerificationEmail(
+      email,
+      "Verification Code",
+      "Verification code for Account verification",
+      verificationCodeExpiry,
+      verificationCode
+    );
+
+    console.log(
+      {
+        verificationresponse
+      }
+    )
 
     return res
       .status(200)
-      .json(new ApiResponse(200, {}, "user Register Successfully", true));
+      .json(new ApiResponse(200, {} , `Verification code send successfully`, true));
   }
 );
 
@@ -145,16 +152,16 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 
   const _user: userType = user.rows[0];
 
-  console.log({ _user })
+  console.log({ _user });
 
-  console.log({ verificationCode })
+  console.log({ verificationCode });
 
   if (!_user) {
     throw new ApiError(401, "User Not found");
   }
 
-  if(_user.email_verified_code_expiry < new Date()) {
-    console.log("true")
+  if (_user.email_verified_code_expiry < new Date()) {
+    console.log("true");
   }
 
   if (_user.email_verified_code !== verificationCode) {

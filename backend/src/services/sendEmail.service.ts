@@ -5,29 +5,34 @@ import { emailTemplate } from "../emails/emailSendService";
 
 const resend = new Resend(ENV.RESEND_SECRET_KEY);
 
-const sendVerificationEmail = async (
+export const sendVerificationEmail = async (
   email: string,
-  verificationCode: string,
   subject: string,
-  validateFor: Date
+  description : string,
+  validateFor: Date,
+  verificationCode?: string,
+  otherUrl? : string,
+  typeOfUrldescription? : string,
 ): Promise<ApiResponseType> => {
   try {
-    await resend.emails.send({
+    const { data, error : emailError } = await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email,
       subject: subject,
       html: emailTemplate(
         verificationCode,
         validateFor,
-        "Verification Code",
-        "Verification code for Account verification"
+         subject ? subject : "Verification Code",
+        description ? description : "Verification code for Account verification",
+        otherUrl ? otherUrl : "" ,
+        typeOfUrldescription ? typeOfUrldescription : "",
       ),
     });
 
     return {
       success: true,
       statusCode: 1,
-      data: {},
+      data : {},
       message: "Message send Successfully",
     };
   } catch (error) {
@@ -35,7 +40,7 @@ const sendVerificationEmail = async (
     return {
       success: true,
       statusCode: 1,
-      data: {},
+      data: { error },
       message: "Message send Successfully",
     };
   }
