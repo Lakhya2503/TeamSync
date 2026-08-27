@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@socket.io/admin-ui": "^0.5.1",
     "@types/js-cookie": "^3.0.6",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",

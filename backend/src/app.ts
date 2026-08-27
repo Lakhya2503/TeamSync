@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { createServer } from "http";
 import { intializeSocketIO } from "./socket/socket.js";
 import morgan from 'morgan'
-
+import { instrument } from "@socket.io/admin-ui";   
 
 const app = express()
 const httpServer = createServer(app)
@@ -23,6 +23,10 @@ const io = new Server(httpServer, {
     },
 })
 
+
+instrument(io, {
+    auth : false
+})
 
 app.set("io",io)
 app.use(express.static("public"));

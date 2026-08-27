@@ -9,6 +9,9 @@ import { accessTokenUserData } from "../modules/user/user.interface";
 
 export const intializeSocketIO = (io: Server) => {
   return io.on("connection", async (socket: Socket) => {
+
+    console.log("io",io)
+
     try {
       let token;
 
