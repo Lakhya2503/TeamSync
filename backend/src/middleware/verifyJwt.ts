@@ -1,7 +1,6 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { 
         accessTokenUserData,
-        AuthRequest, 
         userType 
         } from "../modules/user/user.interface";
 import { ApiError } from "../utils/ApiError";
@@ -9,7 +8,7 @@ import  jwt  from 'jsonwebtoken';
 import { ENV } from "../config/ENV";
 import { fetchUser } from "../helper/user.helper";
 
-export const verifyJWT = async(req : AuthRequest, res : Response, next : NextFunction) =>  {
+export const verifyJWT = async(req : Request, res : Response, next : NextFunction):Promise<void> =>  {
     const token = req.cookies?.accessToken
     if(!token) {
         throw new ApiError(401, "Token not found.")
@@ -30,8 +29,8 @@ export const verifyJWT = async(req : AuthRequest, res : Response, next : NextFun
         req.user = user as userType
         
         next()
-    } catch (error : unknown) {
+    } catch (error) {
         next(error)
-        throw new ApiError(400, error)
+        throw new ApiError(400, `${error}`)
     }
 }

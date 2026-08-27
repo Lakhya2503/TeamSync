@@ -14,7 +14,7 @@ import { USER_TYPE } from "./user.type";
 import { getOtp, setOtp } from "../../redis/cache";
 import { otpGenerator } from "../../helper/comman";
 import crypto from "crypto";
-import { userType } from "./user.interface";
+import { DatabaseUser, userType } from "./user.interface";
 import { Request, Response } from "express";
 import { sendVerificationEmail } from "../../services/sendEmail.service";
 
@@ -48,6 +48,9 @@ export const registerUser = asyncHandler(
       "SELECT * FROM users WHERE email = $1 ",
       [email]
     );
+
+    console.log("user", userExists)
+   
 
     const _userExists: userType = userExists.rows[0];
 
@@ -97,15 +100,15 @@ export const registerUser = asyncHandler(
       verificationCode
     );
 
-    console.log(
-      {
-        verificationresponse
-      }
-    )
+    console.log({
+      verificationresponse,
+    });
 
     return res
       .status(200)
-      .json(new ApiResponse(200, {} , `Verification code send successfully`, true));
+      .json(
+        new ApiResponse(200, {}, `Verification code send successfully`, true)
+      );
   }
 );
 
@@ -146,9 +149,23 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   const { verificationCode } = req.body;
   const { email } = req.query;
 
-  const user = await database.query(` SELECT * FROM users WHERE email = $1 `, [
-    email,
-  ]);
+  let user : DatabaseUser | null = null;
+
+  if (req.body.email) {
+    user = await database.query(` SELECT * FROM users WHERE email = $1 `, [
+      email,
+    ]);
+  }
+
+  if(req.query.email) {
+     user = await database.query(` SELECT * FROM users WHERE email = $1 `, [
+      email,
+    ]);
+  }
+
+  if(!user || user?.rows.length < 0) {
+    throw new ApiError(401, "User not found")
+  }
 
   const _user: userType = user.rows[0];
 
@@ -161,7 +178,9 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   }
 
   if (_user.email_verified_code_expiry < new Date()) {
-    console.log("true");
+    console.log("email_verified_code_expiry",_user.email_verified_code_expiry)
+    console.log("current time",new Date())
+    throw new ApiError(400, "OTP EXPIRED");
   }
 
   if (_user.email_verified_code !== verificationCode) {

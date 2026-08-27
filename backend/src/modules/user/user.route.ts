@@ -26,5 +26,4 @@ router.route("/verify").get(verifyEmail)
 
 router.route("/get-me").get(verifyEmail,currentUser)
 
-
 export default router;

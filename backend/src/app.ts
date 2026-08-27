@@ -2,7 +2,7 @@ import express from "express";
 import cors from 'cors'
 import { ENV } from "./config/ENV.js";
 import { Server } from "socket.io";
-import cookieParser from 'cookie-parser'
+import cookieParser from "cookie-parser";
 import { createServer } from "http";
 import { intializeSocketIO } from "./socket/socket.js";
 import morgan from 'morgan'

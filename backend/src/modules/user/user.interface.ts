@@ -44,6 +44,12 @@ export interface AuthRequest extends Request {
     user : userType
 }
 
+export interface DatabaseUser {
+    rows : userType[]
+        
+}
+
+
 // =======================  //
 //  ?? register interface 
 // ======================= //
