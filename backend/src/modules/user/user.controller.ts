@@ -237,7 +237,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const currentUser = asyncHandler(async (req: Request, res: Response) => {
-  const user: userType = req.user;
+  const user = req.user as userType
 
   return res
     .status(200)
@@ -245,7 +245,7 @@ export const currentUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
-  const user = req.user;
+  const user = req.user as userType;
 
   console.log("user : ", user);
 
@@ -265,7 +265,7 @@ export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const updateUserProfile = asyncHandler(
   async (req: Request, res: Response) => {
-    const user: userType = req.user;
+    const user = req.user as userType;
 
     const { name, avatar } = req.body;
 
