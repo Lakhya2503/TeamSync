@@ -168,10 +168,7 @@ export const emailTemplate = (
 </head>
 
 <body>
-
   <div class="card">
-
-    <!-- Logo + App Name -->
     <img src="https://res.cloudinary.com/qnf2f4fq/image/upload/v1787834151/logo_vsxqcr.png" class="logo" alt="TEAMSYNC" />
     <div class="app-name">TEAMSYNC</div>
 
@@ -190,10 +187,8 @@ export const emailTemplate = (
       `
     }
 
-    <!-- Validity -->
     <div class="validity">⏱ Valid for ${validityMinutes} minutes</div>
 
-    <!-- Optional CTA Button -->
     ${
       ctaText && ctaUrl
         ? `
@@ -204,7 +199,6 @@ export const emailTemplate = (
 
     <div class="divider"></div>
 
-    <!-- Helpful Note -->
     <p class="note">
       ${ctaText ? `If the button doesn't work, copy and paste the code manually.` : `This code is for your exclusive use. Do not share it.`}
       <br />

@@ -39,7 +39,7 @@ export const generateAccessRefreshToken = async (user: userType) => {
 
 export const registerUser = asyncHandler(
   async (req: Request, res: Response): Promise<{}> => {
-    const { name, email, password, secretKey } = req.body;
+    const { name , email, password, secretKey } = req.body;
 
     requiredFiled([name, email, password]);
 
