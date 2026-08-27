@@ -22,7 +22,7 @@ router.route("/update-profile").put(verifyJWT, updateUserProfile)
 
 router.route("/verify-email/request").post(verifyEmailReuqest)
 
-router.route("/:hashToken").get(verifyEmail)
+router.route("/verify").get(verifyEmail)
 
 router.route("/get-me").get(verifyEmail,currentUser)
 

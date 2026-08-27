@@ -50,7 +50,7 @@ export const registerUser = asyncHandler(
 
     const _userExists: userType = userExists.rows[0];
 
-    if (!_userExists) {
+    if (_userExists) {
       throw new ApiError(400, "User already Exist");
     }
 
@@ -145,18 +145,26 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 
   const _user: userType = user.rows[0];
 
+  console.log({ _user })
+
+  console.log({ verificationCode })
+
   if (!_user) {
     throw new ApiError(401, "User Not found");
   }
 
-  if (_user.verificationCode !== verificationCode) {
+  if(_user.email_verified_code_expiry < new Date()) {
+    console.log("true")
+  }
+
+  if (_user.email_verified_code !== verificationCode) {
     throw new ApiError(400, "Invalid OTP");
   }
 
   await database.query(
     ` UPDATE users SET email_verified_code = $1, email_verified_code_expiry = $2, isVerified = $3 WHERE id = $4 RETURNING *
         `,
-    ["", "", true, user.rows[0].id]
+    ["", , true, _user.id]
   );
 
   return res

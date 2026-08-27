@@ -33,8 +33,8 @@ export interface userType {
     role?: string,
     isverified : boolean,
     refreshtoken?: string,
-    verificationCodeExpiry : Date,
-    verificationCode : string,
+    email_verified_code_expiry : Date,
+    email_verified_code : string,
     reset_password_token_expiry?: string,
     reset_password_token?: string,
     created_at?: string
