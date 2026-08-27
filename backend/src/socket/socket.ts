@@ -9,11 +9,9 @@ import { accessTokenUserData } from "../modules/user/user.interface";
 
 export const intializeSocketIO = (io: Server) => {
   return io.on("connection", async (socket: Socket) => {
-
-    console.log("io",io)
-
     try {
-      let token;
+      let token : string | null = null;
+      console.log("token",token)
 
       const cookies = cookie.parse(socket.handshake.headers.cookie || "");
       console.log("cookies", cookies);
@@ -33,8 +31,13 @@ export const intializeSocketIO = (io: Server) => {
       }
 
       const decodedToken = jwt.verify(token, ENV.ACCESS_TOKEN_SECRET) as accessTokenUserData
-
+      
       const user = await fetchUser(decodedToken.id)
+
+      socket.user = user
+
+      socket.join(socket.user.id.toString());
+      socket.emit("connected")
 
       socket.on(COMMAN_SOCKET_EVENT.DISCCONECT, () => {
         console.log("🚨 USER DISS-CONNECTED USER : ", user.name);
@@ -46,7 +49,7 @@ export const intializeSocketIO = (io: Server) => {
         // }
         socket.leave(socket.user.id.toString());
       });
-    } catch (error: any) {
+    } catch (error) {
       console.log("error", error);
       socket.emit(
         COMMAN_SOCKET_EVENT.SOCKET_ERROR,

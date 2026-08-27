@@ -13,7 +13,7 @@ httpServer.listen(port, async()=>{
         await RedisConnection()
         console.log("app listen on port 🚢 : ", ENV.PORT)
         console.log(`backend socket url : ${ENV.BACKEND_ORIGIN}`)
-    } catch (error : unknown) {
+    } catch (error) {
         console.log(`ERROR : ${error}`)
     }
 })

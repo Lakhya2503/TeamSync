@@ -161,7 +161,6 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
     [verificationCode]
   );
 
-  console.log(user.rows[0]);
 
   if (!user || user?.rows.length === 0) {
     throw new ApiError(401, "User not found");

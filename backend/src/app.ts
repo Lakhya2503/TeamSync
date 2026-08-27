@@ -30,8 +30,8 @@ instrument(io, {
 
 app.set("io",io)
 app.use(express.static("public"));
-app.use(cookieParser())
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({extended : true, limit : "20kb"}))
 
 
