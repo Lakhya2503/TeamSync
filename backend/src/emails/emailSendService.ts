@@ -190,8 +190,6 @@ export const emailTemplate = (
       `
     }
 
-    
-
     <!-- Validity -->
     <div class="validity">⏱ Valid for ${validityMinutes} minutes</div>
 
