@@ -49,8 +49,7 @@ export const registerUser = asyncHandler(
       [email]
     );
 
-    console.log("user", userExists)
-   
+    console.log("user", userExists);
 
     const _userExists: userType = userExists.rows[0];
 
@@ -92,6 +91,7 @@ export const registerUser = asyncHandler(
     }
 
     /* TODO : the verification code send on mail via service */
+    /*
     const verificationresponse = await sendVerificationEmail(
       email,
       "Verification Code",
@@ -99,10 +99,9 @@ export const registerUser = asyncHandler(
       verificationCodeExpiry,
       verificationCode
     );
+    */
 
-    console.log({
-      verificationresponse,
-    });
+    console.log({ verificationCode });
 
     return res
       .status(200)
@@ -125,20 +124,27 @@ export const verifyEmailReuqest = asyncHandler(
       throw new ApiError(404, "User not found");
     }
 
-    const { hashToken, unHashedToken } = temporaryTokenGenerater();
-    const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
-
-    console.log(`${ENV.BACKEND_ORIGIN}/api/v1/tms/auth/${hashToken}`);
+    const verificationCode: string = otpGenerator();
+    const verificationCodeExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
     await database.query(
-      `UPDATE users SET email_verified_token = $1, email_verified_token_expiry = $2 WHERE id = $3 RETURNING *
+      `UPDATE users SET email_verified_code = $1, email_verified_code_expiry = $2 WHERE id = $3 RETURNING *
         `,
-      [unHashedToken, tokenExpiry, user.rows[0].id]
+      [verificationCode, verificationCodeExpiry, user.rows[0].id]
     );
 
-    const otp = otpGenerator();
-    await setOtp(unHashedToken, otp);
+    console.log({ verificationCode });
 
+    /* TODO : the verification code send on mail via service */
+    /*
+    const verificationresponse = await sendVerificationEmail(
+      email,
+      "Verification Code",
+      "Verification code for Account verification",
+      verificationCodeExpiry,
+      verificationCode
+    );
+    */
     return res
       .status(200)
       .json(new ApiResponse(200, {}, "Send verify email request", true));
@@ -147,40 +153,28 @@ export const verifyEmailReuqest = asyncHandler(
 
 export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   const { verificationCode } = req.body;
-  const { email } = req.query;
 
-  let user : DatabaseUser | null = null;
+  console.log("verificationCode",verificationCode)
 
-  if (req.body.email) {
-    user = await database.query(` SELECT * FROM users WHERE email = $1 `, [
-      email,
-    ]);
-  }
+  const user = await database.query<userType>(
+    `SELECT * FROM users WHERE email_verified_code = $1`,
+    [verificationCode]
+  );
 
-  if(req.query.email) {
-     user = await database.query(` SELECT * FROM users WHERE email = $1 `, [
-      email,
-    ]);
-  }
+  console.log(user.rows[0]);
 
-  if(!user || user?.rows.length < 0) {
-    throw new ApiError(401, "User not found")
+  if (!user || user?.rows.length === 0) {
+    throw new ApiError(401, "User not found");
   }
 
   const _user: userType = user.rows[0];
-
-  console.log({ _user });
-
-  console.log({ verificationCode });
 
   if (!_user) {
     throw new ApiError(401, "User Not found");
   }
 
   if (_user.email_verified_code_expiry < new Date()) {
-    console.log("email_verified_code_expiry",_user.email_verified_code_expiry)
-    console.log("current time",new Date())
-    throw new ApiError(400, "OTP EXPIRED");
+    throw new ApiError(401, "OTP EXPIRED");
   }
 
   if (_user.email_verified_code !== verificationCode) {

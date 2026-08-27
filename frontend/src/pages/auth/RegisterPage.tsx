@@ -46,7 +46,7 @@ const RegisterPage = () => {
       const res = await register(payload);
       console.log(res);
       if (res.data?.user) {
-        navigate("/dashboard");
+        navigate("/verify-email");
       }
     } catch (error) {
       console.log(error);

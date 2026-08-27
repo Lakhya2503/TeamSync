@@ -97,7 +97,7 @@ const AppRouter = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgetPasswordRequestPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/verify-email/:token" element={<OtpPage />} />
+        <Route path="/verify-email" element={<OtpPage />} />
 
         {/* PROTECTED ROUTES WITH LAYOUT */}
         <Route
