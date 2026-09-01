@@ -37,14 +37,14 @@ interface AuthStore {
     password : string
   }) => Promise<ApiResponseType | ApiErrorType>;
 
-  userLogout: () => Promise<void>;
-  getUser: () => Promise<AuthResponse>;
-  userVerifyEmail: (data: AuthVerifyEmail) => Promise<void>;
-  userVerifyEmailRequest: (data: AuthVerifyEmailRequest) => Promise<void>;
+  userLogout: () => Promise<ApiResponseType | ApiErrorType>;
+  getUser: () => Promise<ApiResponseType | ApiErrorType>;
+  userVerifyEmail: (data: AuthVerifyEmail) => Promise<ApiResponseType | ApiErrorType>;
+  userVerifyEmailRequest: (data: AuthVerifyEmailRequest) => Promise<ApiResponseType | ApiErrorType>;
 }
 
 const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
-  user: null,
+  user : null,
   isAuthenticated: false,
   role: "",
   userRegister: async (data) => {
@@ -83,12 +83,20 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
     }
   },
   getUser: async () => {
-    const res = await getMe();
-    set({
-      user: res.data.data.user,
-      isAuthenticated: true,
-    });
-    return res.data;
+    try {
+      const res = await getMe();
+      set({
+        user: res.data?.user,
+        isAuthenticated: true,
+      });
+      return res.data;
+    } catch (error) {
+       console.log("error", error)
+      if (error instanceof Error) {
+        return error;
+      }
+      throw (error)
+    }
   },
   userVerifyEmail: async () => {
     const res = await verifyEmail();
