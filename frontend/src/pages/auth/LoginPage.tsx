@@ -24,7 +24,7 @@ import { Logo_circle_image } from '../../assets'
 
 const LoginPage = () => {
   const login = useAuthStore((state) => state.userLogin)
-  const user = useAuthStore((state) => state.user)
+  // const user = useAuthStore((state) => state.user)
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -41,20 +41,8 @@ const LoginPage = () => {
     e.preventDefault()
     setIsLoading(true)
     const payload = { email: email, password: password }
-    try {
       const res = await login(payload)
-      console.log(res.data.user)
-      console.log(user)
-      console.log("role", res.data.user?.role)
-      if (res.data.user) {
-        navigate(`/${res.data.user?.role}/dashboard`)
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
-      clearAuth()
-    }
+      console.log("res", res)  
   }
 
   return (

@@ -8,9 +8,11 @@ import ForgetPasswordRequestPage from '../pages/auth/ForgetPasswordRequestPage';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
 import OtpPage from '../pages/auth/OtpPage';
 import NotFound from '../Components/ui/NotFound';
-import AdminRouter from './AdminRouter';
-import ManagerRouter from './ManagerRouter';
-import UserRouter from './UserRouter';
+
+
+const AdminRouter = React.lazy(() => import('./AdminRouter'));
+const ManagerRouter = React.lazy(() => import('./ManagerRouter'));
+const UserRouter = React.lazy(() => import('./UserRouter'));
 
 const HomePage = React.lazy(() => import('../pages/comman/HomePage'));
 const AboutPage = React.lazy(() => import('../pages/comman/AboutPage'));

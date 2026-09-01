@@ -35,15 +35,10 @@ const Navbar = () => {
     (item) => !item.requiresAuth || isAuthenticated
   );
 
-  // Default user data for when user is not fully loaded
-  const defaultUser = {
-    name: "User",
-    email: "user@example.com",
-    avatar: "https://ui-avatars.com/api/?name=User&background=6366F1&color=fff",
-  };
+
 
   // Use user data with fallback to default
-  const userData = user || defaultUser;
+  const userData = user 
 
   return (
     <header className="bg-white border-b border-indigo-100 shadow-sm">

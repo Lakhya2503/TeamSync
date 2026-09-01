@@ -68,6 +68,20 @@ import AuthRouter from './modules/user/user.route.js'
 // APP ROUTER USE HERE
 app.use("/api/v1/teamsync/auth", AuthRouter)
 
+// global error handling
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  const errors = err.errors || [];
+
+  res.status(statusCode).json({
+    statusCode,
+    success: false,
+    message,
+    errors,
+  });
+});
+
 
 app.use((req,res)=>{
     return res.json(

@@ -49,9 +49,11 @@ export const registerUser = asyncHandler(
       [email]
     );
 
-    console.log("user", userExists);
+    // console.log("user 1", userExists.rows[0]);
 
     const _userExists: userType = userExists.rows[0];
+
+    // console.log("user 2", userExists.rows[0]);
 
     if (_userExists) {
       throw new ApiError(400, "User already Exist");
@@ -69,7 +71,7 @@ export const registerUser = asyncHandler(
     const verificationCodeExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
     const user = await database.query(
-      `INSERT INTO users (name, email, password, role, isVerified) 
+      `INSERT INTO users (name, email, password, role, isVerified)
             VALUES ($1, $2, $3, $4, $5)
             RETURNING * `,
       [name, email, hashedPassword, role, false]
@@ -154,13 +156,12 @@ export const verifyEmailReuqest = asyncHandler(
 export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   const { verificationCode } = req.body;
 
-  console.log("verificationCode",verificationCode)
+  console.log("verificationCode", verificationCode);
 
   const user = await database.query<userType>(
     `SELECT * FROM users WHERE email_verified_code = $1`,
     [verificationCode]
   );
-
 
   if (!user || user?.rows.length === 0) {
     throw new ApiError(401, "User not found");
@@ -237,7 +238,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const currentUser = asyncHandler(async (req: Request, res: Response) => {
-  const user = req.user as userType
+  const user = req.user as userType;
 
   return res
     .status(200)

@@ -10,13 +10,11 @@ import {
   FaShieldAlt,
   FaRocket,
   FaUsers,
-  FaArrowRight,
   FaCheck,
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
 import { HiUserGroup } from "react-icons/hi";
-import { BsShieldCheck } from "react-icons/bs";
 import { Logo_circle_image } from "../../assets";
 
 const RegisterPage = () => {
@@ -28,32 +26,18 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const clearAuth = () => {
-    setEmail("");
-    setName("");
-    setPassword("");
-  };
 
   const handleRegister = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     setIsLoading(true);
     const payload = {
       password: password,
       email: email,
       name: name,
     };
-    try {
       const res = await register(payload);
-      console.log(res);
-      if (res.data?.user) {
-        navigate("/verify-email");
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-      clearAuth();
-    }
+      console.log("res",res);
+      setIsLoading(false)
   };
 
   return (
@@ -166,12 +150,12 @@ const RegisterPage = () => {
 
               <button
                 type="submit"
-                disabled={isLoading}
+                // disabled={isLoading}
                 className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-indigo-200/50 flex items-center justify-center space-x-2 ${
-                  isLoading ? "opacity-70 cursor-not-allowed" : ""
+                   "opacity-70 cursor-not-allowed" 
                 }`}
               >
-                {isLoading ? (
+                {/* {isLoading ? (
                   <>
                     <svg
                       className="animate-spin h-5 w-5 text-white"
@@ -198,9 +182,9 @@ const RegisterPage = () => {
                 ) : (
                   <>
                     <FaRocket className="text-lg" />
-                    <span>Create Account</span>
                   </>
-                )}
+                )} */}
+                <span>Create Account</span>
               </button>
 
               <p className="text-center text-gray-600 font-medium">
@@ -261,8 +245,8 @@ const RegisterPage = () => {
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 text-white">
             <div className="text-center">
               <div className="mx-auto w-25 h-25 rounded-full flex items-center justify-center mb-4">
-                  <img src={Logo_circle_image} alt="" />
-                </div>
+                <img src={Logo_circle_image} alt="" />
+              </div>
               <h1 className="text-4xl font-bold mb-3">Join TeamSync</h1>
               <p className="text-white/90 text-lg mb-6">
                 Start managing your teams and projects efficiently

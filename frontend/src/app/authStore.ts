@@ -10,23 +10,35 @@ import type {
   userType,
 } from "../types/user.type";
 import {
-     authRegister,
-     authLogin, 
-     authLogout, 
-     getMe, 
-     verifyEmail, 
-     verifyEmailRequest 
-    } from "../apis/apis";
-import type { AxiosResponse } from "axios";
+  authRegister,
+  authLogin,
+  authLogout,
+  getMe,
+  verifyEmail,
+  verifyEmailRequest,
+} from "../apis/apis";
+import type { ApiResponseType } from "../types/ResponseType";
+import type { ApiErrorType } from "../types/ResponseType";
+import { redirect } from "react-router-dom";
 
 interface AuthStore {
   user: userType | null;
   isAuthenticated: boolean;
   role: "Admin" | "User" | unknown;
-  userRegister: (data: AuthRegister) => Promise<void>;
-  userLogin: (data: AuthLogin) => Promise<AxiosResponse<AuthResponse>>;
+
+  userRegister: (data : {
+    email : string,
+    name : string,
+    password : string
+  }) => Promise<ApiResponseType | ApiErrorType>;
+
+  userLogin: (data: {
+    email : string,
+    password : string
+  }) => Promise<ApiResponseType | ApiErrorType>;
+
   userLogout: () => Promise<void>;
-  getUser: () => Promise<AxiosResponse<AuthResponse>>;
+  getUser: () => Promise<AuthResponse>;
   userVerifyEmail: (data: AuthVerifyEmail) => Promise<void>;
   userVerifyEmailRequest: (data: AuthVerifyEmailRequest) => Promise<void>;
 }
@@ -35,23 +47,40 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
   user: null,
   isAuthenticated: false,
   role: "",
-  userRegister: async (data: AuthRegister) => {
-    const res = await authRegister(data);
-    set({
-      user: null,
-      isAuthenticated: false,
-      role: "",
-    });
-    return res.data;
+  userRegister: async (data) => {
+    try {
+      const res = await authRegister(data);
+      set({
+        user: null,
+        isAuthenticated: false,
+        role: "",
+      });
+      console.log("res",res)
+      return res;
+    } catch (error) {
+      console.log("error", error)
+      if (error instanceof Error) {
+        return error;
+      }
+      throw (error)
+    }
   },
-  userLogin: async (data: AuthLogin) => {
-    const res = await authLogin(data);
-    set({
-      user: res.data.data.user,
-      isAuthenticated: true,
-      role: res.data.data.user.role,
-    });
-    return res.data;
+  userLogin: async (data) => {
+    try {
+      const res = await authLogin(data);
+      set({
+        user: res.data?.user,
+        isAuthenticated: true,
+        role: res.data?.user?.role,
+      });
+      return res.data;
+    } catch (error) {
+      console.log("error", error)
+      if (error instanceof Error) {
+        return error;
+      }
+      throw (error)
+    }
   },
   getUser: async () => {
     const res = await getMe();
