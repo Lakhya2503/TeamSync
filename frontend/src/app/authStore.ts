@@ -19,7 +19,6 @@ import {
 } from "../apis/apis";
 import type { ApiResponseType } from "../types/ResponseType";
 import type { ApiErrorType } from "../types/ResponseType";
-import { redirect } from "react-router-dom";
 
 interface AuthStore {
   user: userType | null;

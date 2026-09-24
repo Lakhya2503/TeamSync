@@ -31,7 +31,7 @@ const AdminRouter : React.FC<AdminRouterProps> = ({ basePath }) => {
   return (
     <Routes>
       <Route path={`/dashboard`} element={<AdminDashboard />} />
-      <Route path={`//users`} element={<AdminUsers />} />
+      <Route path={`/users`} element={<AdminUsers />} />
       <Route path={`/needs`} element={<div>Page for creating needs</div>} />
       <Route path={`/sessions`} element={<AdminSession/>} />
       <Route path={`/plan`} element={<AdminPlane/>} />
