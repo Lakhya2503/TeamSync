@@ -74,6 +74,7 @@ const AppRouter = () => {
   
   // Get role in lowercase for consistent routing
   const userRole = user?.role?.toLowerCase() || '';
+  console.log("userRole, :", userRole)
   const isUserLoaded = isAuthenticated && userRole;
 
   // Determine which router to render based on role

@@ -43,8 +43,8 @@ const LoginPage = () => {
     const payload = { email: email, password: password }
       const res = await login(payload)
       
-      console.log("res", user?.role) 
-      navigate(`/dashboard/${user?.role}`) 
+      console.log("res", user?.role.toLocaleLowerCase()) 
+      navigate(`/${user?.role.toLocaleLowerCase()}/dashboard`) 
   }
 
   return (
