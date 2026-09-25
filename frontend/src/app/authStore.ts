@@ -23,27 +23,31 @@ import type { ApiErrorType } from "../types/ResponseType";
 interface AuthStore {
   user: userType | null;
   isAuthenticated: boolean;
-  role: "Admin" | "User" | unknown;
+  role: "admin" | "user" | unknown;
 
-  userRegister: (data : {
-    email : string,
-    name : string,
-    password : string
+  userRegister: (data: {
+    email: string;
+    name: string;
+    password: string;
   }) => Promise<ApiResponseType | ApiErrorType>;
 
   userLogin: (data: {
-    email : string,
-    password : string
+    email: string;
+    password: string;
   }) => Promise<ApiResponseType | ApiErrorType>;
 
   userLogout: () => Promise<ApiResponseType | ApiErrorType>;
   getUser: () => Promise<ApiResponseType | ApiErrorType>;
-  userVerifyEmail: (data: AuthVerifyEmail) => Promise<ApiResponseType | ApiErrorType>;
-  userVerifyEmailRequest: (data: AuthVerifyEmailRequest) => Promise<ApiResponseType | ApiErrorType>;
+  userVerifyEmail: (
+    data: AuthVerifyEmail
+  ) => Promise<ApiResponseType | ApiErrorType>;
+  userVerifyEmailRequest: (
+    data: AuthVerifyEmailRequest
+  ) => Promise<ApiResponseType | ApiErrorType>;
 }
 
 const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
-  user : null,
+  user: null,
   isAuthenticated: false,
   role: "",
   userRegister: async (data) => {
@@ -54,14 +58,14 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
         isAuthenticated: false,
         role: "",
       });
-      console.log("res",res)
+      console.log("res", res);
       return res;
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
       if (error instanceof Error) {
         return error;
       }
-      throw (error)
+      throw error;
     }
   },
   userLogin: async (data) => {
@@ -70,15 +74,15 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       set({
         user: res.data?.user,
         isAuthenticated: true,
-        role: res.data?.user?.role,
+        role: res.data?.user?.role.toLowerCase(),
       });
       return res.data;
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
       if (error instanceof Error) {
         return error;
       }
-      throw (error)
+      throw error;
     }
   },
   getUser: async () => {
@@ -90,11 +94,11 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       });
       return res.data;
     } catch (error) {
-       console.log("error", error)
+      console.log("error", error);
       if (error instanceof Error) {
         return error;
       }
-      throw (error)
+      throw error;
     }
   },
   userVerifyEmail: async () => {

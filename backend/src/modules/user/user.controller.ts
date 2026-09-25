@@ -195,15 +195,30 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  const user = await database.query("SELECT * FROM users  WHERE email = $1", [
+  console.log({
     email,
+    password,
+  });
+
+  console.log("before user search : 1")
+
+  const user = await database.query("SELECT * FROM users  WHERE email = $1", [
+    email
   ]);
 
+  console.log("after user search : 1")
+  
+  console.log("user : ", user.rows)
+
   const _user: userType = await fetchUser(user.rows[0].id);
+
+  console.log("secure user fetch : ", _user)
 
   if (!_user) {
     throw new ApiError(401, "User can't Exist with this Email..");
   }
+
+  console.log("password checking : 3", )
 
   const isPasswordCorrect = bcrypt.compare(password, _user?.password);
 
@@ -211,7 +226,12 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(401, "Creadential faild....");
   }
 
+  console.log("password match successfully : 4")
+
   const { accessToken, refreshToken } = await generateAccessRefreshToken(_user);
+
+    console.log("token updated : 5")
+
 
   console.log(`${user.rows[0].name} : Login successfully`);
 
@@ -238,6 +258,8 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const currentUser = asyncHandler(async (req: Request, res: Response) => {
+  console.log("user", req);
+
   const user = req.user as userType;
 
   return res
