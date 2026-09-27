@@ -19,22 +19,25 @@ import {
 } from "../apis/apis";
 import type { ApiResponseType } from "../types/ResponseType";
 import type { ApiErrorType } from "../types/ResponseType";
+import type { LoginResponse, RegisterResponse } from "./types/auth";
 
 interface AuthStore {
   user: userType | null;
   isAuthenticated: boolean;
   role: "admin" | "user" | unknown;
+  accessToken: string;
+  refreshToken: string;
 
   userRegister: (data: {
     email: string;
     name: string;
     password: string;
-  }) => Promise<ApiResponseType | ApiErrorType>;
+  }) => Promise<RegisterResponse | ApiErrorType>;
 
   userLogin: (data: {
     email: string;
     password: string;
-  }) => Promise<ApiResponseType | ApiErrorType>;
+  }) => Promise<LoginResponse | ApiErrorType>;
 
   userLogout: () => Promise<ApiResponseType | ApiErrorType>;
   getUser: () => Promise<ApiResponseType | ApiErrorType>;
@@ -50,6 +53,8 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
   user: null,
   isAuthenticated: false,
   role: "",
+  accessToken: "",
+  refreshToken: "",
   userRegister: async (data) => {
     try {
       const res = await authRegister(data);
@@ -72,10 +77,13 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
     try {
       const res = await authLogin(data);
       set({
-        user: res.data?.user,
+        accessToken : res.data.accessToken,
+        refreshToken : res.data.refreshToken,
+        user: res.data.user,
         isAuthenticated: true,
         role: res.data?.user?.role.toLowerCase(),
       });
+      console.log("login : ", res);
       return res.data;
     } catch (error) {
       console.log("error", error);
@@ -102,29 +110,45 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
     }
   },
   userVerifyEmail: async () => {
-    const res = await verifyEmail();
-    set({
-      user: res.data.data.user,
-      isAuthenticated: true,
-    });
-    return res.data;
+    try {
+      const res = await verifyEmail();
+      set({
+        user: res.data.user,
+        isAuthenticated: true,
+      });
+      return res.data;
+    } catch (error) {
+      return error;
+    }
   },
   userVerifyEmailRequest: async () => {
-    const res = await verifyEmailRequest();
-    set({
-      user: res.data.data.user,
-      isAuthenticated: true,
-    });
-    return res.data;
+    try {
+      const res = await verifyEmailRequest();
+      set({
+        user: res.data.data.user,
+        isAuthenticated: true,
+      });
+      return res.data;
+    } catch (error) {
+      return error;
+    }
   },
 
   userLogout: async () => {
-    const res = await authLogout();
-    set({
-      user: null,
-      isAuthenticated: false,
-    });
-    return res.data;
+    try {
+      const res = await authLogout();
+      set({
+        user: null,
+        isAuthenticated: false,
+      });
+      return res.data;
+    } catch (error) {
+      set({
+        user: null,
+        isAuthenticated: false,
+      });
+      return error;
+    }
   },
 });
 

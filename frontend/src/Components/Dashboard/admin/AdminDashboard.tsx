@@ -7,8 +7,15 @@ import {
   ArrowUp,
   ArrowDown
 } from 'lucide-react'
+import useAuthStore from '../../../app/authStore'
+import type { userType } from '../../../types/user.type'
 
 const AdminDashboard = () => {
+
+  const user = useAuthStore((state) => state.user) as userType
+
+  console.log("user : ", user)
+
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalOrders: 0,

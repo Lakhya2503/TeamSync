@@ -2,9 +2,7 @@ import type { userType } from "./user.type";
 
 export interface ApiResponseType {
   statusCode: number;
-  data: {
-    user? : userType
-  };
+  data: object;
   message: string;
   success?: boolean;
 }

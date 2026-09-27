@@ -42,9 +42,9 @@ const LoginPage = () => {
     setIsLoading(true)
     const payload = { email: email, password: password }
       const res = await login(payload)
-      
-      console.log("res", user?.role.toLocaleLowerCase()) 
-      navigate(`/${user?.role.toLocaleLowerCase()}/dashboard`) 
+      console.log("login : ", res)
+      console.log("res", user?.role.toLowerCase()) 
+      navigate(`/${user?.role.toLowerCase()}/dashboard`) 
   }
 
   return (

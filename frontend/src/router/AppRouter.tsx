@@ -71,9 +71,11 @@ const PublicRoutes = () => {
 
 const AppRouter = () => {
   const { user, isAuthenticated } = useAuthStore();
+
+  console.log("user : ", user)
   
   // Get role in lowercase for consistent routing
-  const userRole = user?.role?.toLowerCase() || '';
+  const userRole = user?.role || '';
   console.log("userRole, :", userRole)
   const isUserLoaded = isAuthenticated && userRole;
 
