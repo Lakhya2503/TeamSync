@@ -34,6 +34,7 @@ const RegisterPage = () => {
       password: password,
       email: email,
       name: name,
+      secret : "teamSyncSecretKey",
     };
       const res = await register(payload);
       console.log("res",res);
