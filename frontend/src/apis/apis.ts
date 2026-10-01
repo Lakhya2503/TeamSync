@@ -3,13 +3,13 @@ import type { AuthLogin, AuthRegister } from "../types/user.type";
 import { apiClient } from "./apiClient";
 
 // ============= auth ============= //
-export const authRegister = async (payload: {
+export const authRegister = (payload: {
   name: string;
   email: string;
   password: string;
-  secretKey : string;
-}):Promise<object> => {
-  return await apiClient
+  secretKey: string;
+}): Promise<ApiResponseType> => {
+  return apiClient
     .post("/auth/register", {
       json: payload,
     })

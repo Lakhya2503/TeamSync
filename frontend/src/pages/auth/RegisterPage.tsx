@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import useAuthStore from '../../app/authStore'
+import { useNavigate } from 'react-router-dom'
 
 
 const RegisterPage = () => {
@@ -9,24 +10,36 @@ const RegisterPage = () => {
   const [ email, setEmail ] = useState<string>("")
   const [ password, setPassword ] = useState<string>("")
   const [ showPassword, setShowPassword ] = useState<Boolean>(false)
-  const [ secreatKey, setSecreatKey ] = useState<string>("")
+  const [ secretKey, setSecretKey ] = useState<string>("")
+  const navigate = useNavigate()
+
+  const clearFields = () => {
+    setName("")
+    setEmail("")
+    setPassword("")
+    setSecretKey("")
+  }
 
 
-  console.log({name : name,
+  console.log({name : name, 
     password : password,
     email : email,
-    secreatKey : secreatKey})
+    secretKey : secretKey})
 
-  const handleSumbit = async() => {
-   
-  const payload = {
-    name : name,
-    password : password,
-    email : email,
-    secreatKey : secreatKey
-  }  
-   const res = await userRegister(payload)
-   console.log("res", res)
+  const handleSumbit = async(e) => {
+   e.preventDefault();
+    const payload = {
+      name : name,
+      password : password,
+      email : email,
+      secretKey : secretKey
+    }  
+    const res = await userRegister(payload)
+    console.log("res", res)
+    if(res?.statusCode && res.statusCode === 200) {
+        navigate('/login')
+    }
+    clearFields()
   }
 
   return (
@@ -75,16 +88,16 @@ const RegisterPage = () => {
               </div>
 
               <div className="flex flex-col gap-1">
-                  <label htmlFor="secreatKey" className='uppercase'>
-                      secreatKey
+                  <label htmlFor="secretKey" className='uppercase'>
+                      secretKey
                   </label>
                   <input 
                   className='px-3 py-2 rounded-2xl border'
                   type="text"
-                  id="secreatKey"
-                  value={secreatKey}
-                    onChange={(e)=> setSecreatKey(e.target.value)}
-                  placeholder='secreatKey'
+                  id="secretKey"
+                  value={secretKey}
+                    onChange={(e)=> setSecretKey(e.target.value)}
+                  placeholder='secretKey'
                   />
               </div>
 

@@ -58,6 +58,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
   refreshToken: "",
   userRegister: async (data) => {
     try {
+      console.log("payload :", data)
       const res = await authRegister(data);
       set({
         user: null,
