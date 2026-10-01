@@ -32,6 +32,7 @@ interface AuthStore {
     email: string;
     name: string;
     password: string;
+    secretKey :string
   }) => Promise<RegisterResponse | ApiErrorType>;
 
   userLogin: (data: {
@@ -63,10 +64,10 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
         isAuthenticated: false,
         role: "",
       });
-      console.log("res", res);
+      console.log("userRegister response", res);
       return res;
     } catch (error) {
-      console.log("error", error);
+      console.log("userRegister error", error);
       if (error instanceof Error) {
         return error;
       }
@@ -132,9 +133,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
     } catch (error) {
       return error;
     }
-  },
-
-  userLogout: async () => {
+  },userLogout: async () => {
     try {
       const res = await authLogout();
       set({

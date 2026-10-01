@@ -7,12 +7,13 @@ export const authRegister = async (payload: {
   name: string;
   email: string;
   password: string;
+  secretKey : string;
 }):Promise<object> => {
   return await apiClient
     .post("/auth/register", {
       json: payload,
     })
-    .json();
+    .json<ApiResponseType>();
 };
 
 export const authLogin = (payload: { email: string; password: string }) => {

@@ -6,6 +6,9 @@ export const baseUrl : string = import.meta.env.VITE_API_BASE_URL || "http://loc
 export const apiClient = ky.create(
     {
         prefix : baseUrl,
+        headers : {
+            'Content-Type': 'application/json'
+        },
         fetch : async(request: Request,init : RequestInit) => {
             const start = performance.now()
             const response = await fetch(request, init)
