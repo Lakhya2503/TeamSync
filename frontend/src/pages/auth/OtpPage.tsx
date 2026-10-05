@@ -2,11 +2,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Logo_circle_image } from '../../assets';
+import useAuthStore from '../../app/authStore';
 
 const OtpPage: React.FC = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(40);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const userVerifyEmail = useAuthStore((state) => state.userVerifyEmail )
 
   useEffect(() => {
     if (timer > 0) {
@@ -35,11 +37,11 @@ const OtpPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const otpValue = otp.join('');
+    const otpValue : string = otp.join('');
     console.log('OTP submitted:', otpValue);
-    // Handle OTP verification logic
+    await userVerifyEmail(otpValue)
   };
 
   const handleResend = () => {

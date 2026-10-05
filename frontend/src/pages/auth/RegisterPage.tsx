@@ -37,7 +37,7 @@ const RegisterPage = () => {
     const res = await userRegister(payload)
     console.log("res", res)
     if(res?.statusCode && res.statusCode === 200) {
-        navigate('/login')
+        navigate('/verify-email')
     }
     clearFields()
   }
