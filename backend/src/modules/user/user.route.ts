@@ -16,14 +16,15 @@ router.route("/register").post(registerUser)
 
 router.route("/login").post(loginUser)
 
-router.route("/logout").get(verifyJWT, logoutUser)
-
-router.route("/update-profile").put(verifyJWT, updateUserProfile)
-
 router.route("/verify-email/request").post(verifyEmailReuqest)
 
 router.route("/verify").get(verifyEmail)
 
-router.route("/get-me").get(verifyEmail,currentUser)
+router.route("/logout").get(verifyJWT, logoutUser)
+
+router.route("/update-profile").put(verifyJWT, updateUserProfile)
+
+router.route("/get-me").get(verifyJWT,currentUser)
+
 
 export default router;

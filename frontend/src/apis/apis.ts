@@ -33,7 +33,7 @@ export const getMe = () => {
 };
 
 export const verifyEmail = (verificationCode : string) => {
-  return apiClient.post("/auth/verify", {
+  return apiClient.get("/auth/verify", {
     json : verificationCode
   }).json();
 };
@@ -42,9 +42,6 @@ export const verifyEmailRequest = () => {
   return apiClient.get("/auth/verify-email-request/:email");
 };
 
-// ============= auth ============= //
-
-// ============= auth ============= //
 
 // !! ============= Danger Zone ============= //
 // !! == DELETE USER ACCOUNT
