@@ -1,118 +1,52 @@
-// pages/OtpPage.tsx
-import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Logo_circle_image } from '../../assets';
-import useAuthStore from '../../app/authStore';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import useAuthStore from '../../app/authStore'
 
-const OtpPage: React.FC = () => {
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [timer, setTimer] = useState(40);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const userVerifyEmail = useAuthStore((state) => state.userVerifyEmail )
+const OtpPage = () => {
 
-  useEffect(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [timer]);
+  const [otp, setOtp] = useState<string>("")
+  const [ resendOtpSection, setResendOtpSection ] = useState<boolean>(false)
+  const userVerifyEmail = useAuthStore((state) => state.userVerifyEmail)
+  const userVerifyEmailRequest = useAuthStore((state) => state.userVerifyEmailRequest)
 
-  const handleChange = (index: number, value: string) => {
-    if (value.length > 1) return;
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
+  const navigate = useNavigate()
 
-    // Move to next input
-    if (value && index < 5) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
-
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const otpValue : string = otp.join('');
-    console.log('OTP submitted:', otpValue);
-    await userVerifyEmail(otpValue)
-  };
+    await userVerifyEmail(otp)
+  }
 
-  const handleResend = () => {
-    setTimer(60);
-    setOtp(['', '', '', '', '', '']);
-    inputRefs.current[0]?.focus();
-    // Handle resend logic
-  };
+  const handleVerifyEmailRequest = async(e) => {
+    e.preventDefault()
+    await userVerifyEmailRequest(email)
+    setResendOtpSection(false)
+  }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 space-y-8">
-        <div className="text-center">
-          <div className="mx-auto w-25 h-25 rounded-full flex items-center justify-center mb-4">
-              <img src={Logo_circle_image} alt="" />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900">Verify OTP</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            We've sent a 6-digit verification code to your email address.
-          </p>
-        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex justify-center gap-2">
-            {otp.map((digit, index) => (
-              <input
-                key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
-                type="text"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all duration-200 bg-gray-50 focus:bg-white"
-                autoFocus={index === 0}
-              />
-            ))}
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Time remaining: <span className="font-semibold text-indigo-500">{timer}s</span>
-            </p>
-            {timer === 0 && (
-              <button
-                type="button"
-                onClick={handleResend}
-                className="mt-2 text-sm text-indigo-500 hover:text-indigo-600 font-medium underline underline-offset-2"
-              >
-                Resend OTP
-              </button>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
-            disabled={otp.some((digit) => digit === '')}
-          >
-            Verify OTP
-          </button>
-
-          <div className="text-center">
-             <Link to="/login" className="text-sm text-indigo-500 hover:text-indigo-600 font-medium">
-                Back To Login
-              </Link>
-          </div>
+  resendOtpSection === false ? (
+    <div className="h-screen bg-gray-800">
+        <form action="" onSubmit={handleVerifyEmailRequest}>
+            <input type="email" />
+            <button type='submit'>
+                verify email request
+            </button>
         </form>
-      </div>
     </div>
-  );
-};
+  ) : <div className="min-h-screen bg-gray-800 h-fit w-full">
+        <div className="flex justify-center items-center">
+          <form action="" onSubmit={handleSubmit}>
+            <div className=" flex flex-col">
+            <input type="text"
+            placeholder='otp'
+            onChange={(e)=> setOtp(e.target.value)}
+            />
+            <button type='submit'>
+               Verify Email
+            </button>
+            </div>
+        </form>
+        </div>
+    </div>
+}
 
-export default OtpPage;
+export default OtpPage

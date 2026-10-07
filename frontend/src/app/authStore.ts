@@ -46,7 +46,7 @@ interface AuthStore {
     data: AuthVerifyEmail
   ) => Promise<ApiResponseType | ApiErrorType>;
   userVerifyEmailRequest: (
-    data: AuthVerifyEmailRequest
+    verificationCode : string
   ) => Promise<ApiResponseType | ApiErrorType>;
 }
 
@@ -111,9 +111,9 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       throw error;
     }
   },
-  userVerifyEmail: async () => {
+  userVerifyEmail: async (verificationCode : string) => {
     try {
-      const res = await verifyEmail();
+      const res = await verifyEmail(verificationCode);
       set({
         user: res.data.user,
         isAuthenticated: true,
@@ -123,9 +123,9 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       return error;
     }
   },
-  userVerifyEmailRequest: async () => {
+  userVerifyEmailRequest: async (email : string) => {
     try {
-      const res = await verifyEmailRequest();
+      const res = await verifyEmailRequest(email);
       set({
         user: res.data.data.user,
         isAuthenticated: true,
