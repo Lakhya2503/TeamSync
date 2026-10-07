@@ -32,9 +32,9 @@ export const getMe = () => {
   return apiClient.get("/auth/get-me");
 };
 
-export const verifyEmail = (verificationCode : string) => {
-  return apiClient.get("/auth/verify", {
-    json : verificationCode
+export const verifyEmail = (payload : string) => {
+  return apiClient.post("/auth/verify", {
+    json : payload
   }).json();
 };
 

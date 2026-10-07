@@ -18,7 +18,7 @@ router.route("/login").post(loginUser)
 
 router.route("/verify-email/request").post(verifyEmailReuqest)
 
-router.route("/verify").get(verifyEmail)
+router.route("/verify").post(verifyEmail)
 
 router.route("/logout").get(verifyJWT, logoutUser)
 
