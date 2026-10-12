@@ -75,7 +75,7 @@ const Navbar = () => {
                 <div className="relative group">
                   <button className="flex items-center space-x-2 focus:outline-none">
                     <img
-                      src={userData.avatar}
+                      src={userData.avatar || ""}
                       alt={userData.name}
                       className="w-10 h-10 rounded-full border-2 border-indigo-300 hover:border-indigo-500 transition-colors shadow-sm"
                     />

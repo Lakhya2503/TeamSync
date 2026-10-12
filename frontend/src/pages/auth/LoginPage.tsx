@@ -42,6 +42,13 @@ const LoginPage = () => {
     setIsLoading(true)
     const payload = { email: email, password: password }
       const res = await login(payload)
+
+      console.log("payload login " , res)
+
+        if(res === "undefiend") {
+          navigate('/verify-email')
+        }
+    
       console.log("login : ", res)
       console.log("res", user?.role.toLowerCase()) 
       navigate(`/${user?.role.toLowerCase()}/dashboard`) 

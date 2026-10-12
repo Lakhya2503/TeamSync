@@ -78,6 +78,8 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
   userLogin: async (data) => {
     try {
       const res = await authLogin(data);
+      console.log("LOGIN RES  : ", res)
+
       set({
         accessToken : res.data.accessToken,
         refreshToken : res.data.refreshToken,
@@ -88,7 +90,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       console.log("login : ", res);
       return res.data;
     } catch (error) {
-      console.log("error", error);
+      console.log("error : ", error);
       if (error instanceof Error) {
         return error;
       }

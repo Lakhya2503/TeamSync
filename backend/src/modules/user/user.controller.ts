@@ -258,10 +258,15 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const currentUser = asyncHandler(async (req: Request, res: Response) => {
+
+    console.log("1")
   console.log("user", req);
 
+  console.log("2")
   const user = req.user as userType;
 
+
+  console.log("3")
   return res
     .status(200)
     .json(new ApiResponse(200, { user }, "User Fetch Successfully", true));
