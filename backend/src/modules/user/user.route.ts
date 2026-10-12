@@ -14,9 +14,9 @@ const router = Router()
 
 router.route("/register").post(registerUser)
 
-router.route("/login").post(loginUser)
-
 router.route("/verify-email/request").post(verifyEmailReuqest)
+
+router.route("/login").post(loginUser)
 
 router.route("/verify").post(verifyEmail)
 

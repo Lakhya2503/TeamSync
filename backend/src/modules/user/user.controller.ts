@@ -56,7 +56,7 @@ export const registerUser = asyncHandler(
     // console.log("user 2", userExists.rows[0]);
 
     if (_userExists) {
-      throw new ApiError(400, "User already Exist");
+      throw new ApiError(409, `User already exists with email: ${email}`);
     }
 
     let role;
@@ -200,25 +200,25 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     password,
   });
 
-  console.log("before user search : 1")
+  console.log("before user search : 1");
 
   const user = await database.query("SELECT * FROM users  WHERE email = $1", [
-    email
+    email,
   ]);
 
-  console.log("after user search : 1")
-  
-  console.log("user : ", user.rows)
+  console.log("after user search : 1");
+
+  console.log("user : ", user.rows);
 
   const _user: userType = await fetchUser(user.rows[0].id);
 
-  console.log("secure user fetch : ", _user)
+  console.log("secure user fetch : ", _user);
 
   if (!_user) {
     throw new ApiError(401, "User can't Exist with this Email..");
   }
 
-  console.log("password checking : 3", )
+  console.log("password checking : 3");
 
   const isPasswordCorrect = bcrypt.compare(password, _user?.password);
 
@@ -226,12 +226,11 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(401, "Creadential faild....");
   }
 
-  console.log("password match successfully : 4")
+  console.log("password match successfully : 4");
 
   const { accessToken, refreshToken } = await generateAccessRefreshToken(_user);
 
-    console.log("token updated : 5")
-
+  console.log("token updated : 5");
 
   console.log(`${user.rows[0].name} : Login successfully`);
 
@@ -258,15 +257,13 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const currentUser = asyncHandler(async (req: Request, res: Response) => {
-
-    console.log("1")
+  console.log("1");
   console.log("user", req);
 
-  console.log("2")
+  console.log("2");
   const user = req.user as userType;
 
-
-  console.log("3")
+  console.log("3");
   return res
     .status(200)
     .json(new ApiResponse(200, { user }, "User Fetch Successfully", true));

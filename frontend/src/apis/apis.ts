@@ -1,4 +1,9 @@
-import type { ApiResponseType } from "../types/ResponseType";
+import type { LoginResponse } from "../app/types/AuthType";
+import type {
+  ApiErrorType,
+  ApiResponseType,
+  ResponseType,
+} from "../types/ResponseType";
 import type { AuthLogin, AuthRegister } from "../types/user.type";
 import { apiClient } from "./apiClient";
 
@@ -8,20 +13,21 @@ export const authRegister = (payload: {
   email: string;
   password: string;
   secretKey: string;
-}): Promise<ApiResponseType> => {
+}): Promise<ResponseType> => {
   return apiClient
     .post("/auth/register", {
       json: payload,
     })
-    .json<ApiResponseType>();
+    .json<ResponseType>();
 };
 
 export const authLogin = (payload: { email: string; password: string }) => {
-  return apiClient
+  const res = apiClient
     .post("/auth/login", {
       json: payload,
     })
-    .json<ApiResponseType>();
+    .json<LoginResponse>();
+  return res;
 };
 
 export const authLogout = () => {
@@ -32,16 +38,17 @@ export const getMe = () => {
   return apiClient.get("/auth/get-me");
 };
 
-export const verifyEmail = (payload : string) => {
+export const verifyEmail = (payload: string) => {
   return apiClient.post("/auth/verify", {
-    json : payload
-  }).json();
+    json: payload,
+  });
 };
 
-export const verifyEmailRequest = () => {
-  return apiClient.get("/auth/verify-email-request/:email");
+export const verifyEmailRequest = (email: string) => {
+  return apiClient.post("/auth/verify-email/request", {
+    json: email,
+  });
 };
-
 
 // !! ============= Danger Zone ============= //
 // !! == DELETE USER ACCOUNT

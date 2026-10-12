@@ -19,7 +19,8 @@ import {
 } from "../apis/apis";
 import type { ApiResponseType } from "../types/ResponseType";
 import type { ApiErrorType } from "../types/ResponseType";
-import type { LoginResponse, RegisterResponse } from "./types/auth";
+import type { LoginResponse, RegisterResponse } from "./types/AuthType";
+import toast from "react-hot-toast";
 
 interface AuthStore {
   user: userType | null;
@@ -32,7 +33,7 @@ interface AuthStore {
     email: string;
     name: string;
     password: string;
-    secretKey :string
+    secretKey: string;
   }) => Promise<RegisterResponse | ApiErrorType>;
 
   userLogin: (data: {
@@ -46,7 +47,7 @@ interface AuthStore {
     data: AuthVerifyEmail
   ) => Promise<ApiResponseType | ApiErrorType>;
   userVerifyEmailRequest: (
-    verificationCode : string
+    verificationCode: string
   ) => Promise<ApiResponseType | ApiErrorType>;
 }
 
@@ -58,7 +59,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
   refreshToken: "",
   userRegister: async (data) => {
     try {
-      console.log("payload :", data)
+      console.log("payload :", data);
       const res = await authRegister(data);
       set({
         user: null,
@@ -66,9 +67,11 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
         role: "",
       });
       console.log("userRegister response", res);
+      toast.success(res.message)
       return res;
     } catch (error) {
       console.log("userRegister error", error);
+      toast.error(error?.data?.message)
       if (error instanceof Error) {
         return error;
       }
@@ -78,25 +81,30 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
   userLogin: async (data) => {
     try {
       const res = await authLogin(data);
-      console.log("LOGIN RES  : ", res)
 
+      console.log("login:", res.message);
+
+      toast.success(res.message || "login successfully");
       set({
-        accessToken : res.data.accessToken,
-        refreshToken : res.data.refreshToken,
-        user: res.data.user,
+        accessToken: res.data?.accessToken,
+        refreshToken: res.data?.refreshToken,
+        user: res.data?.user,
         isAuthenticated: true,
-        role: res.data?.user?.role.toLowerCase(),
+        role: res.data?.user?.role?.toLowerCase(),
       });
-      console.log("login : ", res);
-      return res.data;
-    } catch (error) {
-      console.log("error : ", error);
-      if (error instanceof Error) {
-        return error;
-      }
-      throw error;
+
+      return res as LoginResponse;
+    } catch (error: any) {
+      const message =
+        error?.data?.message 
+      toast.error(message);
+      return {
+        success: false,
+        message,
+      } as ApiErrorType;
     }
   },
+
   getUser: async () => {
     try {
       const res = await getMe();
@@ -113,7 +121,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       throw error;
     }
   },
-  userVerifyEmail: async (verificationCode : string) => {
+  userVerifyEmail: async (verificationCode: string) => {
     try {
       const res = await verifyEmail(verificationCode);
       set({
@@ -125,7 +133,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       return error;
     }
   },
-  userVerifyEmailRequest: async (email : string) => {
+  userVerifyEmailRequest: async (email: string) => {
     try {
       const res = await verifyEmailRequest(email);
       set({
@@ -136,7 +144,8 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
     } catch (error) {
       return error;
     }
-  },userLogout: async () => {
+  },
+  userLogout: async () => {
     try {
       const res = await authLogout();
       set({

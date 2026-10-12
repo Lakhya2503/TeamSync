@@ -1,8 +1,6 @@
-import type { userType } from "./user.type";
-
-export interface ApiResponseType {
+export interface ResponseType {
   statusCode: number;
-  data: object;
+  data?: object;
   message: string;
   success?: boolean;
 }

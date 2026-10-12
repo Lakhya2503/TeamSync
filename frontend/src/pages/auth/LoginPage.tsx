@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import useAuthStore from '../../app/authStore'
-import { 
-  FaEnvelope, 
-  FaLock, 
-  FaGoogle, 
-  FaGithub, 
-  FaEye, 
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import useAuthStore from "../../app/authStore";
+import {
+  FaEnvelope,
+  FaLock,
+  FaGoogle,
+  FaGithub,
+  FaEye,
   FaEyeSlash,
   FaArrowRight,
   FaStar,
@@ -16,43 +16,47 @@ import {
   FaUsers,
   FaChartLine,
   FaHeadset,
-  FaCheck
-} from 'react-icons/fa'
-import { HiUserGroup } from 'react-icons/hi'
-import { BsShieldCheck, BsRocket, BsArrowRight } from 'react-icons/bs'
-import { Logo_circle_image } from '../../assets'
+  FaCheck,
+} from "react-icons/fa";
+import { HiUserGroup } from "react-icons/hi";
+import { BsShieldCheck, BsRocket, BsArrowRight } from "react-icons/bs";
+import { Logo_circle_image } from "../../assets";
 
 const LoginPage = () => {
-  const login = useAuthStore((state) => state.userLogin)
-  const user = useAuthStore((state) => state.user)
+  const login = useAuthStore((state) => state.userLogin);
+  const user = useAuthStore((state) => state.user);
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const clearAuth = () => {
-    setEmail("")
-    setPassword("")
-  }
+    setEmail("");
+    setPassword("");
+  };
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    const payload = { email: email, password: password }
-      const res = await login(payload)
+  const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const payload = { email: email, password: password };
+    try {
+      const res = await login(payload);
+      console.log("login : ", res);
 
-      console.log("payload login " , res)
-
-        if(res === "undefiend") {
+      if(res.message === "Account not verified") {
           navigate('/verify-email')
-        }
-    
-      console.log("login : ", res)
-      console.log("res", user?.role.toLowerCase()) 
-      navigate(`/${user?.role.toLowerCase()}/dashboard`) 
-  }
+      }
+
+      
+      setIsLoading(false);
+      clearAuth();
+    } catch (error) {
+      console.log("error :", error);
+    }
+    // navigate(`/${user?.role.toLowerCase()}/dashboard`)
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4">
@@ -63,13 +67,12 @@ const LoginPage = () => {
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 text-white">
             <div className="text-center">
               <div className="mx-auto w-25 h-25 rounded-full flex items-center justify-center mb-4">
-                  <img src={Logo_circle_image} alt="" />
-                </div>
+                <img src={Logo_circle_image} alt="" />
+              </div>
               <h1 className="text-4xl font-bold mb-3">Welcome Back!</h1>
               <p className="text-white/90 text-lg mb-6">
                 Sign in to continue managing your teams and projects
               </p>
-              
               <div className="space-y-3 text-white/80">
                 <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
                   <FaShieldAlt className="text-2xl" />
@@ -118,11 +121,16 @@ const LoginPage = () => {
               <HiUserGroup className="text-indigo-500 text-2xl" />
               <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
             </div>
-            <p className="text-gray-600 mb-6">Please enter your credentials to sign in</p>
+            <p className="text-gray-600 mb-6">
+              Please enter your credentials to sign in
+            </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
                   Email Address
                 </label>
                 <div className="relative">
@@ -142,7 +150,10 @@ const LoginPage = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -163,11 +174,18 @@ const LoginPage = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <FaEyeSlash className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
+                    {showPassword ? (
+                      <FaEyeSlash className="h-5 w-5" />
+                    ) : (
+                      <FaEye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
                 <div className="mt-1.5 text-right">
-                  <Link to="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm text-indigo-600 hover:text-indigo-700 hover:underline transition-colors"
+                  >
                     Forgot password?
                   </Link>
                 </div>
@@ -177,14 +195,30 @@ const LoginPage = () => {
                 type="submit"
                 disabled={isLoading}
                 className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-indigo-200/50 flex items-center justify-center space-x-2 ${
-                  isLoading ? 'opacity-70 cursor-not-allowed' : ''
+                  isLoading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
               >
                 {isLoading ? (
                   <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     <span>Signing in...</span>
                   </>
@@ -197,7 +231,7 @@ const LoginPage = () => {
               </button>
 
               <p className="text-center text-gray-600 font-medium">
-                Don't have an account?{' '}
+                Don't have an account?{" "}
                 <Link
                   to="/register"
                   className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline transition-colors"
@@ -213,7 +247,9 @@ const LoginPage = () => {
                 <div className="w-full border-t border-gray-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Or continue with</span>
+                <span className="px-4 bg-white text-gray-500">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -247,7 +283,7 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

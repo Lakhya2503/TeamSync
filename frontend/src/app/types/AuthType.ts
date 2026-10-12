@@ -7,11 +7,13 @@ export interface RegisterResponse {
 }
 
 export interface LoginResponse {
-  statusCode: number;
-  data: {
-    refreshToken: string;
-    accessToken: string;
-    user: userType;
-  };
-  message: string;
+  statusCode?: number;
+  data: Data;
+  message?: string;
+}
+
+interface Data  {
+    user : userType,
+    accessToken : string,
+    refreshToken : string
 }
