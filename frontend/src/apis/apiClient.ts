@@ -10,8 +10,8 @@ export const apiClient = ky.create({
   fetch: async (input, init) => {
     console.log({
       input,
-      init
-    })
+      init,
+    });
     const response = await fetch(input, init);
     console.log("REQUEST  : ", input);
     console.log("RESPONSE : ", await response.clone().json());

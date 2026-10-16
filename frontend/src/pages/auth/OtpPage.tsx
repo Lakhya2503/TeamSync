@@ -3,32 +3,44 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../app/authStore";
 
 const OtpPage = () => {
-  const [otp, setOtp] = useState<string>("");
+  const [verificationCode, setVerificationCode] = useState<string>("");
   const [showResend, setShowResend] = useState<boolean>(false);
-  const [ email, setEmail ] = useState<string>("")
+  const [email, setEmail] = useState<string>("");
   const userVerifyEmail = useAuthStore((state) => state.userVerifyEmail);
-  const emailVerifticationRequest = useAuthStore((state) => state.userVerifyEmailRequest)
+  const emailVerifticationRequest = useAuthStore(
+    (state) => state.userVerifyEmailRequest
+  );
 
   const navigate = useNavigate();
 
-
-  const handleResendEmailVerificationRequest = async(e: React.SubmitEvent<HTMLFormElement>) => {
-      e.preventDefault()
-        try {
-            const res = await emailVerifticationRequest(email)
-            console.log("res :" , res)
-            setShowResend(false)
-        } catch (error) {
-            console.log("error")
-        }
-  }
-
+  const handleResendEmailVerificationRequest = async (
+    e: React.SubmitEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    try {
+      const payload: { email: string } = {
+        email: email,
+      };
+      const res = await emailVerifticationRequest(payload);
+      console.log("res :", res);
+      setShowResend(false);
+    } catch (error) {
+      console.log("error");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("otp : ", otp);
-    const res = await userVerifyEmail(otp);
-    console.log("res", res);
+    try {
+      console.log("otp : ", verificationCode);
+      const payload: { verificationCode: string } = {
+        verificationCode: verificationCode,
+      };
+      const res = await userVerifyEmail(payload);
+      console.log("res", res);
+    } catch (error) {
+      console.log("ERROR : ", error);
+    }
   };
 
   return showResend ? (
@@ -58,7 +70,7 @@ const OtpPage = () => {
             <input
               type="text"
               placeholder="otp"
-              onChange={(e) => setOtp(e.target.value)}
+              onChange={(e) => setVerificationCode(e.target.value)}
               className="px-4 py-3 rounded-2xl border border-blue-700 my-10"
             />
             <button

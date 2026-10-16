@@ -115,6 +115,7 @@ export const registerUser = asyncHandler(
 
 export const verifyEmailReuqest = asyncHandler(
   async (req: Request, res: Response) => {
+    console.log("Email",  req.body)
     const { email } = req.body;
 
     const user = await database.query(

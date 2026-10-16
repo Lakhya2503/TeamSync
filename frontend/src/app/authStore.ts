@@ -43,12 +43,12 @@ interface AuthStore {
 
   userLogout: () => Promise<ApiResponseType | ApiErrorType>;
   getUser: () => Promise<ApiResponseType | ApiErrorType>;
-  userVerifyEmail: (
-    data: AuthVerifyEmail
-  ) => Promise<ApiResponseType | ApiErrorType>;
-  userVerifyEmailRequest: (
-    verificationCode: string
-  ) => Promise<ApiResponseType | ApiErrorType>;
+  userVerifyEmail: (payload: {
+    verificationCode: string;
+  }) => Promise<ApiResponseType | ApiErrorType>;
+  userVerifyEmailRequest: (payload: {
+    email: string;
+  }) => Promise<ApiResponseType | ApiErrorType>;
 }
 
 const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
@@ -67,11 +67,11 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
         role: "",
       });
       console.log("userRegister response", res);
-      toast.success(res.message)
+      toast.success(res.message);
       return res;
     } catch (error) {
       console.log("userRegister error", error);
-      toast.error(error?.data?.message)
+      toast.error(error?.data?.message);
       if (error instanceof Error) {
         return error;
       }
@@ -95,8 +95,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
 
       return res as LoginResponse;
     } catch (error: any) {
-      const message =
-        error?.data?.message 
+      const message = error?.data?.message;
       toast.error(message);
       return {
         success: false,
@@ -121,9 +120,9 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       throw error;
     }
   },
-  userVerifyEmail: async (verificationCode: string) => {
+  userVerifyEmail: async (payload: { verificationCode: string }) => {
     try {
-      const res = await verifyEmail(verificationCode);
+      const res = await verifyEmail(payload);
       set({
         user: res.data.user,
         isAuthenticated: true,
@@ -133,15 +132,18 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
       return error;
     }
   },
-  userVerifyEmailRequest: async (email: string) => {
+  userVerifyEmailRequest: async (payload: { email: string }) => {
+    console.log("Email : ", payload);
     try {
-      const res = await verifyEmailRequest(email);
+      const res = await verifyEmailRequest(payload);
+      console.log("RESPONSE  OF VERIFYEMAILREQUEST : ", res);
       set({
         user: res.data.data.user,
         isAuthenticated: true,
       });
       return res.data;
     } catch (error) {
+      console.log("ERROR : ", error);
       return error;
     }
   },

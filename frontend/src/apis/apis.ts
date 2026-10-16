@@ -38,15 +38,16 @@ export const getMe = () => {
   return apiClient.get("/auth/get-me");
 };
 
-export const verifyEmail = (payload: string) => {
+export const verifyEmail = (payload: { verificationCode: string }) => {
   return apiClient.post("/auth/verify", {
     json: payload,
   });
 };
 
-export const verifyEmailRequest = (email: string) => {
+export const verifyEmailRequest = (payload: { email: string }) => {
+  console.log("EMAIL : ", payload);
   return apiClient.post("/auth/verify-email/request", {
-    json: email,
+    json: payload,
   });
 };
 

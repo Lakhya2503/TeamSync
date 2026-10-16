@@ -45,17 +45,15 @@ const LoginPage = () => {
       const res = await login(payload);
       console.log("login : ", res);
 
-      if(res.message === "Account not verified") {
-          navigate('/verify-email')
+      if (res.message === "Account not verified") {
+        navigate("/verify-email");
       }
-
-      
       setIsLoading(false);
       clearAuth();
+      navigate(`/${user?.role.toLowerCase()}/dashboard`);
     } catch (error) {
       console.log("error :", error);
     }
-    // navigate(`/${user?.role.toLowerCase()}/dashboard`)
   };
 
   return (
