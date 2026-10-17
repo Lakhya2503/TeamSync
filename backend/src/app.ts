@@ -51,25 +51,31 @@ app.use(morgan("dev"));
 
 // APP ROUTE DIFIEND HERE
 import AuthRouter from "./modules/user/user.route.js";
-import { ApiResponse } from "./utils/ApiResponse.js";
-import { json } from "stream/consumers";
-import { ApiError } from "./utils/ApiError.js";
+import TeamRouter from "./modules/team/team.route.js";
+
 
 // APP ROUTER USE HERE
 app.use("/api/v1/teamsync/auth", AuthRouter);
+app.use("/api/v1/teamsync/team", TeamRouter);
+
 
 // global error handling
 
-
-app.use((err: Error & { statusCode?: number; errors?: unknown[] }, req: Request, res: Response, next: NextFunction) => {
-  res.status(err.statusCode ?? 500).json({
-    status : err.statusCode ?? 500,
-    success: false,
-    message: err.message,
-    errors: err.errors || [],
-  });
-});
-
+app.use(
+  (
+    err: Error & { statusCode?: number; errors?: unknown[] },
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    res.status(err.statusCode ?? 500).json({
+      status: err.statusCode ?? 500,
+      success: false,
+      message: err.message,
+      errors: err.errors || [],
+    });
+  }
+);
 
 app.use((req, res) => {
   return res.json({
