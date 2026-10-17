@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import useAuthStore from '../app/authStore';
 import Loader from '../Components/ui/Loader';
@@ -8,7 +8,6 @@ import ForgetPasswordRequestPage from '../pages/auth/ForgetPasswordRequestPage';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
 import OtpPage from '../pages/auth/OtpPage';
 import NotFound from '../Components/ui/NotFound';
-
 
 const AdminRouter = React.lazy(() => import('./AdminRouter'));
 const ManagerRouter = React.lazy(() => import('./ManagerRouter'));
@@ -28,8 +27,11 @@ interface ProtectedRouteProps {
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, getUser } = useAuthStore();
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     const checkAuth = async () => {
       if (!isAuthenticated) {
         try {
@@ -38,11 +40,17 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
           console.error('Authentication failed:', error);
         }
       }
+      if (mounted) setChecking(false);
     };
+
     checkAuth();
+    return () => {
+      mounted = false;
+    };
   }, [isAuthenticated, getUser]);
 
-  // Show loading while checking authentication
+  // Show loader while restoring session
+  if (checking) return <Loader />;
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -57,11 +65,11 @@ const PublicRoutes = () => {
       <Navbar />
       <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="*" element={<NotFound />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/help" element={<HelpPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
       <Footer />
@@ -72,32 +80,30 @@ const PublicRoutes = () => {
 const AppRouter = () => {
   const { user, isAuthenticated } = useAuthStore();
 
-  console.log("user : ", user)
-  
-  // Get role in lowercase for consistent routing
-  const userRole = user?.role || '';
-  console.log("userRole, :", userRole)
-  const isUserLoaded = isAuthenticated && userRole;
+  // Normalize role to lowercase for consistent routing
+  const userRole = (user?.role || '').toLowerCase();
+  const isUserLoaded = isAuthenticated && !!userRole;
 
-  // Determine which router to render based on role
+  // Render the correct role-based router
   const getRoleRouter = () => {
-    if (userRole === 'admin') {
-      return <AdminRouter basePath={`/${userRole}`} />;
-    } else if (userRole === 'manager') {
-      return <ManagerRouter basePath={`/${userRole}`} />;
-    } else if (userRole === 'user') {
-      return <UserRouter basePath={`/${userRole}`} />;
+    if (!isUserLoaded) return <Loader />;
+
+    switch (userRole) {
+      case 'admin':
+        return <AdminRouter />;
+      case 'manager':
+        return <ManagerRouter />;
+      case 'user':
+        return <UserRouter />;
+      default:
+        return <NotFound />;
     }
-    return <NotFound />;
   };
 
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        {/* PUBLIC ROUTES - No layout needed */}
-        <Route path="/*" element={<PublicRoutes />} />
-
-        {/* AUTH ROUTES - No layout needed */}
+        {/* AUTH ROUTES */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgetPasswordRequestPage />} />
@@ -112,38 +118,26 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         >
-          {/* Dashboard redirect */}
-          <Route 
-            path="/dashboard" 
+          {/* Dashboard redirect to role-specific dashboard */}
+          <Route
+            path="/dashboard"
             element={
               isUserLoaded ? (
                 <Navigate to={`/${userRole}/dashboard`} replace />
               ) : (
                 <Loader />
               )
-            } 
+            }
           />
 
-          {/* Role-based routes - only render if user is loaded */}
+          {/* Role-based nested routes */}
           {isUserLoaded && (
-            <Route 
-              path={`/${userRole}/*`} 
-              element={getRoleRouter()} 
-            />
+            <Route path={`/${userRole}/*`} element={getRoleRouter()} />
           )}
-
-          {/* Catch any other protected routes and redirect to dashboard */}
-          <Route 
-            path="/*" 
-            element={
-              isUserLoaded ? (
-                <Navigate to={`/${userRole}/dashboard`} replace />
-              ) : (
-                <Loader />
-              )
-            } 
-          />
         </Route>
+
+        {/* PUBLIC ROUTES - keep last so auth/protected take precedence */}
+        <Route path="/*" element={<PublicRoutes />} />
       </Routes>
     </Suspense>
   );

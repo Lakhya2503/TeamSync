@@ -1,8 +1,7 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-
-import { BiSupport } from 'react-icons/bi';
-import useAuthStore from '../app/authStore';
+import React, { Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import Loader from '../Components/ui/Loader';
+import NotFound from '../Components/ui/NotFound';
 
 const AdminDashboard = React.lazy(() => import('../Components/Dashboard/admin/AdminDashboard'));
 const AdminUsers = React.lazy(() => import('../Components/Dashboard/admin/AdminUsers'));
@@ -14,35 +13,31 @@ const AdminReports = React.lazy(() => import('../Components/Dashboard/admin/Admi
 const AdminSettings = React.lazy(() => import('../Components/Dashboard/admin/AdminSettings'));
 const AdminProfile = React.lazy(() => import('../Components/Dashboard/admin/AdminProfile'));
 
-interface AdminRouterProps {
-  basePath?: string;
-}
 
+const AdminNeedsPlaceholder = () => <div>Page for creating needs</div>;
 
-const AdminRouter : React.FC<AdminRouterProps> = ({ basePath }) => {
-
-  const role = useAuthStore((state) => state.role);
-  const pathPrefix = basePath || `/${role || ''}`;
-
-  if (!pathPrefix || pathPrefix === '/') {
-    return null;
-  }
-
+const AdminRouter: React.FC = () => {
   return (
-    <Routes>
-      <Route path={`/dashboard`} element={<AdminDashboard />} />
-      <Route path={`/users`} element={<AdminUsers />} />
-      <Route path={`/needs`} element={<div>Page for creating needs</div>} />
-      <Route path={`/sessions`} element={<AdminSession/>} />
-      <Route path={`/plan`} element={<AdminPlane/>} />
-      <Route path={`/evaluations`} element={<AdminEvalutions/>} />
-      <Route path={`/catalogs`} element={<AdminCatlog/>} />
-      <Route path={`/reports`} element={<AdminReports/>} />
-      <Route path={`/setting`} element={<AdminSettings/>} />
-      <Route path={`/support`} element={<BiSupport/>} />
-      {/* <Route path={`/notifications`} element={<AdminNotification>} /> */}
-      <Route path={`/profile`} element={<AdminProfile/>} />
-    </Routes>
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        {/* Redirect /admin -> /admin/dashboard */}
+        <Route index element={<Navigate to="dashboard" replace />} />
+
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="needs" element={<AdminNeedsPlaceholder />} />
+        <Route path="sessions" element={<AdminSession />} />
+        <Route path="plan" element={<AdminPlane />} />
+        <Route path="evaluations" element={<AdminEvalutions />} />
+        <Route path="catalogs" element={<AdminCatlog />} />
+        <Route path="reports" element={<AdminReports />} />
+        <Route path="setting" element={<AdminSettings />} />
+        <Route path="profile" element={<AdminProfile />} />
+
+        {/* Unknown sub-route under /admin */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
   );
 };
 
