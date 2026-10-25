@@ -15,6 +15,7 @@ export const connectDB = async() => {
     try {
        const promise = await database.connect();
        console.log("Database connection successfully : 🦣")
+       return promise
     } catch (error : any) {
         console.log(`error : ${error.message}`);
         process.exit(1);
