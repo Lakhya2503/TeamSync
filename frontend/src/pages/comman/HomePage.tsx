@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import {
   FaRocket,
-  FaUsers,
   FaChartLine,
   FaBell,
   FaShieldAlt,
   FaArrowRight,
   FaPlay,
-  FaCheckCircle,
   FaBolt,
   FaClock,
   FaUsers as FaUsersGroup,
-  FaProjectDiagram,
-  FaChartPie,
-  FaRegStar,
-  FaRegHeart,
-  FaRegComments,
   FaUserPlus,
-  FaCloudUploadAlt,
-  FaMobileAlt,
   FaHeadset,
   FaCog,
   FaRegCalendarAlt,
@@ -27,52 +18,41 @@ import {
   FaRegSmile,
   FaQuoteLeft,
   FaStar,
-  FaStarHalfAlt,
-  FaUserCircle,
   FaRegLightbulb,
   FaRegPaperPlane,
-  FaRegHandshake,
-  FaRegBuilding,
   FaTrophy,
-  FaAward,
-  FaRegGem,
-  FaGlobe,
-  FaLinkedin,
-  FaTwitter,
-  FaYoutube,
-  FaInstagram,
-  FaRegEnvelope,
-  FaPhoneAlt,
-  FaMapMarkerAlt,
   FaChevronRight,
   FaCheck,
-  FaArrowUp,
-  FaArrowDown,
-  FaRegCircle,
-  FaRegDotCircle,
-  FaInfinity,
-  FaLayerGroup,
-  FaRegLifeRing,
-  FaUsersCog,
   FaCrown,
   FaMedal,
   FaFire,
-  FaUserAstronaut,
   FaRocket as FaRocketIcon,
   FaHashtag,
   FaCircle,
-  FaUser,
   FaCalendarCheck,
   FaTasks,
   FaPercentage,
   FaSync,
   FaUserFriends
 } from 'react-icons/fa'
-import { MdOutlineRealEstateAgent } from 'react-icons/md'
-import { HiOutlineLightningBolt } from 'react-icons/hi'
+
+// --- clay tokens ---------------------------------------------------------
+const clayRaised =
+  'bg-[#e0e5ec] shadow-[8px_8px_20px_#b8bec7,-8px_-8px_20px_#ffffff]'
+const clayRaisedSm =
+  'bg-[#e0e5ec] shadow-[6px_6px_14px_#b8bec7,-6px_-6px_14px_#ffffff]'
+const clayInset =
+  'bg-[#e0e5ec] shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]'
+const clayPuck =
+  'flex items-center justify-center rounded-full bg-[#e0e5ec] shadow-[5px_5px_12px_#b8bec7,-5px_-5px_12px_#ffffff]'
+const clayButton =
+  'bg-gradient-to-br from-[#7c9cf5] to-[#a78bfa] text-white font-bold ' +
+  'shadow-[8px_8px_20px_#b8bec7,-8px_-8px_20px_#ffffff] ' +
+  'transition-all duration-150 hover:from-[#6b8cf4] hover:to-[#9d7cf8] ' +
+  'hover:shadow-[10px_10px_24px_#b8bec7,-10px_-10px_24px_#ffffff] ' +
+  'active:shadow-[inset_5px_5px_12px_rgba(90,70,200,0.4),inset_-5px_-5px_12px_rgba(255,255,255,0.5)]'
 
 const HomePage = () => {
-  // Live leaderboard data with initial values
   const [leaderboardData, setLeaderboardData] = useState([
     { id: 1, name: 'Sarah Johnson', team: 'Design Sprint', tasks: 47, completed: 42, avatar: 'SJ', status: 'online' },
     { id: 2, name: 'Michael Chen', team: 'Project Alpha', tasks: 53, completed: 48, avatar: 'MC', status: 'online' },
@@ -80,7 +60,6 @@ const HomePage = () => {
     { id: 4, name: 'David Kim', team: 'Design Sprint', tasks: 41, completed: 36, avatar: 'DK', status: 'online' },
   ])
 
-  // Live update simulation
   useEffect(() => {
     const interval = setInterval(() => {
       setLeaderboardData(prevData => {
@@ -102,247 +81,210 @@ const HomePage = () => {
         return updatedData.sort((a, b) => (b.completed / b.tasks) - (a.completed / a.tasks))
       })
     }, 5000)
-
     return () => clearInterval(interval)
   }, [])
 
-  // Calculate completion percentage
-  const getCompletionRate = (completed : number, total : number) => {
-    return Math.round((completed / total) * 100)
-  }
+  const getCompletionRate = (completed: number, total: number) => Math.round((completed / total) * 100)
 
-  // Get color based on rank
-  const getRankColor = (index) => {
-    switch(index) {
-      case 0: return 'from-yellow-400 to-yellow-500'
-      case 1: return 'from-gray-300 to-gray-400'
-      case 2: return 'from-amber-600 to-amber-700'
-      default: return 'from-indigo-400 to-indigo-500'
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'online': return <FaCircle className="text-emerald-500 text-[8px]" />
+      case 'away': return <FaClock className="text-amber-500 text-[9px]" />
+      default: return <FaCircle className="text-[#a0aec0] text-[8px]" />
     }
   }
 
-  // Get status icon
-  const getStatusIcon = (status) => {
-    switch(status) {
-      case 'online': return <FaCircle className="text-green-500 text-xs" />
-      case 'away': return <FaClock className="text-yellow-500 text-xs" />
-      case 'offline': return <FaCircle className="text-gray-400 text-xs" />
-      default: return <FaCircle className="text-gray-400 text-xs" />
+  const getRankGradient = (index: number) => {
+    switch (index) {
+      case 0: return 'from-amber-300 to-amber-400'
+      case 1: return 'from-slate-300 to-slate-400'
+      case 2: return 'from-orange-400 to-orange-500'
+      default: return 'from-[#7c9cf5] to-[#a78bfa]'
     }
   }
 
-  // Get rank icon
-  const getRankIcon = (index) => {
-    switch(index) {
-      case 0: return <FaCrown className="text-yellow-400 text-lg" />
-      case 1: return <FaMedal className="text-gray-400 text-lg" />
-      case 2: return <FaMedal className="text-amber-600 text-lg" />
-      default: return <FaHashtag className="text-indigo-400 text-sm" />
-    }
-  }
-
-  // Get performance level
-  const getPerformanceLevel = (rate) => {
-    if (rate >= 90) return { icon: <FaFire className="text-red-500" />, label: 'On Fire!' }
-    if (rate >= 75) return { icon: <FaRocketIcon className="text-blue-500" />, label: 'Fast Track' }
-    if (rate >= 50) return { icon: <FaTasks className="text-yellow-500" />, label: 'Steady' }
-    return { icon: <FaClock className="text-gray-400" />, label: 'Building' }
+  const getPerformanceLevel = (rate: number) => {
+    if (rate >= 90) return { icon: <FaFire className="text-rose-500" />, label: 'On Fire!' }
+    if (rate >= 75) return { icon: <FaRocketIcon className="text-indigo-500" />, label: 'Fast Track' }
+    if (rate >= 50) return { icon: <FaTasks className="text-amber-500" />, label: 'Steady' }
+    return { icon: <FaClock className="text-[#a0aec0]" />, label: 'Building' }
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Main Content */}
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-white via-indigo-50 to-white py-10 px-4 relative overflow-hidden">
-          {/* Background Decor */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-200 rounded-full filter blur-3xl opacity-20 translate-y-1/2 -translate-x-1/2"></div>
-          
-          <div className="max-w-6xl mx-auto relative z-10">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Left Column */}
+    <div className="relative min-h-screen overflow-hidden bg-[#e0e5ec]">
+      {/* pastel clay blobs */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#a3b1c6]/40 blur-3xl" />
+        <div className="absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-[#c4b5fd]/40 blur-3xl" />
+        <div className="absolute bottom-0 left-1/3 h-96 w-96 rounded-full bg-[#a5b4fc]/40 blur-3xl" />
+      </div>
+
+      <main className="relative z-10">
+        {/* ========== HERO ========== */}
+        <section className="px-4 py-14">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid items-center gap-12 md:grid-cols-2">
+              {/* Left */}
               <div className="space-y-8">
-                <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-gray-800 leading-tight">
+                <h1 className="text-4xl font-extrabold leading-tight text-[#4a5568] md:text-5xl">
                   Sync Your Team,
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Supercharge Results</span>
+                  <span className="block bg-gradient-to-r from-[#7c9cf5] to-[#a78bfa] bg-clip-text text-transparent">
+                    Supercharge Results
+                  </span>
                 </h1>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  TeamSync brings your team together with powerful collaboration tools, 
+                <p className="text-lg font-medium leading-relaxed text-[#718096]">
+                  TeamSync brings your team together with powerful collaboration tools,
                   real-time updates, and seamless project management — all in one place.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <button className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-indigo-300/50 transition-all duration-200 transform hover:scale-105 group">
-                    <FaRocket className="group-hover:translate-x-1 transition-transform" />
+
+                <div className="flex flex-col gap-4 sm:flex-row">
+                  <button className={`inline-flex items-center gap-2 rounded-2xl px-8 py-3 ${clayButton}`}>
+                    <FaRocket />
                     Start Free Trial
-                    <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                    <FaArrowRight />
                   </button>
-                  <button className="inline-flex items-center gap-2 px-8 py-3 bg-white border-2 border-indigo-300 hover:border-indigo-400 text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:shadow-lg group">
-                    <FaPlay className="text-indigo-500 group-hover:scale-110 transition-transform" />
+                  <button className={`inline-flex items-center gap-2 rounded-2xl px-8 py-3 text-[#4a5568] ${clayRaised} hover:shadow-[10px_10px_24px_#b8bec7,-10px_-10px_24px_#ffffff] active:shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]`}>
+                    <FaPlay className="text-indigo-500" />
                     Watch Demo
                   </button>
                 </div>
-                
+
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-4 pt-4">
-                  <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-indigo-100 hover:shadow-lg transition-shadow">
-                    <div className="flex items-center gap-2">
-                      <FaUsersGroup className="text-indigo-500 text-xl" />
-                      <p className="text-2xl font-bold text-indigo-600">2,000+</p>
+                <div className="grid grid-cols-3 gap-4 pt-2">
+                  {[
+                    { icon: FaUsersGroup, value: '2,000+', label: 'Teams', color: 'text-indigo-500' },
+                    { icon: FaChartLine, value: '98%', label: 'Satisfaction', color: 'text-emerald-500' },
+                    { icon: FaHeadset, value: '24/7', label: 'Support', color: 'text-violet-500' },
+                  ].map((s, i) => (
+                    <div key={i} className={`rounded-2xl p-4 ${clayRaisedSm}`}>
+                      <div className="flex items-center gap-2">
+                        <s.icon className={`text-lg ${s.color}`} />
+                        <p className="text-xl font-extrabold text-[#4a5568]">{s.value}</p>
+                      </div>
+                      <p className="mt-1 text-xs font-semibold text-[#718096]">{s.label}</p>
                     </div>
-                    <p className="text-xs text-gray-500">Teams</p>
-                  </div>
-                  <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-indigo-100 hover:shadow-lg transition-shadow">
-                    <div className="flex items-center gap-2">
-                      <FaChartLine className="text-green-500 text-xl" />
-                      <p className="text-2xl font-bold text-indigo-600">98%</p>
-                    </div>
-                    <p className="text-xs text-gray-500">Satisfaction</p>
-                  </div>
-                  <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-indigo-100 hover:shadow-lg transition-shadow">
-                    <div className="flex items-center gap-2">
-                      <FaHeadset className="text-purple-500 text-xl" />
-                      <p className="text-2xl font-bold text-indigo-600">24/7</p>
-                    </div>
-                    <p className="text-xs text-gray-500">Support</p>
-                  </div>
+                  ))}
                 </div>
 
-                {/* Trust Badge */}
-                <div className="flex items-center gap-6">
+                {/* Trust */}
+                <div className="flex items-center gap-5">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-200 to-indigo-300 border-2 border-white flex items-center justify-center text-indigo-700 font-bold text-sm shadow-md">
-                        {String.fromCharCode(64 + i)}
+                      <div
+                        key={i}
+                        className={`h-10 w-10 rounded-full border-2 border-[#e0e5ec] bg-gradient-to-br ${getRankGradient(i - 1)} text-sm font-bold text-white ${clayRaisedSm}`}
+                      >
+                        <div className="flex h-full w-full items-center justify-center">
+                          {String.fromCharCode(64 + i)}
+                        </div>
                       </div>
                     ))}
-                    <div className="w-10 h-10 rounded-full bg-indigo-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">
-                      <FaUserPlus className="text-lg" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#e0e5ec] bg-gradient-to-br from-[#7c9cf5] to-[#a78bfa] text-white shadow-[4px_4px_10px_#b8bec7,-4px_-4px_10px_#ffffff]">
+                      <FaUserPlus />
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500">
-                    <span className="font-semibold text-gray-700">2,000+</span> teams trust TeamSync
+                  <span className="text-sm font-medium text-[#718096]">
+                    <span className="font-bold text-[#4a5568]">2,000+</span> teams trust TeamSync
                   </span>
                 </div>
               </div>
 
-              {/* Right Column - Live Leaderboard */}
-              <div className="relative group">
-                {/* Animated Background Glow */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-                
-                <div className="relative bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-6 border-2 border-indigo-200 shadow-xl hover:shadow-2xl transition-all duration-500 hover:border-indigo-300">
+              {/* Right — Leaderboard */}
+              <div className="relative">
+                <div className={`rounded-[2rem] p-6 ${clayRaised}`}>
                   <div className="space-y-4">
-                    {/* Leaderboard Header */}
-                    <div className="flex items-center justify-between mb-2">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <FaTrophy className="text-2xl text-yellow-500 animate-pulse" />
-                        <h3 className="text-lg font-bold text-gray-800">Live Leaderboard</h3>
+                        <div className={`h-9 w-9 ${clayPuck}`}>
+                          <FaTrophy className="text-lg text-amber-500" />
+                        </div>
+                        <h3 className="text-lg font-extrabold text-[#4a5568]">Live Leaderboard</h3>
                       </div>
                       <div className="flex items-center gap-2">
-                        <FaSync className="text-green-500 text-xs animate-spin" />
-                        <span className="text-xs text-green-500 font-medium">Live</span>
-                        <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                        <FaSync className="animate-spin text-xs text-emerald-500" />
+                        <span className="text-xs font-bold text-emerald-500">Live</span>
+                        <span className="h-2 w-2 animate-ping rounded-full bg-emerald-500" />
                       </div>
                     </div>
 
-                    {/* Leaderboard List */}
-                    <div className="space-y-3 max-h-[420px] overflow-y-auto pr-2 custom-scrollbar">
+                    {/* List */}
+                    <div className="max-h-[420px] space-y-3 overflow-y-auto pr-1">
                       {leaderboardData.map((member, index) => {
-                        const completionRate = getCompletionRate(member.completed, member.tasks)
-                        const rankColor = getRankColor(index)
-                        const performance = getPerformanceLevel(completionRate)
-                        
+                        const rate = getCompletionRate(member.completed, member.tasks)
+                        const perf = getPerformanceLevel(rate)
                         return (
-                          <div 
-                            key={member.id} 
-                            className={`bg-white rounded-xl p-3 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-x-1 border-l-4 border-transparent hover:border-${rankColor.split(' ')[1].split('-')[1]}-500 group relative`}
-                          >
+                          <div key={member.id} className={`rounded-2xl p-3 ${clayRaisedSm}`}>
                             <div className="flex items-center gap-3">
-                              {/* Avatar with status */}
+                              {/* Avatar + status */}
                               <div className="relative flex-shrink-0">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-400 flex items-center justify-center text-white font-semibold text-sm">
+                                <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${getRankGradient(index)} text-sm font-bold text-white`}>
                                   {member.avatar}
                                 </div>
-                                <div className="absolute -bottom-0.5 -right-0.5">
+                                <div className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#e0e5ec] shadow-[2px_2px_5px_#b8bec7,-2px_-2px_5px_#ffffff]">
                                   {getStatusIcon(member.status)}
                                 </div>
                               </div>
 
                               {/* Info */}
-                              <div className="flex-1 min-w-0">
+                              <div className="min-w-0 flex-1">
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center gap-2">
-                                    <p className="font-semibold text-sm text-gray-800 truncate">{member.name}</p>
-                                    {index === 0 && <FaCrown className="text-yellow-400 text-xs" />}
+                                    <p className="truncate text-sm font-bold text-[#4a5568]">{member.name}</p>
+                                    {index === 0 && <FaCrown className="text-xs text-amber-400" />}
                                   </div>
-                                  <div className="flex items-center gap-1 text-xs">
-                                    <FaUserFriends className="text-gray-400" />
-                                    <span className="text-gray-500">{member.team}</span>
+                                  <div className="flex items-center gap-1 text-[10px] font-semibold text-[#a0aec0]">
+                                    <FaUserFriends />
+                                    <span>{member.team}</span>
                                   </div>
                                 </div>
-                                <div className="flex items-center justify-between mt-1">
-                                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <div className="mt-1 flex items-center justify-between">
+                                  <div className="flex items-center gap-2 text-[11px] font-semibold text-[#718096]">
                                     <FaTasks className="text-indigo-400" />
                                     <span>{member.completed}/{member.tasks}</span>
-                                    <span className="text-gray-300">|</span>
+                                    <span className="text-[#c3cad5]">|</span>
                                     <FaPercentage className="text-indigo-400" />
-                                    <span className={`font-semibold ${completionRate >= 80 ? 'text-green-500' : completionRate >= 50 ? 'text-yellow-500' : 'text-red-500'}`}>
-                                      {completionRate}%
+                                    <span className={rate >= 80 ? 'text-emerald-500' : rate >= 50 ? 'text-amber-500' : 'text-rose-500'}>
+                                      {rate}%
                                     </span>
                                   </div>
-                                  <div className="flex items-center gap-1 text-[10px] text-gray-400">
-                                    {performance.icon}
-                                    <span>{performance.label}</span>
+                                  <div className="flex items-center gap-1 text-[10px] font-semibold text-[#a0aec0]">
+                                    {perf.icon}
+                                    <span>{perf.label}</span>
                                   </div>
                                 </div>
                               </div>
                             </div>
 
-                            {/* Progress Bar */}
-                            <div className="mt-2 w-full bg-gray-100 rounded-full h-1.5">
-                              <div 
-                                className={`h-1.5 rounded-full transition-all duration-1000 bg-gradient-to-r ${index === 0 ? 'from-yellow-400 to-yellow-500' : index === 1 ? 'from-gray-300 to-gray-400' : index === 2 ? 'from-amber-600 to-amber-700' : 'from-indigo-400 to-indigo-500'}`}
-                                style={{ width: `${completionRate}%` }}
-                              ></div>
-                            </div>
-
-                            {/* Hover effect */}
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <div className="flex items-center gap-1 text-[10px] text-indigo-500 bg-indigo-50 px-2 py-1 rounded-full">
-                                <FaBolt className="text-xs" />
-                                <span>updating</span>
-                              </div>
+                            {/* Inset progress track */}
+                            <div className={`mt-2 h-2 w-full overflow-hidden rounded-full ${clayInset}`}>
+                              <div
+                                className={`h-full rounded-full bg-gradient-to-r ${getRankGradient(index)} transition-all duration-1000`}
+                                style={{ width: `${rate}%` }}
+                              />
                             </div>
                           </div>
                         )
                       })}
                     </div>
 
-                    {/* Live Stats Footer */}
-                    <div className="flex justify-between items-center pt-3 border-t border-indigo-200">
-                      <div className="flex items-center gap-3 text-xs">
-                        <div className="flex items-center gap-1 text-gray-500">
+                    {/* Footer */}
+                    <div className="flex items-center justify-between border-t border-[#c3cad5]/50 pt-3">
+                      <div className="flex items-center gap-3 text-[11px] font-semibold">
+                        <div className="flex items-center gap-1 text-[#718096]">
                           <FaUserFriends />
                           <span>{leaderboardData.length} members</span>
                         </div>
-                        <div className="flex items-center gap-1 text-green-500">
+                        <div className="flex items-center gap-1 text-emerald-500">
                           <FaCircle className="text-[6px]" />
                           <span>{leaderboardData.filter(m => m.status === 'online').length} online</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 text-xs">
+                      <div className="flex items-center gap-1 text-[11px] font-semibold text-[#a0aec0]">
                         <FaCalendarCheck className="text-indigo-400" />
-                        <span className="text-gray-500">Updated: now</span>
+                        <span>Updated now</span>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Decorative dots */}
-                  <div className="absolute top-4 right-4 flex gap-1">
-                    <div className="w-1 h-1 bg-indigo-300 rounded-full"></div>
-                    <div className="w-1 h-1 bg-indigo-300 rounded-full"></div>
-                    <div className="w-1 h-1 bg-indigo-300 rounded-full"></div>
                   </div>
                 </div>
               </div>
@@ -350,60 +292,64 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Features</span>
-              <h2 className="text-4xl font-bold text-gray-800 mt-2">
-                Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">TeamSync</span>
+        {/* ========== FEATURES ========== */}
+        <section className="px-4 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-14 text-center">
+              <span className="text-sm font-extrabold uppercase tracking-wider text-indigo-500">Features</span>
+              <h2 className="mt-2 text-4xl font-extrabold text-[#4a5568]">
+                Why Choose <span className="bg-gradient-to-r from-[#7c9cf5] to-[#a78bfa] bg-clip-text text-transparent">TeamSync</span>
               </h2>
-              <p className="text-gray-600 mt-3 max-w-2xl mx-auto">Everything you need to keep your team aligned and productive</p>
+              <p className="mx-auto mt-3 max-w-2xl font-medium text-[#718096]">
+                Everything you need to keep your team aligned and productive
+              </p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { icon: FaUsersGroup, title: 'Team Collaboration', desc: 'Share files, chat, and collaborate in real-time', color: 'from-blue-400 to-blue-500' },
-                { icon: FaChartLine, title: 'Project Tracking', desc: 'Monitor progress with intuitive dashboards', color: 'from-green-400 to-green-500' },
-                { icon: FaBell, title: 'Smart Notifications', desc: 'Stay updated with intelligent alerts', color: 'from-yellow-400 to-yellow-500' },
-                { icon: FaShieldAlt, title: 'Secure & Reliable', desc: 'Enterprise-grade security for your data', color: 'from-red-400 to-red-500' }
+                { icon: FaUsersGroup, title: 'Team Collaboration', desc: 'Share files, chat, and collaborate in real-time' },
+                { icon: FaChartLine, title: 'Project Tracking', desc: 'Monitor progress with intuitive dashboards' },
+                { icon: FaBell, title: 'Smart Notifications', desc: 'Stay updated with intelligent alerts' },
+                { icon: FaShieldAlt, title: 'Secure & Reliable', desc: 'Enterprise-grade security for your data' },
               ].map((feature, idx) => (
-                <div key={idx} className="group bg-white rounded-2xl p-8 border-2 border-indigo-100 hover:border-indigo-300 hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-2">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <feature.icon className="text-2xl text-white" />
+                <div key={idx} className={`rounded-[2rem] p-8 ${clayRaised} transition-transform duration-200 hover:-translate-y-1`}>
+                  <div className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${clayRaisedSm}`}>
+                    <feature.icon className="text-2xl text-indigo-500" />
                   </div>
-                  <h3 className="font-semibold text-lg text-gray-800 mb-2">{feature.title}</h3>
-                  <p className="text-sm text-gray-500">{feature.desc}</p>
+                  <h3 className="mb-2 text-lg font-extrabold text-[#4a5568]">{feature.title}</h3>
+                  <p className="text-sm font-medium text-[#718096]">{feature.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Extended Features Section */}
-        <section className="py-20 px-4 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Advanced Tools</span>
-              <h2 className="text-4xl font-bold text-gray-800 mt-2">
-                Everything You Need to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Succeed</span>
+        {/* ========== ADVANCED TOOLS ========== */}
+        <section className="px-4 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-14 text-center">
+              <span className="text-sm font-extrabold uppercase tracking-wider text-indigo-500">Advanced Tools</span>
+              <h2 className="mt-2 text-4xl font-extrabold text-[#4a5568]">
+                Everything You Need to <span className="bg-gradient-to-r from-[#7c9cf5] to-[#a78bfa] bg-clip-text text-transparent">Succeed</span>
               </h2>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+
+            <div className="grid gap-6 md:grid-cols-3">
               {[
                 { icon: FaRegCalendarAlt, title: 'Smart Scheduling', desc: 'AI-powered meeting planning and calendar management' },
                 { icon: FaRegFileAlt, title: 'Document Hub', desc: 'Centralized storage with version control and sharing' },
                 { icon: FaRegClock, title: 'Time Tracking', desc: 'Monitor productivity with detailed time analytics' },
                 { icon: FaRegSmile, title: 'Employee Engagement', desc: 'Keep morale high with recognition tools' },
                 { icon: FaRegLightbulb, title: 'Idea Management', desc: 'Capture and develop team innovations' },
-                { icon: FaRegPaperPlane, title: 'Instant Messaging', desc: 'Secure chat with threaded conversations' }
+                { icon: FaRegPaperPlane, title: 'Instant Messaging', desc: 'Secure chat with threaded conversations' },
               ].map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-4 p-6 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                <div key={idx} className={`flex items-start gap-4 rounded-2xl p-6 ${clayRaisedSm}`}>
+                  <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${clayPuck}`}>
                     <feature.icon className="text-xl text-indigo-500" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-1">{feature.title}</h3>
-                    <p className="text-sm text-gray-500">{feature.desc}</p>
+                    <h3 className="mb-1 font-extrabold text-[#4a5568]">{feature.title}</h3>
+                    <p className="text-sm font-medium text-[#718096]">{feature.desc}</p>
                   </div>
                 </div>
               ))}
@@ -411,34 +357,35 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section className="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Testimonials</span>
-              <h2 className="text-4xl font-bold text-gray-800 mt-2">
-                Loved by Teams <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Worldwide</span>
+        {/* ========== TESTIMONIALS ========== */}
+        <section className="px-4 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-14 text-center">
+              <span className="text-sm font-extrabold uppercase tracking-wider text-indigo-500">Testimonials</span>
+              <h2 className="mt-2 text-4xl font-extrabold text-[#4a5568]">
+                Loved by Teams <span className="bg-gradient-to-r from-[#7c9cf5] to-[#a78bfa] bg-clip-text text-transparent">Worldwide</span>
               </h2>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+
+            <div className="grid gap-8 md:grid-cols-3">
               {[
                 { name: 'Sarah Johnson', role: 'CEO, TechFlow', quote: 'TeamSync completely transformed how we work. Our productivity increased by 40% in just two months.', rating: 5 },
-                { name: 'Michael Chen', role: 'Product Lead, InnovateCo', quote: 'The real-time collaboration features are incredible. It feels like we\'re all in the same room.', rating: 5 },
-                { name: 'Emily Rodriguez', role: 'Marketing Director, GrowthLab', quote: 'Best project management tool we\'ve ever used. The analytics dashboard is a game-changer.', rating: 5 }
-              ].map((testimonial, idx) => (
-                <div key={idx} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-indigo-100">
-                  <FaQuoteLeft className="text-3xl text-indigo-300 mb-4" />
-                  <p className="text-gray-700 mb-6 leading-relaxed">"{testimonial.quote}"</p>
+                { name: 'Michael Chen', role: 'Product Lead, InnovateCo', quote: "The real-time collaboration features are incredible. It feels like we're all in the same room.", rating: 5 },
+                { name: 'Emily Rodriguez', role: 'Marketing Director, GrowthLab', quote: "Best project management tool we've ever used. The analytics dashboard is a game-changer.", rating: 5 },
+              ].map((t, idx) => (
+                <div key={idx} className={`rounded-[2rem] p-8 ${clayRaised}`}>
+                  <FaQuoteLeft className="mb-4 text-3xl text-indigo-300" />
+                  <p className="mb-6 font-medium leading-relaxed text-[#4a5568]">"{t.quote}"</p>
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-400 flex items-center justify-center text-white font-bold">
-                      {testimonial.name.split(' ').map(n => n[0]).join('')}
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#7c9cf5] to-[#a78bfa] font-bold text-white">
+                      {t.name.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-800">{testimonial.name}</p>
-                      <p className="text-sm text-gray-500">{testimonial.role}</p>
-                      <div className="flex gap-0.5 mt-1">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <FaStar key={i} className="text-yellow-400 text-sm" />
+                      <p className="font-extrabold text-[#4a5568]">{t.name}</p>
+                      <p className="text-xs font-semibold text-[#718096]">{t.role}</p>
+                      <div className="mt-1 flex gap-0.5">
+                        {[...Array(t.rating)].map((_, i) => (
+                          <FaStar key={i} className="text-sm text-amber-400" />
                         ))}
                       </div>
                     </div>
@@ -449,41 +396,55 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Pricing Section */}
-        <section className="py-20 px-4 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Pricing</span>
-              <h2 className="text-4xl font-bold text-gray-800 mt-2">
-                Choose Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Plan</span>
+        {/* ========== PRICING ========== */}
+        <section className="px-4 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-14 text-center">
+              <span className="text-sm font-extrabold uppercase tracking-wider text-indigo-500">Pricing</span>
+              <h2 className="mt-2 text-4xl font-extrabold text-[#4a5568]">
+                Choose Your <span className="bg-gradient-to-r from-[#7c9cf5] to-[#a78bfa] bg-clip-text text-transparent">Plan</span>
               </h2>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+
+            <div className="grid gap-8 md:grid-cols-3">
               {[
                 { name: 'Starter', price: '$9', features: ['10 team members', '5 projects', 'Basic analytics', 'Email support', '1GB storage'], popular: false },
                 { name: 'Professional', price: '$29', features: ['50 team members', 'Unlimited projects', 'Advanced analytics', 'Priority support', '50GB storage', 'Custom integrations'], popular: true },
-                { name: 'Enterprise', price: 'Custom', features: ['Unlimited members', 'Unlimited projects', 'Enterprise analytics', '24/7 support', 'Unlimited storage', 'Custom development'], popular: false }
+                { name: 'Enterprise', price: 'Custom', features: ['Unlimited members', 'Unlimited projects', 'Enterprise analytics', '24/7 support', 'Unlimited storage', 'Custom development'], popular: false },
               ].map((plan, idx) => (
-                <div key={idx} className={`rounded-2xl p-8 border-2 transition-all duration-300 hover:-translate-y-2 ${plan.popular ? 'border-indigo-500 bg-gradient-to-br from-indigo-50 to-purple-50 shadow-xl' : 'border-gray-200 hover:border-indigo-300 hover:shadow-lg'}`}>
+                <div
+                  key={idx}
+                  className={`rounded-[2rem] p-8 transition-transform duration-200 hover:-translate-y-1 ${
+                    plan.popular
+                      ? 'bg-[#e0e5ec] shadow-[inset_6px_6px_14px_#b8bec7,inset_-6px_-6px_14px_#ffffff]'
+                      : clayRaised
+                  }`}
+                >
                   {plan.popular && (
-                    <div className="bg-indigo-500 text-white text-xs font-semibold px-3 py-1 rounded-full inline-block mb-4">
-                      <FaStar className="inline mr-1" /> Most Popular
+                    <div className={`mb-4 inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold text-white ${clayButton}`}>
+                      <FaStar /> Most Popular
                     </div>
                   )}
-                  <h3 className="text-2xl font-bold text-gray-800">{plan.name}</h3>
+                  <h3 className="text-2xl font-extrabold text-[#4a5568]">{plan.name}</h3>
                   <div className="mt-4 mb-6">
-                    <span className="text-4xl font-bold text-gray-800">{plan.price}</span>
-                    {plan.price !== 'Custom' && <span className="text-gray-500">/month</span>}
+                    <span className="text-4xl font-extrabold text-[#4a5568]">{plan.price}</span>
+                    {plan.price !== 'Custom' && <span className="font-semibold text-[#718096]">/month</span>}
                   </div>
-                  <ul className="space-y-3 mb-8">
+                  <ul className="mb-8 space-y-3">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                        <FaCheck className="text-indigo-500 flex-shrink-0" />
+                      <li key={i} className="flex items-center gap-2 text-sm font-semibold text-[#718096]">
+                        <FaCheck className="flex-shrink-0 text-indigo-500" />
                         {feature}
                       </li>
                     ))}
                   </ul>
-                  <button className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 ${plan.popular ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:shadow-lg' : 'border-2 border-gray-300 text-gray-700 hover:border-indigo-300 hover:bg-indigo-50'}`}>
+                  <button
+                    className={`w-full rounded-2xl py-3 ${
+                      plan.popular
+                        ? clayButton
+                        : `${clayRaisedSm} text-[#4a5568] hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff] active:shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]`
+                    }`}
+                  >
                     Get Started
                   </button>
                 </div>
@@ -492,46 +453,48 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-20 px-4 bg-gradient-to-r from-indigo-600 to-purple-600">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
-              {[
-                { number: '2,000+', label: 'Active Teams', icon: <FaUsersGroup className="text-3xl mb-2 mx-auto" /> },
-                { number: '98%', label: 'Satisfaction Rate', icon: <FaChartLine className="text-3xl mb-2 mx-auto" /> },
-                { number: '24/7', label: 'Customer Support', icon: <FaHeadset className="text-3xl mb-2 mx-auto" /> },
-                { number: '50+', label: 'Integrations', icon: <FaCog className="text-3xl mb-2 mx-auto" /> }
-              ].map((stat, idx) => (
-                <div key={idx} className="space-y-2">
-                  {stat.icon}
-                  <p className="text-4xl font-bold">{stat.number}</p>
-                  <p className="text-indigo-100">{stat.label}</p>
-                </div>
-              ))}
+        {/* ========== STATS BANNER ========== */}
+        <section className="px-4 py-16">
+          <div className="mx-auto max-w-6xl">
+            <div className={`rounded-[2rem] p-10 ${clayRaised}`}>
+              <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
+                {[
+                  { number: '2,000+', label: 'Active Teams', icon: FaUsersGroup },
+                  { number: '98%', label: 'Satisfaction Rate', icon: FaChartLine },
+                  { number: '24/7', label: 'Customer Support', icon: FaHeadset },
+                  { number: '50+', label: 'Integrations', icon: FaCog },
+                ].map((stat, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className={`mx-auto mb-1 flex h-14 w-14 items-center justify-center rounded-full ${clayPuck}`}>
+                      <stat.icon className="text-xl text-indigo-500" />
+                    </div>
+                    <p className="text-3xl font-extrabold text-[#4a5568]">{stat.number}</p>
+                    <p className="text-sm font-semibold text-[#718096]">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 px-4 bg-white">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Get Started</span>?
-            </h2>
-            <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-              Join thousands of teams already using TeamSync to streamline their workflow and achieve more together.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-indigo-300/50 transition-all duration-200 transform hover:scale-105 group">
-                <FaRocket className="group-hover:translate-x-1 transition-transform" />
-                Start Free Trial
-                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="inline-flex items-center gap-2 px-8 py-3 bg-white border-2 border-gray-300 hover:border-indigo-300 text-gray-700 font-semibold rounded-lg transition-all duration-200 hover:shadow-lg">
-                <FaHeadset className="text-indigo-500" />
-                Contact Sales
-                <FaChevronRight className="text-indigo-500" />
-              </button>
+        {/* ========== CTA ========== */}
+        <section className="px-4 pb-20">
+          <div className="mx-auto max-w-4xl text-center">
+            <div className={`rounded-[2.5rem] p-10 ${clayRaised}`}>
+              <h2 className="mb-4 text-4xl font-extrabold text-[#4a5568]">
+                Ready to <span className="bg-gradient-to-r from-[#7c9cf5] to-[#a78bfa] bg-clip-text text-transparent">Get Started</span>?
+              </h2>
+              <p className="mx-auto mb-8 max-w-2xl font-medium text-[#718096]">
+                Join thousands of teams already using TeamSync to streamline their workflow and achieve more together.
+              </p>
+              <div className="flex flex-col justify-center gap-4 sm:flex-row">
+                <button className={`inline-flex items-center gap-2 rounded-2xl px-8 py-3 ${clayButton}`}>
+                  <FaRocket /> Start Free Trial <FaArrowRight />
+                </button>
+                <button className={`inline-flex items-center gap-2 rounded-2xl px-8 py-3 text-[#4a5568] ${clayRaisedSm} hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff] active:shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]`}>
+                  <FaHeadset className="text-indigo-500" /> Contact Sales <FaChevronRight className="text-indigo-500" />
+                </button>
+              </div>
             </div>
           </div>
         </section>

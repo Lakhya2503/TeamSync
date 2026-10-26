@@ -49,7 +49,7 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
     };
   }, [isAuthenticated, getUser]);
 
-  // Show loader while restoring session
+  // Show clay loader while restoring session
   if (checking) return <Loader />;
 
   if (!isAuthenticated) {
@@ -61,19 +61,21 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
 
 const PublicRoutes = () => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-[#e0e5ec]">
       <Navbar />
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/help" element={<HelpPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+      <div className="flex-1">
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/help" element={<HelpPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

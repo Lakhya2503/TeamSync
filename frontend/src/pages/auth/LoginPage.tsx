@@ -49,7 +49,7 @@ const LoginPage = () => {
         return;
       }
       clearAuth();
-      navigate(`/${user?.role.toLowerCase()}/dashboard`);
+      navigate(`/${user?.role}/dashboard`);
     } catch (error) {
       console.log("error :", error);
     } finally {
@@ -85,7 +85,11 @@ const LoginPage = () => {
                     className="flex h-16 w-16 items-center justify-center rounded-full bg-[#e0e5ec]
                       shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]"
                   >
-                    <img src={Logo_circle_image} alt="Logo" className="h-12 w-12" />
+                    <img
+                      src={Logo_circle_image}
+                      alt="Logo"
+                      className="h-12 w-12"
+                    />
                   </div>
                 </div>
 
@@ -138,8 +142,12 @@ const LoginPage = () => {
                       className="flex flex-1 flex-col items-center rounded-2xl bg-[#e0e5ec] px-3 py-4
                         shadow-[6px_6px_14px_#b8bec7,-6px_-6px_14px_#ffffff]"
                     >
-                      <div className="text-xl font-extrabold text-[#4a5568]">{s.value}</div>
-                      <div className="text-xs font-medium text-[#718096]">{s.label}</div>
+                      <div className="text-xl font-extrabold text-[#4a5568]">
+                        {s.value}
+                      </div>
+                      <div className="text-xs font-medium text-[#718096]">
+                        {s.label}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -167,7 +175,9 @@ const LoginPage = () => {
                   >
                     <HiUserGroup className="text-xl text-indigo-500" />
                   </div>
-                  <h2 className="text-2xl font-extrabold text-[#4a5568]">Welcome Back</h2>
+                  <h2 className="text-2xl font-extrabold text-[#4a5568]">
+                    Welcome Back
+                  </h2>
                 </div>
                 <p className="mb-7 text-sm font-medium text-[#718096]">
                   Please enter your credentials to sign in
@@ -176,7 +186,10 @@ const LoginPage = () => {
                 <form onSubmit={handleLogin} className="space-y-4">
                   {/* Email */}
                   <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-sm font-bold text-[#4a5568]">
+                    <Label
+                      htmlFor="email"
+                      className="text-sm font-bold text-[#4a5568]"
+                    >
                       Email Address
                     </Label>
                     <div className="relative">
@@ -200,7 +213,10 @@ const LoginPage = () => {
 
                   {/* Password */}
                   <div className="space-y-1.5">
-                    <Label htmlFor="password" className="text-sm font-bold text-[#4a5568]">
+                    <Label
+                      htmlFor="password"
+                      className="text-sm font-bold text-[#4a5568]"
+                    >
                       Password
                     </Label>
                     <div className="relative">

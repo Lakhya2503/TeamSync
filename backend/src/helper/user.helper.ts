@@ -27,8 +27,8 @@ export const fetchUser = async (key: string, value: string | number) => {
   try {
     let user = await database.query(
       `
-             SELECT id,name,email, avatar,isverified FROM users WHERE ${key} = $1
-       `, 
+             SELECT id,name,email, avatar,role,isverified FROM users WHERE ${key} = $1
+       `,
       [value]
     );
     console.log("user", user.rows[0]);

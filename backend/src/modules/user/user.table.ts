@@ -11,7 +11,7 @@ export const userTable = async () => {
                 password TEXT NOT NULL,
                 avatar TEXT DEFAULT NULL,
                 refreshToken TEXT DEFAULT NULL,
-                role VARCHAR(10) DEFAULT '${USER_TYPE.USER}' CHECK (role IN ('${USER_TYPE.USER}','${USER_TYPE.ADMIN}')),
+                role VARCHAR(10) DEFAULT '${USER_TYPE.USER}' CHECK (role IN ('${USER_TYPE.USER}','${USER_TYPE.ADMIN}', '${USER_TYPE.MANAGER}')),
                 reset_password_token TEXT DEFAULT NULL,
                 reset_password_token_expiry TIMESTAMP DEFAULT NULL,
                 email_verified_code TEXT DEFAULT NULL,
@@ -20,7 +20,7 @@ export const userTable = async () => {
                 created_at TIMESTAMP DEFAULT now()
             )
         `;
-   await database.query(userQuery);
+    await database.query(userQuery);
     console.log("User Table Create Or Fetch Successfully : 👤🗃️");
   } catch (error: { message: string } | any) {
     console.error(`CREATE TABLE ERROR: ${error.message}`);

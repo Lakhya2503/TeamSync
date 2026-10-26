@@ -15,6 +15,9 @@ const AdminSession = React.lazy(
 const AdminPlane = React.lazy(
   () => import("../dash/Dashboard/admin/AdminPlane")
 );
+const AdminTeam = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminTeam")
+);
 const AdminEvalutions = React.lazy(
   () => import("../dash/Dashboard/admin/AdminEvalutions")
 );
@@ -41,6 +44,7 @@ const AdminRouter: React.FC = () => {
         <Route index element={<Navigate to="dashboard" replace />} />
 
         <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="team" element={<AdminTeam />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="needs" element={<AdminNeedsPlaceholder />} />
         <Route path="sessions" element={<AdminSession />} />

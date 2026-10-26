@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import { 
-  BellIcon, 
-  SearchIcon, 
+import {
+  BellIcon,
+  SearchIcon,
   ChevronDownIcon,
-  XIcon,
   CheckCircleIcon,
   AlertCircleIcon,
   InfoIcon,
@@ -12,6 +11,7 @@ import {
 import useAuthStore from '../../../app/authStore'
 import type { userType } from '../../../types/user.type'
 import { useNavigate } from 'react-router-dom'
+import { User_image } from '../../../assets'
 
 // Types
 type NotificationType = 'info' | 'success' | 'warning' | 'message'
@@ -26,8 +26,14 @@ interface Notification {
   link?: string
 }
 
+// Clay tokens
+const clayRaised =
+  'bg-[#e0e5ec] shadow-[6px_6px_14px_#b8bec7,-6px_-6px_14px_#ffffff]'
+const clayInset =
+  'bg-[#e0e5ec] shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]'
+
 // Notification Item Component
-const NotificationItem: React.FC<{ 
+const NotificationItem: React.FC<{
   notification: Notification
   onMarkAsRead: (id: string) => void
   onClose: () => void
@@ -35,9 +41,9 @@ const NotificationItem: React.FC<{
   const getIcon = () => {
     switch (notification.type) {
       case 'success':
-        return <CheckCircleIcon size={20} className="text-green-500" />
+        return <CheckCircleIcon size={20} className="text-emerald-500" />
       case 'warning':
-        return <AlertCircleIcon size={20} className="text-yellow-500" />
+        return <AlertCircleIcon size={20} className="text-amber-500" />
       case 'message':
         return <MessageCircleIcon size={20} className="text-indigo-500" />
       default:
@@ -58,35 +64,39 @@ const NotificationItem: React.FC<{
   }
 
   return (
-    <div 
+    <div
       className={`
-        px-4 py-3 hover:bg-indigo-50 transition-colors cursor-pointer
-        ${!notification.isRead ? 'bg-indigo-50/60' : ''}
+        mx-2 my-1 rounded-2xl px-3 py-3 cursor-pointer transition-all duration-150
+        ${!notification.isRead
+          ? `${clayRaised} text-[#4a5568] hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff]`
+          : `bg-[#e0e5ec]/60 text-[#718096] shadow-[inset_2px_2px_6px_#b8bec7,inset_-2px_-2px_6px_#ffffff] hover:shadow-[inset_3px_3px_8px_#b8bec7,inset_-3px_-3px_8px_#ffffff]`
+        }
       `}
       onClick={() => {
         if (!notification.isRead) {
           onMarkAsRead(notification.id)
         }
         if (notification.link) {
-          // Navigate to link
           onClose()
         }
       }}
     >
       <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 mt-1">
-          {getIcon()}
+        <div className="flex-shrink-0 mt-0.5">
+          <div className={`flex h-8 w-8 items-center justify-center rounded-full ${clayRaised}`}>
+            {getIcon()}
+          </div>
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <p className="text-sm font-medium text-gray-900">
+            <p className={`text-sm ${!notification.isRead ? 'font-bold text-[#4a5568]' : 'font-semibold text-[#718096]'}`}>
               {notification.title}
             </p>
-            <span className="text-xs text-gray-400 whitespace-nowrap">
+            <span className="text-[10px] font-medium text-[#a0aec0] whitespace-nowrap">
               {getTimeAgo(notification.timestamp)}
             </span>
           </div>
-          <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">
+          <p className="text-xs text-[#718096] mt-1 line-clamp-2">
             {notification.message}
           </p>
         </div>
@@ -136,9 +146,9 @@ const Header: React.FC = () => {
 
   const dropdownRef = useRef<HTMLDivElement>(null)
   const notificationRef = useRef<HTMLDivElement>(null)
-  const user : userType | null = useAuthStore((state) => state.user)
-  const logout = useAuthStore((state) => state.userLogout);
-  const navigate = useNavigate();
+  const user: userType | null = useAuthStore((state) => state.user)
+  const logout = useAuthStore((state) => state.userLogout)
+  const navigate = useNavigate()
 
   // Click outside handlers
   useEffect(() => {
@@ -173,24 +183,24 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      navigate("/");
+      await logout()
+      navigate("/")
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error("Logout failed:", error)
     }
     setIsDropdownOpen(false)
-  };
+  }
 
   const handleMarkAsRead = useCallback((id: string) => {
-    setNotifications(prev => 
-      prev.map(notif => 
+    setNotifications(prev =>
+      prev.map(notif =>
         notif.id === id ? { ...notif, isRead: true } : notif
       )
     )
   }, [])
 
   const handleMarkAllAsRead = useCallback(() => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(notif => ({ ...notif, isRead: true }))
     )
   }, [])
@@ -201,70 +211,73 @@ const Header: React.FC = () => {
   }, [])
 
   const unreadCount = notifications.filter(n => !n.isRead).length
+  const avatar = user?.avatar ? user.avatar : User_image 
 
   if (!user) {
     return (
-      <header className="bg-white border-b border-indigo-100 sticky top-0 z-30">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="animate-pulse h-10 w-32 bg-indigo-100 rounded"></div>
+      <header className="sticky top-0 z-30 bg-[#e0e5ec] px-4 pt-4">
+        <div className={`flex items-center justify-between rounded-[1.75rem] px-6 py-4 ${clayRaised}`}>
+          <div className="h-10 w-32 animate-pulse rounded-2xl bg-[#d4dae4]" />
         </div>
       </header>
     )
   }
 
   return (
-    <header className="bg-white border-b border-indigo-100 sticky top-0 z-30">
-      <div className="flex items-center justify-between px-6 py-4">
-        {/* Left Section - Search */}
+    <header className="sticky top-0 z-30 bg-[#e0e5ec] px-4 pt-4">
+      <div className={`flex items-center justify-between rounded-[1.75rem] px-4 py-3 md:px-6 ${clayRaised}`}>
+        {/* Left Section - Search (inset clay field) */}
         <div className="flex items-center gap-4 flex-1">
           <div className="relative flex-1 max-w-md">
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" size={20} />
+            <div className={`pointer-events-none absolute left-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full ${clayRaised}`}>
+              <SearchIcon size={14} className="text-indigo-400" />
+            </div>
             <input
               type="text"
               placeholder="Search..."
               aria-label="Search"
-              className="w-full pl-10 pr-4 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent hover:border-indigo-300 transition-colors"
+              className="w-full rounded-2xl border-none bg-[#e0e5ec] py-2.5 pl-12 pr-4 text-sm font-medium text-[#4a5568] placeholder-[#a0aec0] shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300/50 focus:ring-offset-0 transition-shadow duration-200"
             />
           </div>
         </div>
 
         {/* Right Section */}
-        <div className="flex items-center gap-4">
-          {/* Notifications Button */}
+        <div className="flex items-center gap-3 md:gap-4">
+          {/* Notifications Button — clay puck */}
           <div className="relative" ref={notificationRef}>
             <button
               onClick={toggleNotification}
-              className="relative p-2 rounded-lg hover:bg-indigo-50 transition-colors"
+              className={`relative flex h-11 w-11 items-center justify-center rounded-full ${clayRaised} text-indigo-500 transition-all duration-150 hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff] active:shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]`}
               aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
               aria-expanded={isNotificationOpen}
             >
-              <BellIcon size={26} className="text-indigo-600 hover:text-indigo-700 transition-colors" />
+              <BellIcon size={20} />
               {unreadCount > 0 && (
-                <span className="absolute top-0 right-0 min-w-[18px] h-[18px] bg-indigo-600 text-white text-xs font-bold rounded-full flex items-center justify-center px-1 shadow-sm">
+                <span className="absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gradient-to-br from-[#7c9cf5] to-[#a78bfa] px-1 text-[10px] font-bold text-white shadow-[2px_2px_6px_#b8bec7,-2px_-2px_6px_#ffffff]">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
             </button>
 
-            {/* Notification Dropdown */}
+            {/* Notification Dropdown — clay panel */}
             {isNotificationOpen && (
-              <div className="absolute right-0 mt-2 w-[380px] max-w-[90vw] bg-white rounded-lg shadow-lg border border-indigo-100 overflow-hidden animate-slideDown">
+              <div className={`absolute right-0 mt-3 w-[380px] max-w-[90vw] overflow-hidden rounded-[1.75rem] ${clayRaised} animate-slideDown`}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 to-white">
-                  <h3 className="text-sm font-semibold text-indigo-900">Notifications</h3>
+                <div className="flex items-center justify-between px-4 py-3">
+                  <h3 className="text-sm font-extrabold text-[#4a5568]">Notifications</h3>
                   <div className="flex items-center gap-2">
                     {notifications.length > 0 && (
                       <>
                         <button
                           onClick={handleMarkAllAsRead}
-                          className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors font-medium"
+                          className="rounded-lg px-2 py-1 text-[11px] font-bold text-indigo-500 transition-colors hover:text-indigo-600 hover:underline"
                         >
                           Mark all read
                         </button>
-                        <span className="text-indigo-200">|</span>
+                        <span className="text-[#c3cad5]">|</span>
                         <button
                           onClick={handleClearAll}
-                          className="text-xs text-red-500 hover:text-red-700 transition-colors font-medium"
+                          className="rounded-lg px-2 py-1 text-[11px] font-bold text-rose-500 transition-colors hover:text-rose-600 hover:underline"
                         >
                           Clear all
                         </button>
@@ -273,8 +286,11 @@ const Header: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Divider */}
+                <div className="mx-4 h-px bg-[#c3cad5]/60" />
+
                 {/* Notification List */}
-                <div className="max-h-[400px] overflow-y-auto">
+                <div className="max-h-[400px] overflow-y-auto py-2">
                   {notifications.length > 0 ? (
                     notifications.map((notification) => (
                       <NotificationItem
@@ -285,70 +301,80 @@ const Header: React.FC = () => {
                       />
                     ))
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-8 px-4">
-                      <BellIcon size={48} className="text-indigo-200 mb-2" />
-                      <p className="text-sm text-gray-500">No notifications</p>
-                      <p className="text-xs text-indigo-400">You're all caught up!</p>
+                    <div className="flex flex-col items-center justify-center px-4 py-10">
+                      <div className={`flex h-16 w-16 items-center justify-center rounded-full ${clayInset}`}>
+                        <BellIcon size={28} className="text-indigo-300" />
+                      </div>
+                      <p className="mt-3 text-sm font-bold text-[#718096]">No notifications</p>
+                      <p className="text-xs font-medium text-[#a0aec0]">You're all caught up!</p>
                     </div>
                   )}
                 </div>
 
                 {/* Footer */}
                 {notifications.length > 0 && (
-                  <div className="border-t border-indigo-100 px-4 py-2 bg-gradient-to-r from-indigo-50 to-white">
-                    <a 
-                      href="/notifications" 
-                      className="text-sm text-indigo-600 hover:text-indigo-800 transition-colors flex items-center justify-center gap-1 font-medium"
-                    >
-                      View all notifications
-                      <ChevronDownIcon size={16} className="rotate-[-90deg]" />
-                    </a>
-                  </div>
+                  <>
+                    <div className="mx-4 h-px bg-[#c3cad5]/60" />
+                    <div className="px-4 py-3">
+                      <a
+                        href="/notifications"
+                        className="flex items-center justify-center gap-1 text-sm font-bold text-indigo-500 transition-colors hover:text-indigo-600"
+                      >
+                        View all notifications
+                        <ChevronDownIcon size={16} className="rotate-[-90deg]" />
+                      </a>
+                    </div>
+                  </>
                 )}
               </div>
             )}
           </div>
 
-          {/* User Profile Dropdown */}
+          {/* User Profile Dropdown — clay pill */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={toggleDropdown}
-              className="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 transition-colors border-2 border-transparent hover:border-indigo-200"
+              className={`flex items-center gap-2 rounded-full ${clayRaised} p-1.5 pr-3 transition-all duration-150 hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff] active:shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]`}
               aria-expanded={isDropdownOpen}
               aria-haspopup="true"
             >
-              <div className="rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 w-10 h-10 flex items-center justify-center text-white font-semibold overflow-hidden shadow-sm">
-                {user.avatar ? (
-                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span>{user.name?.charAt(0).toUpperCase() || 'U'}</span>
-                )}
+              <div className={`flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#7c9cf5] to-[#a78bfa] text-sm font-bold text-white shadow-[inset_2px_2px_5px_rgba(90,70,200,0.3),inset_-2px_-2px_5px_rgba(255,255,255,0.4)]`}>
+                  <img src={avatar} alt={user.name} className="h-full w-full object-cover" />
               </div>
 
               <div className="hidden md:block text-left">
-                <p className="text-sm font-medium text-gray-700">{user.name}</p>
-                <p className="text-xs text-indigo-500">{user.email}</p>
+                <p className="text-xs font-bold text-[#4a5568]">{user.name}</p>
+                <p className="text-[10px] font-medium text-[#718096]">{user.email}</p>
               </div>
-              <ChevronDownIcon size={20} className="text-indigo-400" />
+              <ChevronDownIcon size={16} className="text-[#a0aec0]" />
             </button>
 
-            {/* User Dropdown */}
+            {/* User Dropdown — clay panel */}
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-indigo-100 py-2 animate-slideDown">
-                <div className="px-4 py-2 border-b border-indigo-100 md:hidden">
-                  <p className="text-sm font-medium text-gray-700">{user.name}</p>
-                  <p className="text-xs text-indigo-500 truncate">{user.email}</p>
+              <div className={`absolute right-0 mt-3 w-52 overflow-hidden rounded-[1.5rem] ${clayRaised} py-2 animate-slideDown`}>
+                <div className="px-4 py-2 md:hidden">
+                  <p className="text-sm font-bold text-[#4a5568]">{user.name}</p>
+                  <p className="text-xs font-medium text-[#718096] truncate">{user.email}</p>
                 </div>
-                <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+
+                <a
+                  href="/profile"
+                  className="mx-2 block rounded-xl px-3 py-2 text-sm font-semibold text-[#4a5568] transition-all hover:bg-[#e0e5ec] hover:text-indigo-500 hover:shadow-[inset_3px_3px_6px_#b8bec7,inset_-3px_-3px_6px_#ffffff]"
+                >
                   Profile
                 </a>
-                <a href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                <a
+                  href="/settings"
+                  className="mx-2 block rounded-xl px-3 py-2 text-sm font-semibold text-[#4a5568] transition-all hover:bg-[#e0e5ec] hover:text-indigo-500 hover:shadow-[inset_3px_3px_6px_#b8bec7,inset_-3px_-3px_6px_#ffffff]"
+                >
                   Settings
                 </a>
-                <hr className="my-1 border-indigo-100" />
+
+                <div className="mx-4 my-1 h-px bg-[#c3cad5]/60" />
+
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  className="mx-2 block w-[calc(100%-1rem)] rounded-xl px-3 py-2 text-left text-sm font-bold text-rose-500 transition-all hover:bg-rose-50 hover:shadow-[inset_3px_3px_6px_#e8b8c0,inset_-3px_-3px_6px_#ffffff]"
                 >
                   Logout
                 </button>

@@ -14,6 +14,7 @@ export interface refreshTokenUserData {
 export interface auth_userType {
   USER: string;
   ADMIN: string;
+  MANAGER: string;
 }
 
 export interface teamUserType {

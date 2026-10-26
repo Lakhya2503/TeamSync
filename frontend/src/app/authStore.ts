@@ -90,7 +90,7 @@ const authStore = (set: StoreApi<AuthStore>["setState"]): AuthStore => ({
         refreshToken: res.data?.refreshToken,
         user: res.data?.user,
         isAuthenticated: true,
-        role: res.data?.user?.role?.toLowerCase(),
+        role: res.data?.user?.role,
       });
 
       return res as LoginResponse;

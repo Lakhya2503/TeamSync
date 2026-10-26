@@ -1,11 +1,11 @@
 import React from 'react'
 import AppRouter from './router/AppRouter'
-import { Toaster } from 'react-hot-toast'
+import ClayToaster from './pages/comman/ClayToaster'
 
 const App = () => {
   return (
       <>
-      <Toaster position='top-right' />
+      <ClayToaster/>
       <AppRouter/>
       </>
   )
