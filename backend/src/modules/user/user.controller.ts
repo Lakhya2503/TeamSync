@@ -210,13 +210,29 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     password,
   });
 
-  const user = (await fetchUser("email", email)) as userType;
-  const _user = (await fetchUser("id", user.id)) as userType;
+  console.log("before user search : 1");
+
+  const user = await fetchUser("email", email) as userType;
+
+    console.log("secure user fetch : ", user);
+
+  const _user = await fetchUser("id", user.id) as userType;
+
+  console.log("secure user fetch : ", _user);
 
   if (!_user) {
     throw new ApiError(401, "User can't Exist with this Email..");
   }
+
+  console.log("password checking : 3");
+
+  const isPasswordCorrect = await passwordChecker(user.id, password);
+
+  console.log("password match successfully : 4");
+
   const { accessToken, refreshToken } = await generateAccessRefreshToken(user);
+
+  console.log("token updated : 5");
 
   console.log(`${user.name} : Login successfully`);
 
