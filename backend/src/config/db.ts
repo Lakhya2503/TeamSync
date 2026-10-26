@@ -1,6 +1,7 @@
 import { Pool } from 'pg'
 import { ENV } from './ENV'
 import { userTable } from '../modules/user/user.table';
+import { teamTable } from '../modules/team/team.table';
 
 export const database = new Pool({
     user : ENV.DATABASE_USERNAME,
@@ -26,6 +27,7 @@ export const connectDB = async() => {
 export const createTable = async() => {
     try {
         await userTable()
+        await teamTable()
         console.log("All Table Create Successfully : 📚")
     } catch (error : {message : string} | any) {
         console.error(`ERROR : ${error.message}`)

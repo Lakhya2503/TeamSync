@@ -1,14 +1,9 @@
 import { Router } from "express";
-import { createTeam } from "./team.controller.js";
+import { createTeam } from "./team.controller";
+import { verifyJWT } from "../../middleware/verifyJwt";
 
-const router = Router()
+const router = Router();
 
+router.route("/create").post(verifyJWT, createTeam);
 
-router.route(
-  '/team/create'
-).post(
-  createTeam
-)
-
-
-export default router
+export default router;

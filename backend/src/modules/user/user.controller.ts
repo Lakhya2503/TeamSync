@@ -1,10 +1,15 @@
 import { database } from "../../config/db";
 import { ENV } from "../../config/ENV";
-import { fetchUser, requiredFiled } from "../../helper/user.helper";
+import {
+  fetchUser,
+  passwordChecker,
+  requiredFiled,
+} from "../../helper/user.helper";
 import { ApiError } from "../../utils/ApiError";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
 import bcrypt from "bcrypt";
+
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -23,8 +28,12 @@ const options = {
   secure: true,
 };
 
-export const generateAccessRefreshToken = async (user: userType) => {
-  const refreshToken = generateRefreshToken(user);
+export const generateAccessRefreshToken = async (user: {
+  id: number;
+  email: string;
+  role: string;
+}) => {
+  const refreshToken = generateRefreshToken(user.id);
   const accessToken = generateAccessToken(user);
 
   await database.query(
@@ -115,7 +124,7 @@ export const registerUser = asyncHandler(
 
 export const verifyEmailReuqest = asyncHandler(
   async (req: Request, res: Response) => {
-    console.log("Email",  req.body)
+    console.log("Email", req.body);
     const { email } = req.body;
 
     const user = await database.query(
@@ -201,39 +210,15 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     password,
   });
 
-  console.log("before user search : 1");
-
-  const user = await database.query("SELECT * FROM users  WHERE email = $1", [
-    email,
-  ]);
-
-  console.log("after user search : 1");
-
-  console.log("user : ", user.rows);
-
-  const _user: userType = await fetchUser(user.rows[0].id);
-
-  console.log("secure user fetch : ", _user);
+  const user = (await fetchUser("email", email)) as userType;
+  const _user = (await fetchUser("id", user.id)) as userType;
 
   if (!_user) {
     throw new ApiError(401, "User can't Exist with this Email..");
   }
+  const { accessToken, refreshToken } = await generateAccessRefreshToken(user);
 
-  console.log("password checking : 3");
-
-  const isPasswordCorrect = bcrypt.compare(password, _user?.password);
-
-  if (!isPasswordCorrect) {
-    throw new ApiError(401, "Creadential faild....");
-  }
-
-  console.log("password match successfully : 4");
-
-  const { accessToken, refreshToken } = await generateAccessRefreshToken(_user);
-
-  console.log("token updated : 5");
-
-  console.log(`${user.rows[0].name} : Login successfully`);
+  console.log(`${user.name} : Login successfully`);
 
   if (!_user.isverified) {
     throw new ApiError(401, "Account not verified", [], false);
@@ -247,7 +232,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
       new ApiResponse(
         200,
         {
-          user: user.rows[0],
+          user: user,
           accessToken: accessToken,
           refreshToken: refreshToken,
         },

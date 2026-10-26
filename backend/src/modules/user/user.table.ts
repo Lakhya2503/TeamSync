@@ -1,11 +1,11 @@
 import { database } from "../../config/db";
 import { USER_TYPE } from "./user.type";
 
-export const userTable = async() => {
-    try {
-        const userQuery = `
+export const userTable = async () => {
+  try {
+    const userQuery = `
             CREATE TABLE IF NOT EXISTS users (
-                id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 name VARCHAR(100) NOT NULL CHECK (char_length(name) >= 3),
                 email VARCHAR(100) UNIQUE NOT NULL,
                 password TEXT NOT NULL,
@@ -19,11 +19,10 @@ export const userTable = async() => {
                 isVerified BOOLEAN NOT NULL DEFAULT FALSE,
                 created_at TIMESTAMP DEFAULT now()
             )
-        `
-        await database.query(userQuery);
-        console.log("User Table Create Or Fetch Successfully : 👤🗃️")
-    } catch (error : {message : string} | any) {
-        console.error(`CREATE TABLE ERROR: ${error.message}`)
-    }
-}
-
+        `;
+   await database.query(userQuery);
+    console.log("User Table Create Or Fetch Successfully : 👤🗃️");
+  } catch (error: { message: string } | any) {
+    console.error(`CREATE TABLE ERROR: ${error.message}`);
+  }
+};

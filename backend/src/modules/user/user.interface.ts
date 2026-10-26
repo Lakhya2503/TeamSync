@@ -1,152 +1,147 @@
-import { Request, Response } from "express"
-import { ApiResponse } from "../../utils/ApiResponse"
+import { Request, Response } from "express";
+import { ApiResponse } from "../../utils/ApiResponse";
 
 export interface accessTokenUserData {
-    id: string,
-    email: string,
-    role?: string,
+  id: number;
+  email: string;
+  role?: string;
 }
 
 export interface refreshTokenUserData {
-    id: string,
+  id: number;
 }
 
 export interface auth_userType {
-    USER : string,
-    ADMIN : string,
+  USER: string;
+  ADMIN: string;
 }
 
 export interface teamUserType {
-    ADMIN : string,
-    MANAGER : string,
-    MEMBER : string
+  ADMIN: string;
+  MANAGER: string;
+  MEMBER: string;
 }
 
-
-
 export interface userType {
-    name: string,
-    id: string,
-    email: string,
-    password: string,
-    avatar?: string,
-    role?: string,
-    isverified : boolean,
-    refreshtoken?: string,
-    email_verified_code_expiry : Date,
-    email_verified_code : string,
-    reset_password_token_expiry?: string,
-    reset_password_token?: string,
-    created_at?: string
+  name: string;
+  id: number;
+  email: string;
+  password?: string;
+  avatar: string;
+  role: string;
+  isverified?: boolean;
+  refreshtoken?: string;
+  email_verified_code_expiry: Date;
+  email_verified_code: string;
+  reset_password_token_expiry?: string;
+  reset_password_token?: string;
+  created_at?: string;
 }
 
 export interface AuthRequest extends Request {
-    user : userType
+  user: userType;
 }
 
 export interface DatabaseUser {
-    rows : userType[]
-        
+  rows: userType[];
 }
-
 
 // =======================  //
-//  ?? register interface 
+//  ?? register interface
 // ======================= //
 // ---------- Request ---------- //
-interface RegisterRequestBody  {
-    name: string,
-    email: string,
-    password: string,
-    secretKey? : string,
-    avatar? : string
+interface RegisterRequestBody {
+  name: string;
+  email: string;
+  password: string;
+  secretKey?: string;
+  avatar?: string;
 }
 
-export type RegisterRequest = Request < {},{}, RegisterRequestBody >;
+export type RegisterRequest = Request<{}, {}, RegisterRequestBody>;
 
 // ---------- Response ---------- //
 interface RegisterResponseData {}
 
-export type RegisterResponse = Response<ApiResponse<RegisterResponseData> >;
-
+export type RegisterResponse = Response<ApiResponse<RegisterResponseData>>;
 
 // ========== xx ==========
 
 // =======================  //
-//  ?? verifyEmailRequest interface 
+//  ?? verifyEmailRequest interface
 // ======================= //
 // ---------- Request ---------- //
-interface VerifyEmailRequestBody  {
-    email: string
+interface VerifyEmailRequestBody {
+  email: string;
 }
 
-export type VerifyEmailRequestRequest = Request < {},{}, VerifyEmailRequestBody >;
+export type VerifyEmailRequestRequest = Request<{}, {}, VerifyEmailRequestBody>;
 
 // ---------- Response ---------- //
 export interface VerifyEmailRequestResponseData {}
 
-export type VerifyEmailRequestResponse = Response<ApiResponse<VerifyEmailRequestResponseData>>;
+export type VerifyEmailRequestResponse = Response<
+  ApiResponse<VerifyEmailRequestResponseData>
+>;
 
 // ========== xx ==========
 
-
-
 // =======================  //
-//  ?? verifyEmail interface 
+//  ?? verifyEmail interface
 // ======================= //
 // ---------- Request ---------- //
-interface VerifyEmailBody  {
-    email: string,
-    token : string,
-    otp: string,
+interface VerifyEmailBody {
+  email: string;
+  token: string;
+  otp: string;
 }
 
-export type VerifyEmailRequest = Request < {},{}, VerifyEmailBody >;
+export type VerifyEmailRequest = Request<{}, {}, VerifyEmailBody>;
 
 // ---------- Response ---------- //
 export interface VerifyEmailResponseData {}
 
-export type VerifyEmailResponse = Response<ApiResponse<VerifyEmailResponseData>>;
+export type VerifyEmailResponse = Response<
+  ApiResponse<VerifyEmailResponseData>
+>;
 
 // ========== xx ==========
 
-
 // =======================  //
-//  ?? login interface 
+//  ?? login interface
 // ======================= //
 // ---------- Request ---------- //
-interface LoginRequestBody  {
-    email: string,
-    password: string,
+interface LoginRequestBody {
+  email: string;
+  password: string;
 }
 
-export type LoginRequest = Request<{},{},LoginRequestBody>;
+export type LoginRequest = Request<{}, {}, LoginRequestBody>;
 
 // ---------- Response ---------- //
 export interface LoginResponseData {
-    user : userType,
-    refreshToken : string,
-    accessToken : string
+  user: userType;
+  refreshToken: string;
+  accessToken: string;
 }
 
 export type LoginResponse = Response<ApiResponse<LoginResponseData>>;
 
 // ========== xx ==========
 
-
 // =======================  //
-//  ?? current interface 
+//  ?? current interface
 // ======================= //
 // ---------- Request ---------- //
-interface CurrentUserParams  {
-    user: userType
+interface CurrentUserParams {
+  user: userType;
 }
 
-export type CurrentUserParamsRequest = Request <CurrentUserParams,{},{}>;
+export type CurrentUserParamsRequest = Request<CurrentUserParams, {}, {}>;
 
 // ---------- Response ---------- //
 export interface CurrentUserData {
-    user : userType
+  user: userType;
 }
 
 export type CurrentUserResponse = Response<ApiResponse<CurrentUserData>>;
@@ -154,11 +149,11 @@ export type CurrentUserResponse = Response<ApiResponse<CurrentUserData>>;
 // ========== xx ==========
 
 // =======================  //
-//  ?? logout interface 
+//  ?? logout interface
 // ======================= //
 // ---------- Request ---------- //
 export interface LogoutRequest extends Request {
-    user : userType
+  user: userType;
 }
 
 // ---------- Response ---------- //
@@ -166,29 +161,30 @@ export type LogoutResponse = Response<ApiResponse<{}>>;
 
 // ========== xx ==========
 
-
 // =======================  //
-//  ?? userUpdate interface 
+//  ?? userUpdate interface
 // ======================= //
 // ---------- Request ---------- //
-interface UserUpdateRequestBody  {
-    name? : string,
-    avatar? : string
+interface UserUpdateRequestBody {
+  name?: string;
+  avatar?: string;
 }
 
 interface UserUpdateRequestParams {
-    user : userType
+  user: userType;
 }
 
-export type UserUpdateRequest = Request <UserUpdateRequestParams,{}, UserUpdateRequestBody >;
+export type UserUpdateRequest = Request<
+  UserUpdateRequestParams,
+  {},
+  UserUpdateRequestBody
+>;
 
 // ---------- Response ---------- //
 interface UserUpdateResponseData {
-    user : userType,
+  user: userType;
 }
 
-export type UserUpdateResponse = Response<ApiResponse<UserUpdateResponseData> >;
+export type UserUpdateResponse = Response<ApiResponse<UserUpdateResponseData>>;
 
 // ========== xx ==========
-
-
