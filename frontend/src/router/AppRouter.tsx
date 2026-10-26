@@ -1,25 +1,25 @@
-import React, { useEffect, useState, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import useAuthStore from '../app/authStore';
-import Loader from '../Components/ui/Loader';
-import Navbar from '../Components/ui/Navbar';
-import Footer from '../Components/ui/Footer';
-import ForgetPasswordRequestPage from '../pages/auth/ForgetPasswordRequestPage';
-import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
-import OtpPage from '../pages/auth/OtpPage';
-import NotFound from '../Components/ui/NotFound';
+import React, { useEffect, useState, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import useAuthStore from "../app/authStore";
+import Loader from "../pages/comman/Loader";
+import Navbar from "../pages/comman/Navbar";
+import Footer from "../pages/comman/Footer";
+import ForgetPasswordRequestPage from "../pages/auth/ForgetPasswordRequestPage";
+import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
+import OtpPage from "../pages/auth/OtpPage";
+import NotFound from "../pages/comman/NotFound";
 
-const AdminRouter = React.lazy(() => import('./AdminRouter'));
-const ManagerRouter = React.lazy(() => import('./ManagerRouter'));
-const UserRouter = React.lazy(() => import('./UserRouter'));
+const AdminRouter = React.lazy(() => import("./AdminRouter"));
+const ManagerRouter = React.lazy(() => import("./ManagerRouter"));
+const UserRouter = React.lazy(() => import("./UserRouter"));
 
-const HomePage = React.lazy(() => import('../pages/comman/HomePage'));
-const AboutPage = React.lazy(() => import('../pages/comman/AboutPage'));
-const ContactPage = React.lazy(() => import('../pages/comman/ContactPage'));
-const HelpPage = React.lazy(() => import('../pages/comman/HelpPage'));
-const RegisterPage = React.lazy(() => import('../pages/auth/RegisterPage'));
-const LoginPage = React.lazy(() => import('../pages/auth/LoginPage'));
-const Layout = React.lazy(() => import('../Components/Dashboard/layout/Layout'));
+const HomePage = React.lazy(() => import("../pages/comman/HomePage"));
+const AboutPage = React.lazy(() => import("../pages/comman/AboutPage"));
+const ContactPage = React.lazy(() => import("../pages/comman/ContactPage"));
+const HelpPage = React.lazy(() => import("../pages/comman/HelpPage"));
+const RegisterPage = React.lazy(() => import("../pages/auth/RegisterPage"));
+const LoginPage = React.lazy(() => import("../pages/auth/LoginPage"));
+const Layout = React.lazy(() => import("../dash/Dashboard/layout/Layout"));
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -37,7 +37,7 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
         try {
           await getUser();
         } catch (error) {
-          console.error('Authentication failed:', error);
+          console.error("Authentication failed:", error);
         }
       }
       if (mounted) setChecking(false);
@@ -81,7 +81,7 @@ const AppRouter = () => {
   const { user, isAuthenticated } = useAuthStore();
 
   // Normalize role to lowercase for consistent routing
-  const userRole = (user?.role || '').toLowerCase();
+  const userRole = (user?.role || "").toLowerCase();
   const isUserLoaded = isAuthenticated && !!userRole;
 
   // Render the correct role-based router
@@ -89,11 +89,11 @@ const AppRouter = () => {
     if (!isUserLoaded) return <Loader />;
 
     switch (userRole) {
-      case 'admin':
+      case "admin":
         return <AdminRouter />;
-      case 'manager':
+      case "manager":
         return <ManagerRouter />;
-      case 'user':
+      case "user":
         return <UserRouter />;
       default:
         return <NotFound />;
@@ -106,7 +106,10 @@ const AppRouter = () => {
         {/* AUTH ROUTES */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgetPasswordRequestPage />} />
+        <Route
+          path="/forgot-password"
+          element={<ForgetPasswordRequestPage />}
+        />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/verify-email" element={<OtpPage />} />
 

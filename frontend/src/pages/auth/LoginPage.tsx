@@ -9,18 +9,19 @@ import {
   FaEye,
   FaEyeSlash,
   FaArrowRight,
-  FaStar,
-  FaUserFriends,
   FaShieldAlt,
   FaRocket,
   FaUsers,
-  FaChartLine,
-  FaHeadset,
   FaCheck,
 } from "react-icons/fa";
 import { HiUserGroup } from "react-icons/hi";
-import { BsShieldCheck, BsRocket, BsArrowRight } from "react-icons/bs";
 import { Logo_circle_image } from "../../assets";
+
+// shadcn/ui primitives
+import { Button } from "#components/ui/button";
+import { Input } from "#components/ui/input";
+import { Label } from "#components/ui/label";
+import { Card, CardContent } from "#components/ui/card";
 
 const LoginPage = () => {
   const login = useAuthStore((state) => state.userLogin);
@@ -37,249 +38,323 @@ const LoginPage = () => {
     setPassword("");
   };
 
-  const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    const payload = { email: email, password: password };
+    const payload = { email, password };
     try {
       const res = await login(payload);
-      console.log("login : ", res);
-
       if (res.message === "Account not verified") {
         navigate("/verify-email");
+        return;
       }
-      setIsLoading(false);
       clearAuth();
       navigate(`/${user?.role.toLowerCase()}/dashboard`);
     } catch (error) {
       console.log("error :", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4">
-      <div className="flex w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden">
-        {/* Left side - Image */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
-          <div className="absolute inset-0 bg-black/10"></div>
-          <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 text-white">
-            <div className="text-center">
-              <div className="mx-auto w-25 h-25 rounded-full flex items-center justify-center mb-4">
-                <img src={Logo_circle_image} alt="" />
-              </div>
-              <h1 className="text-4xl font-bold mb-3">Welcome Back!</h1>
-              <p className="text-white/90 text-lg mb-6">
-                Sign in to continue managing your teams and projects
-              </p>
-              <div className="space-y-3 text-white/80">
-                <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <FaShieldAlt className="text-2xl" />
-                  <span className="text-sm">Secure & encrypted platform</span>
-                </div>
-                <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <FaUsers className="text-2xl" />
-                  <span className="text-sm">Team collaboration tools</span>
-                </div>
-                <div className="flex items-center justify-center space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-2.5">
-                  <FaRocket className="text-2xl" />
-                  <span className="text-sm">Real-time project tracking</span>
-                </div>
-              </div>
-
-              {/* Stats */}
-              <div className="mt-6 pt-6 border-t border-white/20 flex justify-around">
-                <div>
-                  <div className="text-2xl font-bold">10K+</div>
-                  <div className="text-sm text-white/80">Active Users</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">500+</div>
-                  <div className="text-sm text-white/80">Teams</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">4.9★</div>
-                  <div className="text-sm text-white/80">Rating</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right side - Login Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-10">
-          <div className="max-w-sm mx-auto">
-            {/* Mobile Logo */}
-            <div className="md:hidden flex items-center justify-center mb-6">
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-2xl">
-                TS
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 mb-1">
-              <HiUserGroup className="text-indigo-500 text-2xl" />
-              <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
-            </div>
-            <p className="text-gray-600 mb-6">
-              Please enter your credentials to sign in
-            </p>
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-semibold text-gray-700 mb-1.5"
-                >
-                  Email Address
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaEnvelope className="text-indigo-400" />
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    id="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-200"
-                    placeholder="you@example.com"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-semibold text-gray-700 mb-1.5"
-                >
-                  Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-indigo-400" />
-                  </div>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    id="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-12 px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? (
-                      <FaEyeSlash className="h-5 w-5" />
-                    ) : (
-                      <FaEye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-                <div className="mt-1.5 text-right">
-                  <Link
-                    to="/forgot-password"
-                    className="text-sm text-indigo-600 hover:text-indigo-700 hover:underline transition-colors"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-indigo-200/50 flex items-center justify-center space-x-2 ${
-                  isLoading ? "opacity-70 cursor-not-allowed" : ""
-                }`}
-              >
-                {isLoading ? (
-                  <>
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    <span>Signing in...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Sign In</span>
-                    <FaArrowRight className="text-lg" />
-                  </>
-                )}
-              </button>
-
-              <p className="text-center text-gray-600 font-medium">
-                Don't have an account?{" "}
-                <Link
-                  to="/register"
-                  className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline transition-colors"
-                >
-                  Create one now
-                </Link>
-              </p>
-            </form>
-
-            {/* Divider */}
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            {/* Social Login */}
-            <div className="grid grid-cols-2 gap-3">
-              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-indigo-300 transition-all duration-200">
-                <FaGoogle className="text-red-500 text-lg" />
-                <span className="ml-2 text-sm font-medium">Google</span>
-              </button>
-              <button className="flex items-center justify-center px-4 py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-indigo-300 transition-all duration-200">
-                <FaGithub className="text-gray-800 text-lg" />
-                <span className="ml-2 text-sm font-medium">GitHub</span>
-              </button>
-            </div>
-
-            {/* Trust Badge */}
-            <div className="mt-4 flex items-center justify-center space-x-4 text-xs text-gray-500">
-              <span className="flex items-center">
-                <FaShieldAlt className="mr-1 text-indigo-500" />
-                Secure
-              </span>
-              <span>•</span>
-              <span className="flex items-center">
-                <FaCheck className="mr-1 text-indigo-500 h-3 w-3" />
-                Privacy Protected
-              </span>
-              <span>•</span>
-              <span>24/7 Support</span>
-            </div>
-          </div>
-        </div>
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#e0e5ec] p-4">
+      {/* Claymorphic pastel background blobs */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-28 -left-28 h-96 w-96 rounded-full bg-[#a3b1c6]/40 blur-3xl" />
+        <div className="absolute top-1/3 -right-28 h-96 w-96 rounded-full bg-[#c4b5fd]/40 blur-3xl" />
+        <div className="absolute -bottom-28 left-1/3 h-96 w-96 rounded-full bg-[#a5b4fc]/40 blur-3xl" />
       </div>
+
+      {/* Clay shell */}
+      <Card
+        className="relative z-10 w-full max-w-5xl overflow-visible rounded-[2.5rem] border-none bg-[#e0e5ec] p-3
+          shadow-[20px_20px_60px_#b8bec7,-20px_-20px_60px_#ffffff]"
+      >
+        <CardContent className="p-0">
+          <div className="flex flex-col overflow-hidden rounded-[2rem] md:flex-row">
+            {/* ---------------- Left showcase ---------------- */}
+            <div className="relative flex w-full flex-col items-center justify-center p-8 md:w-1/2 md:p-10">
+              <div className="relative z-10 w-full text-center">
+                {/* Logo clay puck */}
+                <div
+                  className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-[#e0e5ec]
+                    shadow-[8px_8px_20px_#b8bec7,-8px_-8px_20px_#ffffff]"
+                >
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full bg-[#e0e5ec]
+                      shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]"
+                  >
+                    <img src={Logo_circle_image} alt="Logo" className="h-12 w-12" />
+                  </div>
+                </div>
+
+                <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-[#4a5568] md:text-4xl">
+                  Welcome Back!
+                </h1>
+                <p className="mb-7 text-base font-medium text-[#718096] md:text-lg">
+                  Sign in to continue managing your teams and projects
+                </p>
+
+                {/* Feature clay pills */}
+                <div className="space-y-3">
+                  {[
+                    {
+                      icon: <FaShieldAlt className="text-lg text-indigo-500" />,
+                      label: "Secure & encrypted platform",
+                    },
+                    {
+                      icon: <FaUsers className="text-lg text-indigo-500" />,
+                      label: "Team collaboration tools",
+                    },
+                    {
+                      icon: <FaRocket className="text-lg text-indigo-500" />,
+                      label: "Real-time project tracking",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className="flex items-center justify-center gap-3 rounded-2xl bg-[#e0e5ec] p-3
+                        shadow-[6px_6px_14px_#b8bec7,-6px_-6px_14px_#ffffff]
+                        transition-shadow duration-200 hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff]"
+                    >
+                      {item.icon}
+                      <span className="text-sm font-semibold text-[#4a5568]">
+                        {item.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Stats clay tiles */}
+                <div className="mt-8 flex justify-around gap-3">
+                  {[
+                    { value: "10K+", label: "Active Users" },
+                    { value: "500+", label: "Teams" },
+                    { value: "4.9★", label: "Rating" },
+                  ].map((s) => (
+                    <div
+                      key={s.label}
+                      className="flex flex-1 flex-col items-center rounded-2xl bg-[#e0e5ec] px-3 py-4
+                        shadow-[6px_6px_14px_#b8bec7,-6px_-6px_14px_#ffffff]"
+                    >
+                      <div className="text-xl font-extrabold text-[#4a5568]">{s.value}</div>
+                      <div className="text-xs font-medium text-[#718096]">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* ---------------- Right form ---------------- */}
+            <div className="w-full p-6 sm:p-10 md:w-1/2">
+              <div className="mx-auto max-w-sm">
+                {/* Mobile logo puck */}
+                <div className="mb-6 flex items-center justify-center md:hidden">
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full bg-[#e0e5ec]
+                      text-2xl font-extrabold text-indigo-500
+                      shadow-[8px_8px_20px_#b8bec7,-8px_-8px_20px_#ffffff]"
+                  >
+                    TS
+                  </div>
+                </div>
+
+                <div className="mb-1 flex items-center gap-3">
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e0e5ec]
+                      shadow-[5px_5px_12px_#b8bec7,-5px_-5px_12px_#ffffff]"
+                  >
+                    <HiUserGroup className="text-xl text-indigo-500" />
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-[#4a5568]">Welcome Back</h2>
+                </div>
+                <p className="mb-7 text-sm font-medium text-[#718096]">
+                  Please enter your credentials to sign in
+                </p>
+
+                <form onSubmit={handleLogin} className="space-y-4">
+                  {/* Email */}
+                  <div className="space-y-1.5">
+                    <Label htmlFor="email" className="text-sm font-bold text-[#4a5568]">
+                      Email Address
+                    </Label>
+                    <div className="relative">
+                      <div className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2">
+                        <FaEnvelope className="text-indigo-400" />
+                      </div>
+                      <Input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        required
+                        className="h-auto rounded-2xl border-none bg-[#e0e5ec] py-3 pl-10 text-[#4a5568]
+                          placeholder-[#a0aec0] shadow-[inset_5px_5px_12px_#b8bec7,inset_-5px_-5px_12px_#ffffff]
+                          transition-shadow duration-200
+                          focus-visible:ring-2 focus-visible:ring-indigo-300/50 focus-visible:ring-offset-0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Password */}
+                  <div className="space-y-1.5">
+                    <Label htmlFor="password" className="text-sm font-bold text-[#4a5568]">
+                      Password
+                    </Label>
+                    <div className="relative">
+                      <div className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2">
+                        <FaLock className="text-indigo-400" />
+                      </div>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                        required
+                        className="h-auto rounded-2xl border-none bg-[#e0e5ec] py-3 pl-10 pr-12 text-[#4a5568]
+                          placeholder-[#a0aec0] shadow-[inset_5px_5px_12px_#b8bec7,inset_-5px_-5px_12px_#ffffff]
+                          transition-shadow duration-200
+                          focus-visible:ring-2 focus-visible:ring-indigo-300/50 focus-visible:ring-offset-0"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-[#a0aec0]
+                          transition-colors hover:text-indigo-500"
+                      >
+                        {showPassword ? (
+                          <FaEyeSlash className="h-5 w-5" />
+                        ) : (
+                          <FaEye className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
+                    <div className="text-right">
+                      <Link
+                        to="/forgot-password"
+                        className="text-sm font-semibold text-indigo-500 transition-colors hover:text-indigo-600 hover:underline"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Submit clay button */}
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full gap-2 rounded-2xl border-none py-3 font-bold text-white
+                      bg-gradient-to-br from-[#7c9cf5] to-[#a78bfa]
+                      shadow-[8px_8px_20px_#b8bec7,-8px_-8px_20px_#ffffff]
+                      transition-all duration-150
+                      hover:from-[#6b8cf4] hover:to-[#9d7cf8]
+                      hover:shadow-[10px_10px_24px_#b8bec7,-10px_-10px_24px_#ffffff]
+                      active:shadow-[inset_5px_5px_12px_rgba(90,70,200,0.4),inset_-5px_-5px_12px_rgba(255,255,255,0.5)]
+                      disabled:opacity-60 h-10"
+                  >
+                    {isLoading ? (
+                      <>
+                        <svg
+                          className="h-5 w-5 animate-spin"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        Signing in...
+                      </>
+                    ) : (
+                      <>
+                        Sign In
+                        <FaArrowRight className="text-lg" />
+                      </>
+                    )}
+                  </Button>
+
+                  <p className="text-center font-medium text-[#718096]">
+                    Don't have an account?{" "}
+                    <Link
+                      to="/register"
+                      className="font-bold text-indigo-500 transition-colors hover:text-indigo-600 hover:underline"
+                    >
+                      Create one now
+                    </Link>
+                  </p>
+                </form>
+
+                {/* Divider */}
+                <div className="relative my-5">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-[#c3cad5]" />
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-[#e0e5ec] px-4 font-semibold text-[#a0aec0]">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+
+                {/* Social clay buttons */}
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    type="button"
+                    className="gap-2 rounded-2xl border-none bg-[#e0e5ec] py-2.5 font-semibold text-[#4a5568]
+                      shadow-[6px_6px_14px_#b8bec7,-6px_-6px_14px_#ffffff]
+                      transition-all duration-150
+                      hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff]
+                      active:shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]"
+                  >
+                    <FaGoogle className="text-lg text-red-400" />
+                    Google
+                  </Button>
+                  <Button
+                    type="button"
+                    className="gap-2 rounded-2xl border-none bg-[#e0e5ec] py-2.5 font-semibold text-[#4a5568]
+                      shadow-[6px_6px_14px_#b8bec7,-6px_-6px_14px_#ffffff]
+                      transition-all duration-150
+                      hover:shadow-[8px_8px_18px_#b8bec7,-8px_-8px_18px_#ffffff]
+                      active:shadow-[inset_4px_4px_10px_#b8bec7,inset_-4px_-4px_10px_#ffffff]"
+                  >
+                    <FaGithub className="text-lg text-[#4a5568]" />
+                    GitHub
+                  </Button>
+                </div>
+
+                {/* Trust badge */}
+                <div className="mt-5 flex items-center justify-center gap-3 text-[11px] font-semibold text-[#a0aec0]">
+                  <span className="flex items-center">
+                    <FaShieldAlt className="mr-1 text-indigo-400" />
+                    Secure
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center">
+                    <FaCheck className="mr-1 h-3 w-3 text-indigo-400" />
+                    Privacy Protected
+                  </span>
+                  <span>•</span>
+                  <span>24/7 Support</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

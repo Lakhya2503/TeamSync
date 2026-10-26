@@ -1,18 +1,35 @@
-import React, { Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import Loader from '../Components/ui/Loader';
-import NotFound from '../Components/ui/NotFound';
+import React, { Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Loader from "../pages/comman/Loader";
+import NotFound from "../pages/comman/NotFound";
 
-const AdminDashboard = React.lazy(() => import('../Components/Dashboard/admin/AdminDashboard'));
-const AdminUsers = React.lazy(() => import('../Components/Dashboard/admin/AdminUsers'));
-const AdminSession = React.lazy(() => import('../Components/Dashboard/admin/AdminSession'));
-const AdminPlane = React.lazy(() => import('../Components/Dashboard/admin/AdminPlane'));
-const AdminEvalutions = React.lazy(() => import('../Components/Dashboard/admin/AdminEvalutions'));
-const AdminCatlog = React.lazy(() => import('../Components/Dashboard/admin/AdminCatlog'));
-const AdminReports = React.lazy(() => import('../Components/Dashboard/admin/AdminReports'));
-const AdminSettings = React.lazy(() => import('../Components/Dashboard/admin/AdminSettings'));
-const AdminProfile = React.lazy(() => import('../Components/Dashboard/admin/AdminProfile'));
-
+const AdminDashboard = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminDashboard")
+);
+const AdminUsers = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminUsers")
+);
+const AdminSession = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminSession")
+);
+const AdminPlane = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminPlane")
+);
+const AdminEvalutions = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminEvalutions")
+);
+const AdminCatlog = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminCatlog")
+);
+const AdminReports = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminReports")
+);
+const AdminSettings = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminSettings")
+);
+const AdminProfile = React.lazy(
+  () => import("../dash/Dashboard/admin/AdminProfile")
+);
 
 const AdminNeedsPlaceholder = () => <div>Page for creating needs</div>;
 
