@@ -2,6 +2,7 @@ import { configDotenv } from "dotenv";
 import app from "./app.ts";
 import ENV from "./config/ENV.ts";
 import database from "./db/index.ts";
+import { table } from "node:console";
 
 configDotenv({
   path: ".env",
