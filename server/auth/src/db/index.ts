@@ -9,8 +9,8 @@ const database = new Pool({
   database: ENV.DATABASE_NAME,
 });
 
-database.on("error", () => {
-  console.log("ERROR");
+database.on("error", (err) => {
+  console.error("PostgreSQL error:", err.message);
 });
 
 export default database;
