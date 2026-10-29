@@ -6,10 +6,12 @@ const userTable = async () => {
     const query = `
           CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY NOT NULL,
-                username VARCHAR(50) NOT NULL,
+                email VARCHAR(100) NOT NULL UNIQUE,
+                password VARCHAR(100) NOT NULL,
+                username VARCHAR(50) NOT NULL UNIQUE CHECK (LENGTH(username) > 3),
                 first_name VARCHAR(20) NOT NULL,
                 last_name VARCHAR(20) NOT NULL,
-                avatar TEXT NOT NULL,
+                avatar TEXT,
                 create_at DATE NOT NULL DEFAULT CURRENT_DATE
             )
     `;
@@ -27,9 +29,10 @@ const refreshTokenTable = async () => {
   try {
     const query = `
           CREATE TABLE IF NOT EXISTS refreshtoken (
-                refreshtoken_id INT NOT NULL REFERENCES users(id),
-                refreshTokenHash VARCHAR(50) NOT NULL,
-                refreshTokenExpiry DATE NOT NULL
+              id SERIAL NOT NULL,
+              user_id INT NOT NULL REFERENCES users(id),
+              refreshTokenHash VARCHAR(50) NOT NULL,
+              refreshTokenExpiry DATE NOT NULL
             )
     `;
     const result = await database.query(query);
