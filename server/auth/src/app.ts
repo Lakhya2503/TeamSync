@@ -18,8 +18,6 @@ app.use(express.urlencoded({ extended: true, limit: "20kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-console.log("PORT", ENV.PORT);
-
 app.get("/", (req, res) => {
   res.send(`AUTH LISTEN ON PORT ${ENV.PORT}`);
 });

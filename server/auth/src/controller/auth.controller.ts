@@ -49,14 +49,21 @@ const authLogin = asyncHandler(async (req: Request, res: Response) => {
 
   let user;
   if (req.body?.username) {
-    const userUsername = await fetchQuery("username", username);
-    console.log("USER USERNAME : ", userUsername);
+    user = await fetchQuery("username", username);
+    console.log("USER USERNAME : ", user);
   } else if (req.body?.email) {
-    const userEmail = await fetchQuery("email", email);
-    console.log("USER EMAIL : ", userEmail);
+    user = await fetchQuery("email", email);
+    console.log("USER EMAIL : ", user);
+  }
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+  if (isPasswordCorrect) {
+    throw new ApiError(401, "invalid credentials");
   }
 
-  console.log("Password :", password);
+  if (!user) {
+    throw new ApiError(401, "user not found");
+  }
 
   return res.status(200).json(new ApiResponse(200, {}, "Login successfully"));
 });

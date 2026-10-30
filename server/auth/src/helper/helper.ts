@@ -7,7 +7,6 @@ const fetchQuery = async (key: string | number, value: string | number) => {
      `;
 
   const result = await database.query(query, [value]);
-  console.log("Result", result.rows[0]);
   return result.rows[0];
 };
 
