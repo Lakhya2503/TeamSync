@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import ENV from "./ENV";
+import ENV from "./ENV.ts";
 
 export const createAccessToken = (user: {
   id: number;
@@ -19,7 +19,7 @@ export const createAccessToken = (user: {
   );
 };
 
-export const createRefreshToken = (id: string | number) => {
+export const createRefreshToken = (id: number) => {
   return jwt.sign({ id }, ENV.REFRESH_TOKEN_SECRET, {
     expiresIn: ENV.REFRESH_TOKEN_EXPIRY,
   });

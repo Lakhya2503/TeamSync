@@ -31,8 +31,7 @@ const refreshTokenTable = async () => {
           CREATE TABLE IF NOT EXISTS refreshtoken (
               id SERIAL NOT NULL,
               user_id INT NOT NULL REFERENCES users(id),
-              refreshTokenHash VARCHAR(50) NOT NULL,
-              refreshTokenExpiry DATE NOT NULL
+              refreshTokenHash TEXT NOT NULL
             )
     `;
     const result = await database.query(query);
