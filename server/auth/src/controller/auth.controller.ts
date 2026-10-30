@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 
 const generateAccessRefreshToken = async () => {};
 
-const AuthRegister = asyncHandler(async (req: Request, res: Response) => {
+const authRegister = asyncHandler(async (req: Request, res: Response) => {
   console.log("Req", req.body);
 
   const { username, first_name, last_name, email, password } = req.body;
@@ -44,4 +44,21 @@ const AuthRegister = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(201, { _user }, "user register successfully"));
 });
 
-export { AuthRegister };
+const authLogin = asyncHandler(async (req: Request, res: Response) => {
+  const { username, email, password } = req.body;
+
+  let user;
+  if (req.body?.username) {
+    const userUsername = await fetchQuery("username", username);
+    console.log("USER USERNAME : ", userUsername);
+  } else if (req.body?.email) {
+    const userEmail = await fetchQuery("email", email);
+    console.log("USER EMAIL : ", userEmail);
+  }
+
+  console.log("Password :", password);
+
+  return res.status(200).json(new ApiResponse(200, {}, "Login successfully"));
+});
+
+export { authRegister, authLogin };

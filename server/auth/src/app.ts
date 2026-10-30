@@ -1,4 +1,5 @@
 import express from "express";
+import type { NextFunction, Request, Response } from "express";
 import ENV from "./config/ENV.ts";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -28,5 +29,24 @@ import HealthRouter from "./routes/health.route.ts";
 
 app.use("/api/health", HealthRouter);
 app.use("/api/auth", AuthRouter);
+
+app.use(
+  (
+    err: Error & {
+      statusCode: number;
+      message: string;
+      errors: [];
+    },
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    res.status(err.statusCode || 500).json({
+      success: false,
+      message: err.message,
+      errors: err.errors || [],
+    });
+  },
+);
 
 export default app;
