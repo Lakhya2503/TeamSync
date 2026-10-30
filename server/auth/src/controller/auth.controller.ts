@@ -1,10 +1,18 @@
 import type { Request, Response } from "express";
 import asyncHandler from "../config/asyncHandler.ts";
 import ApiResponse from "../config/ApiResponse.ts";
-import { fetchQuery } from "../helper/helper.ts";
+import { databasePassword, fetchQuery } from "../helper/helper.ts";
 import ApiError from "../config/ApiError.ts";
 import database from "../db/index.ts";
 import bcrypt from "bcrypt";
+
+const options: {
+  httpOnly: boolean;
+  secure: boolean;
+} = {
+  httpOnly: true,
+  secure: true,
+};
 
 const generateAccessRefreshToken = async () => {};
 
@@ -55,9 +63,14 @@ const authLogin = asyncHandler(async (req: Request, res: Response) => {
     user = await fetchQuery("email", email);
     console.log("USER EMAIL : ", user);
   }
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-  if (isPasswordCorrect) {
+  const hashedPassword = await databasePassword(user.id);
+  const isPasswordCorrect = await bcrypt.compare(
+    password,
+    hashedPassword.password,
+  );
+
+  if (!isPasswordCorrect) {
     throw new ApiError(401, "invalid credentials");
   }
 
@@ -65,7 +78,14 @@ const authLogin = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(401, "user not found");
   }
 
-  return res.status(200).json(new ApiResponse(200, {}, "Login successfully"));
+  const accessToken = "";
+  const refreshToken = "";
+
+  return res
+    .status(200)
+    .cookie("accesstoken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(new ApiResponse(200, {}, "Login successfully"));
 });
 
 export { authRegister, authLogin };

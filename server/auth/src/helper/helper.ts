@@ -10,4 +10,13 @@ const fetchQuery = async (key: string | number, value: string | number) => {
   return result.rows[0];
 };
 
-export { fetchQuery };
+const databasePassword = async (id: number) => {
+  const query = `
+     SELECT password FROM users WHERE  id=$1
+     `;
+
+  const result = await database.query(query, [id]);
+  return result.rows[0];
+};
+
+export { fetchQuery, databasePassword };
