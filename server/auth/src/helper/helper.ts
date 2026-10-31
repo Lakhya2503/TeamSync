@@ -10,6 +10,15 @@ const fetchQuery = async (key: string | number, value: string | number) => {
   return result.rows[0];
 };
 
+export const fetchRefreshToken = async (id: number) => {
+  const query = `
+     SELECT id, user_id, refreshtokenhash FROM refreshToken WHERE  user_id=$1
+     `;
+
+  const result = await database.query(query, [id]);
+  return result.rows[0];
+};
+
 const databasePassword = async (id: number) => {
   const query = `
      SELECT password FROM users WHERE  id=$1

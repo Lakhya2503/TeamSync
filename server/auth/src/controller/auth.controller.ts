@@ -20,12 +20,13 @@ const generateAccessRefreshToken = async (user: {
   username: string;
   id: number;
 }) => {
-  const refreshToken = createRefreshToken(user.id);
+  console.log("USER", user);
+
+  const refreshToken = await createRefreshToken(user.id);
   const accessToken = createAccessToken(user);
 
-  const query = `UPDATE refreshtoken SET refreshtokenhash= $1 WHERE user_id=$2 RETURNING * `;
-  const _user = await database.query(query, [refreshToken, user.id]);
-  console.log("user", _user.rows[0]);
+  console.log("RefreshToken", refreshToken);
+  console.log("AccessToken", accessToken);
 
   return {
     refreshToken,
