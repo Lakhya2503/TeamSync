@@ -105,4 +105,16 @@ const authLogin = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(200, {}, "Login successfully"));
 });
 
+const authLogout = asyncHandler(async (req: Request, res: Response) => {
+
+  
+
+
+  return res
+    .status(200)
+    .cookie("accessToken", "", options)
+    .cookie("refreshToken", "", options)
+    .json(new ApiResponse(200, {}, "User loggedout successfully"));
+});
+
 export { authRegister, authLogin };
